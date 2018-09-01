@@ -1,5 +1,7 @@
-# rlbot-rust
+# rlbot
 
+[![crates.io](https://img.shields.io/crates/v/rlbot.svg)](https://docs.rs/rlbot/)
+[![docs](https://docs.rs/rlbot/badge.svg)](https://docs.rs/rlbot/)
 [![pipeline status](https://gitlab.com/whatisaphone/rlbot-rust/badges/master/pipeline.svg)](https://gitlab.com/whatisaphone/rlbot-rust/commits/master)
 
 <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" />
