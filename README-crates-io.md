@@ -1,6 +1,6 @@
 # rlbot
 
-[![crates.io](https://img.shields.io/crates/v/rlbot.svg)](https://docs.rs/rlbot/)
+[![crates.io](https://img.shields.io/crates/v/rlbot.svg)](https://crates.io/crates/rlbot)
 [![docs](https://docs.rs/rlbot/badge.svg)](https://docs.rs/rlbot/)
 [![pipeline status](https://gitlab.com/whatisaphone/rlbot-rust/badges/master/pipeline.svg)](https://gitlab.com/whatisaphone/rlbot-rust/commits/master)
 
