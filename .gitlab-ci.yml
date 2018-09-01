@@ -1,0 +1,21 @@
+stages:
+  - check
+
+test:
+  stage: check
+  image: rust:1.28
+  script:
+    - cargo test
+
+fmt:
+  stage: check
+  image: rustlang/rust:nightly
+  script:
+    - rustup component add rustfmt-preview
+    - cargo fmt -- --check
+
+doc:
+  stage: check
+  image: rustlang/rust:nightly
+  script:
+    - cargo doc --no-deps

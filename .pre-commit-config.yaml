@@ -1,0 +1,21 @@
+- repo: local
+  hooks:
+    - id: fmt
+      name: fmt
+      language: system
+      files: '[.]rs$'
+      entry: rustup run nightly rustfmt
+
+    - id: test
+      name: test
+      language: system
+      files: '[.]rs$'
+      entry: cargo test
+      pass_filenames: false
+
+    - id: doc
+      name: doc
+      language: system
+      files: '[.]rs$'
+      entry: cargo +nightly doc --no-deps
+      pass_filenames: false
