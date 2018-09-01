@@ -1,5 +1,7 @@
 # rlbot-rust
 
+[![pipeline status](https://gitlab.com/whatisaphone/rlbot-rust/badges/master/pipeline.svg)](https://gitlab.com/whatisaphone/rlbot-rust/commits/master)
+
 <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" />
 
 [RLBot] is a framework for creating offline Rocket League bots. This crate
