@@ -3,6 +3,7 @@ name = "rlbot"
 version = "0.0.1"
 authors = ["John Simon <john@whatisaph.one>"]
 description = "RLBot bindings for Rust"
+documentation = "https://docs.rs/rlbot/"
 repository = "https://gitlab.com/whatisaphone/rlbot-rust"
 readme = "README-crates-io.md"
 keywords = ["rlbot", "rocket-league", "game"]
