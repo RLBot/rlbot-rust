@@ -35,7 +35,7 @@ which stands for Always Towards Ball Agent. To try it out, open Rocket League,
 and then run the example like so:
 
 ```sh
-git clone https://gitlab.com/whatisaphone/rlbot
+git clone https://gitlab.com/whatisaphone/rlbot-rust
 cd rlbot
 cargo run --example atba
 ```
