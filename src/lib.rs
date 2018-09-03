@@ -2,7 +2,8 @@
 //! [![docs](https://docs.rs/rlbot/badge.svg)](https://docs.rs/rlbot/)
 //! [![pipeline status](https://gitlab.com/whatisaphone/rlbot-rust/badges/master/pipeline.svg)](https://gitlab.com/whatisaphone/rlbot-rust/commits/master)
 //!
-//! <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" />
+//! <img src="https://gitlab.com/whatisaphone/rlbot-rust/raw/master/assets/logo.png" height="128" style="float:left;margin:0 16px 0 0" />
+//! <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" style="float:right;margin:0 0 0 16px" />
 //!
 //! [RLBot] is a framework for creating offline Rocket League bots. This crate
 //! exposes Rust bindings to RLBot's [RLBot_Core_Interface.dll]. It presents a
@@ -18,7 +19,7 @@
 //! When using this crate, you'll always start out by calling [`init`]. It will
 //! return an [`RLBot`] instance with which you can begin using the framework.
 //!
-//! Example usage:
+//! ## Quick start
 //!
 //! ```no_run
 //! # fn main() -> Result<(), Box<::std::error::Error>> {
