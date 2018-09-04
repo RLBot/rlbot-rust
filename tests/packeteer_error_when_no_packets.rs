@@ -17,6 +17,7 @@ fn integration_packeteer_error_when_no_packets() -> Result<(), Box<Error>> {
         // get *maybe* one initial empty packet, but after that, only errors.
         let mut packeteer = rlbot.packeteer();
         assert!(packeteer.next().is_err() || packeteer.next().is_err());
+        assert!(packeteer.next_flatbuffer().is_err() || packeteer.next_flatbuffer().is_err());
         Ok(())
     })
 }

@@ -40,12 +40,14 @@ pub trait Bot {
 /// # Example
 ///
 /// ```no_run
+/// use rlbot::ffi;
+///
 /// struct MyBot;
 ///
 /// impl rlbot::Bot for MyBot {
 ///     // ...
 ///     # fn set_player_index(&mut self, index: usize) { unimplemented!() }
-///     # fn tick(&mut self, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput { unimplemented!() }
+///     # fn tick(&mut self, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput { unimplemented!() }
 /// }
 ///
 /// rlbot::run_bot(MyBot);

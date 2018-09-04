@@ -34,19 +34,23 @@
 //! [`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
 //! [`examples/simple`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 
+#![warn(missing_docs)]
+
+extern crate flatbuffers;
 extern crate libloading;
 extern crate ratelimit;
 
-pub use ffi::*;
+pub mod ffi;
 pub use framework::{run_bot, Bot};
 pub use packeteer::Packeteer;
 pub use rlbot::{init, RLBot};
+pub use rlbot_generated::rlbot::flat;
 
 mod dll;
 mod error;
-mod ffi;
 mod ffi_impls;
 mod framework;
 mod inject;
 mod packeteer;
 mod rlbot;
+mod rlbot_generated;
