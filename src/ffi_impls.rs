@@ -24,7 +24,7 @@ impl ffi::MatchSettings {
     /// Create a simple 1v1 match with sensible defaults and the given player
     /// names. Team Blue will be RLBot-controlled, and Team Orange will be a
     /// Psyonix all-star bot.
-    pub fn simple_1v1(hero: &str, villian: &str) -> Self {
+    pub fn simple_1v1(hero: &str, villain: &str) -> Self {
         let mut result = ffi::MatchSettings {
             NumPlayers: 2,
             ..Default::default()
@@ -36,7 +36,7 @@ impl ffi::MatchSettings {
 
         result.PlayerConfiguration[1].Bot = true;
         result.PlayerConfiguration[1].BotSkill = 1.0;
-        result.PlayerConfiguration[1].set_name(villian);
+        result.PlayerConfiguration[1].set_name(villain);
         result.PlayerConfiguration[1].Team = 1;
 
         result

@@ -15,7 +15,7 @@ simple, safe interface that should feel comfortable to Rust developers.
 
 ```rust
 let rlbot = rlbot::init()?;
-rlbot.start_match(rlbot::MatchSettings::simple_1v1("Hero", "Villian"))?;
+rlbot.start_match(rlbot::MatchSettings::simple_1v1("Hero", "Villain"))?;
 
 let mut packets = rlbot.packeteer();
 

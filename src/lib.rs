@@ -24,7 +24,7 @@
 //! ```no_run
 //! # fn main() -> Result<(), Box<::std::error::Error>> {
 //! let rlbot = rlbot::init()?;
-//! rlbot.start_match(rlbot::MatchSettings::simple_1v1("Hero", "Villian"))?;
+//! rlbot.start_match(rlbot::MatchSettings::simple_1v1("Hero", "Villain"))?;
 //!
 //! let mut packets = rlbot.packeteer();
 //!
