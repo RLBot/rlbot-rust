@@ -1,3 +1,5 @@
+#![cfg(windows)]
+
 extern crate rlbot;
 extern crate winapi;
 extern crate winproc;
