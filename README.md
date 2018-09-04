@@ -89,6 +89,16 @@ pollute your system, place them in your crate's target directory, e.g.
 [rustup]: https://rustup.rs/
 [pre-commit]: https://pre-commit.com/
 
+### Testing
+
+Many of the tests require a copy of Rocket League. All such tests will have
+`integration` in their name. Because these tests cannot be run in CI, they
+should be run manually before cutting a release, using this command:
+
+```sh
+cargo test -- integration
+```
+
 ### How to generate bindings
 
 Bindings are generated with [rust-bindgen]. Those docs are required reading.

@@ -48,7 +48,6 @@ pub use ffi::*;
 pub use packeteer::Packeteer;
 pub use rlbot::RLBot;
 use std::error::Error;
-use std::sync::atomic::{AtomicBool, Ordering};
 
 mod dll;
 mod error;
@@ -57,9 +56,6 @@ mod ffi_impls;
 mod inject;
 mod packeteer;
 mod rlbot;
-
-/// Tracks whether a RLBot instance has been created.
-static INITIALIZED: AtomicBool = AtomicBool::new(false);
 
 /// Injects the RLBot core DLL into Rocket League, and initializes the interface
 /// DLL. This function might sleep for a bit while it waits for RLBot to fully
@@ -71,10 +67,6 @@ static INITIALIZED: AtomicBool = AtomicBool::new(false);
 /// you call this function more than once, it will panic. If you lose the RLBot
 /// instance, well, you should keep better track of your things.
 pub fn init() -> Result<RLBot, Box<Error>> {
-    if INITIALIZED.swap(true, Ordering::SeqCst) {
-        panic!("RLBot can only be initialized once");
-    }
-
     inject::inject_dll()?;
 
     let interface = RLBotCoreInterface::load()?;

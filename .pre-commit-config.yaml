@@ -10,7 +10,8 @@
       name: test
       language: system
       files: '[.]rs$'
-      entry: cargo test
+      # Skip the slow tests that launch the game
+      entry: cargo test -- --skip integration
       pass_filenames: false
 
     - id: doc

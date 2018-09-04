@@ -1,6 +1,6 @@
 //! This module handles injecting the core DLL, using RLBot's provided
 //! injector. It is basically a reimplementation of
-//! https://github.com/RLBot/RLBot/blob/fa959462f8a54752afc64769cf141db904efae8a/src/main/python/rlbot/utils/structures/game_interface.py#L165
+//! https://github.com/RLBot/RLBot/blob/928d0b1660618ef2c88b8aaf218189e8fb6b744b/src/main/python/rlbot/utils/structures/game_interface.py#L175
 
 use std::error::Error;
 use std::fmt;
@@ -20,7 +20,7 @@ pub fn inject_dll() -> Result<InjectorCode, Box<Error>> {
     match code {
         InjectorCode::InjectionSuccessful => {
             // If rlbot is freshly injected, give it some time to sink its hooks in.
-            sleep(Duration::from_secs(11));
+            sleep(Duration::from_secs(20));
             Ok(code)
         }
         InjectorCode::RLBotDLLAlreadyInjected => Ok(code),
