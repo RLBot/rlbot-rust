@@ -43,11 +43,9 @@
 extern crate libloading;
 extern crate ratelimit;
 
-use dll::RLBotCoreInterface;
 pub use ffi::*;
 pub use packeteer::Packeteer;
-pub use rlbot::RLBot;
-use std::error::Error;
+pub use rlbot::{init, RLBot};
 
 mod dll;
 mod error;
@@ -56,21 +54,3 @@ mod ffi_impls;
 mod inject;
 mod packeteer;
 mod rlbot;
-
-/// Injects the RLBot core DLL into Rocket League, and initializes the interface
-/// DLL. This function might sleep for a bit while it waits for RLBot to fully
-/// initialize.
-///
-/// # Panics
-///
-/// Only one RLBot instance may be created over the life of the application. If
-/// you call this function more than once, it will panic. If you lose the RLBot
-/// instance, well, you should keep better track of your things.
-pub fn init() -> Result<RLBot, Box<Error>> {
-    inject::inject_dll()?;
-
-    let interface = RLBotCoreInterface::load()?;
-    interface.wait_for_initialized()?;
-
-    Ok(RLBot::new(interface))
-}
