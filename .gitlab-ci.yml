@@ -1,6 +1,12 @@
 stages:
   - check
 
+check:
+  stage: check
+  image: rust:1.28
+  script:
+    - cargo rustc -- -D warnings
+
 test:
   stage: check
   image: rust:1.28
@@ -18,4 +24,4 @@ doc:
   stage: check
   image: rustlang/rust:nightly
   script:
-    - cargo doc --no-deps
+    - cargo rustdoc -- --deny warnings

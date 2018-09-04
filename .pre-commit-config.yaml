@@ -6,6 +6,13 @@
       files: '[.]rs$'
       entry: rustup run nightly rustfmt
 
+    - id: check
+      name: check
+      language: system
+      files: '[.]rs$'
+      entry: cargo rustc -- -D warnings
+      pass_filenames: false
+
     - id: test
       name: test
       language: system
@@ -18,5 +25,5 @@
       name: doc
       language: system
       files: '[.]rs$'
-      entry: cargo +nightly doc --no-deps
+      entry: cargo +nightly rustdoc -- --deny warnings
       pass_filenames: false
