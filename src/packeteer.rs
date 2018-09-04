@@ -54,7 +54,7 @@ impl<'a> Packeteer<'a> {
             }
 
             if Instant::now() - started > Duration::from_secs(5) {
-                return Err(From::from("No packets received in five seconds."));
+                return Err(From::from("no packet received after five seconds"));
             }
         }
 
