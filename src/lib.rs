@@ -6,44 +6,40 @@
 //! <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" style="float:right;margin:0 0 0 16px" />
 //!
 //! [RLBot] is a framework for creating offline Rocket League bots. This crate
-//! exposes Rust bindings to RLBot's [RLBot_Core_Interface.dll]. It presents a
-//! simple, safe interface that should feel comfortable to Rust developers.
+//! lets you write bots using a simple, safe interface that should feel
+//! comfortable to Rust developers.
 //!
 //! [RLBot]: https://github.com/RLBot/RLBot
-//! [RLBot_Core_Interface.dll]: https://github.com/RLBot/RLBot/tree/master/src/main/cpp/RLBotInterface
 //!
-//! Most types in this crate come directly from RLBot, so for anything not
-//! documented here, you'll need to use RLBot's docs as the authoritative
+//! Most types in this crate are exported directly from RLBot, so for anything
+//! not documented here, you'll need to use RLBot's docs as the authoritative
 //! reference.
 //!
-//! When using this crate, you'll always start out by calling [`init`]. It will
-//! return an [`RLBot`] instance with which you can begin using the framework.
+//! There are two ways to use this crate:
 //!
-//! ## Quick start
+//! 1. [`run`] and [`Bot`] – This is the **high-level** interface. It plays a
+//!    single match from start to finish. It expects the app to have been
+//!    launched by the RLBot framework, and runs its own game loop under
+//!    framework control.
+//! 2. [`init`] – This is the **low-level** interface. You can use this to
+//!    directly access the innards of RLBot for scripting, integration tests, or
+//!    any other custom use-case.
 //!
-//! ```no_run
-//! # fn main() -> Result<(), Box<::std::error::Error>> {
-//! let rlbot = rlbot::init()?;
-//! rlbot.start_match(rlbot::MatchSettings::simple_1v1("Hero", "Villain"))?;
+//! # Examples
 //!
-//! let mut packets = rlbot.packeteer();
+//! This crate comes with a few examples to get you started.
 //!
-//! // Wait for the match to start. `packets.next()` sleeps until the next
-//! // packet is available, so this loop will not roast your CPU :)
-//! while !packets.next()?.GameInfo.RoundActive {}
+//! * [`examples/bot`] – Demonstrates use of the [`run`] API.
+//! * [`examples/simple`] – Demonstrates use of the [`init`] API.
 //!
-//! loop {
-//!     let packet = packets.next()?;
-//!     let input: rlbot::PlayerInput = Default::default();
-//!     rlbot.update_player_input(input, 0)?;
-//! }
-//! # }
-//! ```
+//! [`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
+//! [`examples/simple`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 
 extern crate libloading;
 extern crate ratelimit;
 
 pub use ffi::*;
+pub use framework::{run, Bot};
 pub use packeteer::Packeteer;
 pub use rlbot::{init, RLBot};
 
@@ -51,6 +47,7 @@ mod dll;
 mod error;
 mod ffi;
 mod ffi_impls;
+mod framework;
 mod inject;
 mod packeteer;
 mod rlbot;

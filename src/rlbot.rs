@@ -18,6 +18,31 @@ use std::ptr::null_mut;
 /// Only one RLBot instance may be created over the life of the application. If
 /// you call this function more than once, it will panic. If you lose the RLBot
 /// instance, well, you should keep better track of your things.
+///
+/// # Example
+///
+/// ```no_run
+/// # fn main() -> Result<(), Box<::std::error::Error>> {
+/// let rlbot = rlbot::init()?;
+/// rlbot.start_match(rlbot::MatchSettings::simple_1v1("Hero", "Villain"))?;
+///
+/// let mut packets = rlbot.packeteer();
+///
+/// // Wait for the match to start. `packets.next()` sleeps until the next
+/// // packet is available, so this loop will not roast your CPU :)
+/// while !packets.next()?.GameInfo.RoundActive {}
+///
+/// loop {
+///     let packet = packets.next()?;
+///     let input: rlbot::PlayerInput = Default::default();
+///     rlbot.update_player_input(input, 0)?;
+/// }
+/// # }
+/// ```
+///
+/// See [`examples/simple`] for a complete example.
+///
+/// [`examples/simple`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 pub fn init() -> Result<RLBot, Box<Error>> {
     inject::inject_dll()?;
 
