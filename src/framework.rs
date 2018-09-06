@@ -29,11 +29,9 @@ pub trait Bot {
 
 /// Runs a bot under control of the RLBot framework.
 ///
-/// The argument is a function which creates a [`Bot`].
-///
 /// This function assumes the app was launched by the framework. It will
-/// establish a connection to the framework, create a bot with the function you
-/// pass in, enter a game loop, and never return.
+/// establish a connection to the framework, enter a game loop, and never
+/// return.
 ///
 /// # Errors
 ///
@@ -50,13 +48,13 @@ pub trait Bot {
 ///     # fn tick(&mut self, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput { unimplemented!() }
 /// }
 ///
-/// rlbot::run(|| MyBot);
+/// rlbot::run(MyBot);
 /// ```
 ///
 /// See [`examples/bot`] for a complete example.
 ///
 /// [`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
-pub fn run<B: Bot>(factory: impl Fn() -> B + Sync) -> Result<(), Box<Error>> {
+pub fn run<B: Bot>(mut bot: B) -> Result<(), Box<Error>> {
     // Currently this only needs to interoperate with one caller – RLBot Python's
     // BaseSubprocessAgent. No public interface has been committed to, so we can
     // afford to be rigid and inflexible with the parsing.
@@ -68,7 +66,6 @@ pub fn run<B: Bot>(factory: impl Fn() -> B + Sync) -> Result<(), Box<Error>> {
 
     let rlbot = rlbot::init()?;
 
-    let mut bot = factory();
     bot.set_player_index(player_index as usize);
 
     let mut packets = rlbot.packeteer();
