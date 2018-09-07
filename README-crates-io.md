@@ -4,46 +4,62 @@
 [![docs](https://docs.rs/rlbot/badge.svg)](https://docs.rs/rlbot/)
 [![pipeline status](https://gitlab.com/whatisaphone/rlbot-rust/badges/master/pipeline.svg)](https://gitlab.com/whatisaphone/rlbot-rust/commits/master)
 
-[RLBot] is a framework for creating offline Rocket League bots. This crate
-exposes Rust bindings to RLBot's [RLBot_Core_Interface.dll]. It presents a
-simple, safe interface that should feel comfortable to Rust developers.
+[RLBot] is a framework for creating offline Rocket League bots. This crate lets
+you write bots using a simple, safe interface that should feel comfortable to
+Rust developers.
 
 [RLBot]: https://github.com/RLBot/RLBot
-[RLBot_Core_Interface.dll]: https://github.com/RLBot/RLBot/tree/master/src/main/cpp/RLBotInterface
 
 ## Usage
 
+Your code will look a little something like this:
+
 ```rust
-let rlbot = rlbot::init()?;
-rlbot.start_match(rlbot::MatchSettings::simple_1v1("Hero", "Villain"))?;
+fn main() -> Result<(), Box<Error>> {
+    rlbot::run_bot(MyBot { /* ... */ })
+}
 
-let mut packets = rlbot.packeteer();
+struct MyBot { /* ... */ }
 
-// Wait for the match to start. `packets.next()` sleeps until the next
-// packet is available, so this loop will not roast your CPU :)
-while !packets.next()?.GameInfo.RoundActive {}
-
-loop {
-    let packet = packets.next()?;
-    let input: rlbot::PlayerInput = Default::default();
-    rlbot.update_player_input(input, 0)?;
+impl rlbot::Bot for MyBot {
+    fn tick(&mut self, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput {
+        // ...
+    }
 }
 ```
 
+See [`examples/bot`] for a complete example.
+
+[`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
+
 ### Quick start
 
-This repo comes with a simple example to get you started. It's called `atba`,
-which stands for Always Towards Ball Agent. To try it out, open Rocket League,
-and then run the example like so:
+This repo comes with a few examples to get you started.
+
+#### `examples/simple`
+
+This is a simple ATBA, or Always Towards Ball Agent. It can run with no
+dependencies other than RLBot itself. You can run it like this:
 
 ```sh
-git clone https://gitlab.com/whatisaphone/rlbot-rust
-cd rlbot
 cargo run --example atba
 ```
 
-If you get an error, chances are you need to download the framework! Proceed to
-the next section.
+If you get an error, chances are you need to download the framework! Follow the instructions under **Installing the framework**.
+
+#### `examples/bot`
+
+This is a full-fledged bot that can run within the Python RLBot framework. It
+requires a working RLBot Python setup. Follow the instructions in
+[RLBotPythonExample] to make sure you have all the necessary dependencies
+installed. Once you have that working, you should be able to run a Rust bot
+within the framework with this command:
+
+```sh
+cargo build --example bot && python -c "from rlbot import runner; runner.main()"
+```
+
+[RLBotPythonExample]: https://github.com/RLBot/RLBotPythonExample
 
 ### Installing the framework
 
