@@ -17,10 +17,9 @@
 //!
 //! There are two ways to use this crate:
 //!
-//! 1. [`run`] and [`Bot`] – This is the **high-level** interface. It plays a
-//!    single match from start to finish. It expects the app to have been
-//!    launched by the RLBot framework, and runs its own game loop under
-//!    framework control.
+//! 1. [`run_bot`] – This is the **high-level** interface. It plays a single
+//!    match from start to finish. It expects the app to have been launched by
+//!    the RLBot framework, and runs its own game loop under framework control.
 //! 2. [`init`] – This is the **low-level** interface. You can use this to
 //!    directly access the innards of RLBot for scripting, integration tests, or
 //!    any other custom use-case.
@@ -29,7 +28,7 @@
 //!
 //! This crate comes with a few examples to get you started.
 //!
-//! * [`examples/bot`] – Demonstrates use of the [`run`] API.
+//! * [`examples/bot`] – Demonstrates use of the [`run_bot`] API.
 //! * [`examples/simple`] – Demonstrates use of the [`init`] API.
 //!
 //! [`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
@@ -39,7 +38,7 @@ extern crate libloading;
 extern crate ratelimit;
 
 pub use ffi::*;
-pub use framework::{run, Bot};
+pub use framework::{run_bot, Bot};
 pub use packeteer::Packeteer;
 pub use rlbot::{init, RLBot};
 

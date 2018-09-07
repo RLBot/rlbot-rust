@@ -6,7 +6,7 @@ use std::error::Error;
 use std::f32::consts::PI;
 
 fn main() -> Result<(), Box<Error>> {
-    rlbot::run(MyBot { player_index: 0 })
+    rlbot::run_bot(MyBot { player_index: 0 })
 }
 
 struct MyBot {

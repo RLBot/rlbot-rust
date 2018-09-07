@@ -6,7 +6,7 @@ use std::env;
 use std::error::Error;
 
 /// A bot that can run within the RLBot framework. Instances of `Bot` are used
-/// by the [`run`] function.
+/// by the [`run_bot`] function.
 ///
 /// # Example
 ///
@@ -48,13 +48,13 @@ pub trait Bot {
 ///     # fn tick(&mut self, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput { unimplemented!() }
 /// }
 ///
-/// rlbot::run(MyBot);
+/// rlbot::run_bot(MyBot);
 /// ```
 ///
 /// See [`examples/bot`] for a complete example.
 ///
 /// [`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
-pub fn run<B: Bot>(mut bot: B) -> Result<(), Box<Error>> {
+pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<Error>> {
     // Currently this only needs to interoperate with one caller – RLBot Python's
     // BaseSubprocessAgent. No public interface has been committed to, so we can
     // afford to be rigid and inflexible with the parsing.

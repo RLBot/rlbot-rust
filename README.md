@@ -16,7 +16,7 @@ Your code will look a little something like this:
 
 ```rust
 fn main() -> Result<(), Box<Error>> {
-    rlbot::run(|| MyBot { /* ... */ })
+    rlbot::run_bot(MyBot { /* ... */ })
 }
 
 struct MyBot { /* ... */ }
