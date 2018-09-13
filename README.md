@@ -15,6 +15,8 @@ Rust developers.
 Your code will look a little something like this:
 
 ```rust
+use rlbot::ffi;
+
 fn main() -> Result<(), Box<Error>> {
     rlbot::run_bot(MyBot { /* ... */ })
 }
@@ -22,7 +24,7 @@ fn main() -> Result<(), Box<Error>> {
 struct MyBot { /* ... */ }
 
 impl rlbot::Bot for MyBot {
-    fn tick(&mut self, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput {
+    fn tick(&mut self, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput {
         // ...
     }
 }
@@ -42,7 +44,16 @@ This is a simple ATBA, or Always Towards Ball Agent. It can run with no
 dependencies other than RLBot itself. You can run it like this:
 
 ```sh
-cargo run --example atba
+cargo run --example simple
+```
+
+#### `examples/simple_flatbuffer`
+
+Another ATBA, but using a secondary interface which uses flatbuffers. Many
+functions in RLBot's core interface require flatbuffers.
+
+```sh
+cargo run --example simple_flatbuffer
 ```
 
 If you get an error, chances are you need to download the framework! Follow the instructions under **Installing the framework**.
@@ -115,7 +126,29 @@ should be run manually before cutting a release, using this command:
 cargo test -- integration
 ```
 
-### How to generate bindings
+### How to compile the flatbuffer schema
+
+Flatbuffers comes with a schema compiler, flatc. Unless your package manager
+has flatc and allows building HEAD, you'll have to [build flatc] yourself.
+
+Get the most recent [flatbuffer schema]. Then compile the schema like so from
+this project's root:
+
+```sh
+flatc -o src --rust rlbot.fbs && cargo fmt
+```
+
+This will update the `src/rlbot_generated.rs` file. One manual addition that
+must be made is adding the following under the `rlbot` module defined within:
+
+```rust
+#![allow(non_camel_case_types, non_snake_case, missing_docs)]
+```
+
+[build flatc]: https://google.github.io/flatbuffers/flatbuffers_guide_building.html
+[flatbuffer schema]: https://github.com/RLBot/RLBot/blob/master/src/main/flatbuffers/rlbot.fbs
+
+### How to generate ffi bindings
 
 Bindings are generated with [rust-bindgen]. Those docs are required reading.
 
@@ -133,15 +166,17 @@ bindgen \
     --no-layout-tests \
     --default-enum-style rust \
     --with-derive-default \
-    --raw-line '#![allow(non_camel_case_types, non_snake_case)]' \
+    --raw-line '#![allow(non_camel_case_types, non_snake_case, missing_docs)]' \
     --whitelist-function Interface::IsInitialized \
     --whitelist-function GameFunctions::SetGameState \
     --whitelist-function GameFunctions::StartMatch \
     --whitelist-function GameFunctions::UpdateFieldInfo \
     --whitelist-function GameFunctions::UpdateLiveDataPacket \
+    --whitelist-function GameFunctions::UpdateLiveDataPacketFlatbuffer \
     --whitelist-function GameFunctions::SendQuickChat \
     --whitelist-function GameFunctions::SendChat \
     --whitelist-function GameFunctions::UpdatePlayerInput \
+    --whitelist-function GameFunctions::UpdatePlayerInputFlatbuffer \
     --whitelist-function RenderFunctions::RenderGroup \
     -- \
     -I "$rlbot"/src/main/cpp/RLBotInterface/RLBotMessages

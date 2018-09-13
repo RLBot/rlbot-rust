@@ -2,6 +2,7 @@ extern crate nalgebra;
 extern crate rlbot;
 
 use nalgebra::Vector2;
+use rlbot::ffi;
 use std::error::Error;
 use std::f32::consts::PI;
 
@@ -18,12 +19,12 @@ impl rlbot::Bot for MyBot {
         self.player_index = index;
     }
 
-    fn tick(&mut self, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput {
+    fn tick(&mut self, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput {
         get_input(self.player_index, packet)
     }
 }
 
-fn get_input(player_index: usize, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput {
+fn get_input(player_index: usize, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput {
     let ball = packet.GameBall;
     let ball_loc = Vector2::new(ball.Physics.Location.X, ball.Physics.Location.Y);
     let car = packet.GameCars[player_index];
@@ -33,7 +34,7 @@ fn get_input(player_index: usize, packet: &rlbot::LiveDataPacket) -> rlbot::Play
     let desired_yaw = f32::atan2(offset.y, offset.x);
     let steer = desired_yaw - car.Physics.Rotation.Yaw;
 
-    rlbot::PlayerInput {
+    ffi::PlayerInput {
         Throttle: 1.0,
         Steer: normalize_angle(steer).max(-1.0).min(1.0),
         ..Default::default()

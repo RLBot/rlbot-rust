@@ -15,6 +15,8 @@ Rust developers.
 Your code will look a little something like this:
 
 ```rust
+use rlbot::ffi;
+
 fn main() -> Result<(), Box<Error>> {
     rlbot::run_bot(MyBot { /* ... */ })
 }
@@ -22,7 +24,7 @@ fn main() -> Result<(), Box<Error>> {
 struct MyBot { /* ... */ }
 
 impl rlbot::Bot for MyBot {
-    fn tick(&mut self, packet: &rlbot::LiveDataPacket) -> rlbot::PlayerInput {
+    fn tick(&mut self, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput {
         // ...
     }
 }
@@ -42,10 +44,19 @@ This is a simple ATBA, or Always Towards Ball Agent. It can run with no
 dependencies other than RLBot itself. You can run it like this:
 
 ```sh
-cargo run --example atba
+cargo run --example simple
 ```
 
 If you get an error, chances are you need to download the framework! Follow the instructions under **Installing the framework**.
+
+#### `examples/simple_flatbuffer`
+
+Another ATBA, but using a secondary interface which uses flatbuffers. Many
+functions in RLBot's core interface require flatbuffers.
+
+```sh
+cargo run --example simple_flatbuffer
+```
 
 #### `examples/bot`
 
