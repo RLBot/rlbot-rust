@@ -4,13 +4,13 @@ version = "0.0.4"
 authors = ["John Simon <john@whatisaph.one>"]
 description = "RLBot bindings for Rust"
 documentation = "https://docs.rs/rlbot/"
-repository = "https://gitlab.com/whatisaphone/rlbot-rust"
+repository = "https://github.com/whatisaphone/rlbot-rust"
 readme = "README-crates-io.md"
 keywords = ["rlbot", "rocket-league", "game"]
 license = "MIT"
 
 [badges]
-gitlab = { repository = "whatisaphone/rlbot-rust" }
+travis-ci = { repository = "whatisaphone/rlbot-rust" }
 
 [dependencies]
 libloading = "0.5.0"
