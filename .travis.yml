@@ -1,0 +1,22 @@
+language: rust
+
+cache: cargo
+
+rust:
+  - 1.27.0
+  - stable
+
+script:
+  - cargo rustc -- -D warnings
+  - cargo test
+
+matrix:
+  include:
+    - rust: nightly
+      before_script:
+        - rustup component add rustfmt-preview
+      script:
+        - cargo rustc -- -D warnings
+        - cargo test
+        - cargo fmt -- --check
+        - cargo rustdoc -- --deny warnings
