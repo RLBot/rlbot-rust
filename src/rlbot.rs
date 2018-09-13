@@ -47,7 +47,7 @@ use std::slice;
 ///
 /// See [`examples/simple`] for a complete example.
 ///
-/// [`examples/simple`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
+/// [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 pub fn init() -> Result<RLBot, Box<Error>> {
     inject::inject_dll()?;
 

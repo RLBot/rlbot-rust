@@ -12,7 +12,7 @@ use std::error::Error;
 ///
 /// See [`examples/bot`] for a complete example.
 ///
-/// [`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
+/// [`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
 pub trait Bot {
     /// This method is called when the bot's player index changes. The player
     /// index is the index in the
@@ -55,7 +55,7 @@ pub trait Bot {
 ///
 /// See [`examples/bot`] for a complete example.
 ///
-/// [`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
+/// [`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
 pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<Error>> {
     // Currently this only needs to interoperate with one caller – RLBot Python's
     // BaseSubprocessAgent. No public interface has been committed to, so we can

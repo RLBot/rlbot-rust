@@ -1,8 +1,8 @@
-# <img src="https://gitlab.com/whatisaphone/rlbot-rust/raw/master/assets/logo.png" height="128" /> rlbot-rust <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" align="right" />
+# <img src="https://github.com/whatisaphone/rlbot-rust/raw/master/assets/logo.png" height="128" /> rlbot-rust <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" align="right" />
 
 [![crates.io](https://img.shields.io/crates/v/rlbot.svg)](https://crates.io/crates/rlbot)
 [![docs](https://docs.rs/rlbot/badge.svg)](https://docs.rs/rlbot/)
-[![pipeline status](https://gitlab.com/whatisaphone/rlbot-rust/badges/master/pipeline.svg)](https://gitlab.com/whatisaphone/rlbot-rust/commits/master)
+[![Build Status](https://travis-ci.org/whatisaphone/rlbot-rust.svg?branch=master)](https://travis-ci.org/whatisaphone/rlbot-rust)
 
 [RLBot] is a framework for creating offline Rocket League bots. This crate lets
 you write bots using a simple, safe interface that should feel comfortable to
@@ -32,7 +32,7 @@ impl rlbot::Bot for MyBot {
 
 See [`examples/bot`] for a complete example.
 
-[`examples/bot`]: https://gitlab.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
+[`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
 
 ### Quick start
 
