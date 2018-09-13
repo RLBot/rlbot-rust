@@ -8,7 +8,11 @@
 you write bots using a simple, safe interface that should feel comfortable to
 Rust developers.
 
+**Stability:** As you might notice, we're still on version 0.0.x. Breaking
+changes are likely at this stage. Join the [Discord] to keep up-to-date!
+
 [RLBot]: https://github.com/RLBot/RLBot
+[Discord]: https://discordapp.com/invite/XhrQGf
 
 ## Usage
 
@@ -47,6 +51,9 @@ dependencies other than RLBot itself. You can run it like this:
 cargo run --example simple
 ```
 
+If you get an error, chances are you need to download the framework! Follow the
+instructions under **Installing the framework**.
+
 #### `examples/simple_flatbuffer`
 
 Another ATBA, but using a secondary interface which uses flatbuffers. Many
@@ -55,8 +62,6 @@ functions in RLBot's core interface require flatbuffers.
 ```sh
 cargo run --example simple_flatbuffer
 ```
-
-If you get an error, chances are you need to download the framework! Follow the instructions under **Installing the framework**.
 
 #### `examples/bot`
 

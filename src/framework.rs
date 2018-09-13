@@ -40,8 +40,8 @@ pub trait Bot {
 /// # Example
 ///
 /// ```no_run
-/// use rlbot::ffi;
-///
+/// # use rlbot::ffi;
+/// #
 /// struct MyBot;
 ///
 /// impl rlbot::Bot for MyBot {

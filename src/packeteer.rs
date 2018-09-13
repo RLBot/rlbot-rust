@@ -6,9 +6,7 @@ use std::error::Error;
 use std::mem;
 use std::time::{Duration, Instant};
 
-/// An iterator-like object that yields
-/// [`LiveDataPacket`](::ffi::LiveDataPacket)s or [`GameTickPacket`](::flat::
-/// GameTickPacket)s from the game as they occur.
+/// An iterator-like object that yields packets from the game as they occur.
 pub struct Packeteer<'a> {
     rlbot: &'a RLBot,
     ratelimiter: ratelimit::Limiter,

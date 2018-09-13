@@ -29,10 +29,14 @@
 //! This crate comes with a few examples to get you started.
 //!
 //! * [`examples/bot`] – Demonstrates use of the [`run_bot`] API.
-//! * [`examples/simple`] – Demonstrates use of the [`init`] API.
+//! * [`examples/simple`] – Demonstrates use of the [`init`] API with plain
+//!   structs.
+//! * [`examples/simple_flatbuffer`] – Demonstrates use of the [`init`] API with
+//!   FlatBuffers.
 //!
 //! [`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
 //! [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
+//! [`examples/simple_flatbuffer`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple_flatbuffer.rs
 
 #![warn(missing_docs)]
 

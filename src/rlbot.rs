@@ -12,9 +12,11 @@ use std::os::raw::{c_int, c_void};
 use std::ptr::null_mut;
 use std::slice;
 
-/// Injects the RLBot core DLL into Rocket League, and initializes the interface
-/// DLL. This function might sleep for a bit while it waits for RLBot to fully
-/// initialize.
+/// Initializes RLBot and returns a ready-to-use [`RLBot`] object.
+///
+/// This function will inject the RLBot core DLL into Rocket League, and then
+/// load the interface DLL. It might sleep for some time while it waits for
+/// RLBot to fully initialize.
 ///
 /// # Panics
 ///
@@ -25,8 +27,9 @@ use std::slice;
 /// # Example
 ///
 /// ```no_run
-/// use rlbot::ffi::MatchSettings;
-/// use rlbot::flat::{ControllerStateArgs, GameTickPacket};
+/// # use rlbot::ffi::MatchSettings;
+/// # use rlbot::flat::{ControllerStateArgs, GameTickPacket};
+/// #
 /// # fn main() -> Result<(), Box<::std::error::Error>> {
 /// let rlbot = rlbot::init()?;
 /// rlbot.start_match(MatchSettings::simple_1v1("Hero", "Villain"))?;
@@ -57,7 +60,7 @@ pub fn init() -> Result<RLBot, Box<Error>> {
     Ok(RLBot::new(interface))
 }
 
-/// The main interface to RLBot. All the RLBot calls that are available can be
+/// The low-level interface to RLBot. All RLBot calls that are available can be
 /// made through this struct.
 pub struct RLBot {
     interface: RLBotCoreInterface,
