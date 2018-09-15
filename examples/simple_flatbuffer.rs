@@ -2,14 +2,12 @@
 //! blindly towards the ball no matter what is happening on the field (just
 //! like Dory from Finding Nemo).
 
-extern crate nalgebra;
+extern crate flatbuffers;
+extern crate nalgebra as na;
 extern crate rlbot;
 
-use nalgebra::Vector2;
-use rlbot::{
-    ffi::MatchSettings,
-    flat::{ControllerStateArgs, GameTickPacket},
-};
+use na::Vector2;
+use rlbot::{ffi::MatchSettings, flat};
 use std::error::Error;
 use std::f32::consts::PI;
 
@@ -27,13 +25,12 @@ fn main() -> Result<(), Box<Error>> {
         // available, so this loop will not roast your CPU :)
         if packet.gameInfo().unwrap().isRoundActive() {
             let input = get_input(&packet);
-            let player_index = 0;
-            rlbot.update_player_input_flatbuffer(player_index, input)?;
+            rlbot.update_player_input_flatbuffer(input.finished_data())?;
         }
     }
 }
 
-fn get_input(packet: &GameTickPacket) -> ControllerStateArgs {
+fn get_input<'a>(packet: &flat::GameTickPacket) -> flatbuffers::FlatBufferBuilder<'a> {
     let ball = packet.ball().expect("Missing ball");
     let ball_phys = ball.physics().expect("Missing ball physics");
     let flat_ball_loc = ball_phys.location().expect("Missing ball location");
@@ -49,11 +46,36 @@ fn get_input(packet: &GameTickPacket) -> ControllerStateArgs {
     let flat_car_rot = car_phys.rotation().expect("Missing player rotation");
     let steer = desired_yaw - flat_car_rot.yaw();
 
-    ControllerStateArgs {
+    let player_index = 0;
+    let controller_state_args = flat::ControllerStateArgs {
         throttle: 1.0,
         steer: normalize_angle(steer).max(-1.0).min(1.0),
         ..Default::default()
-    }
+    };
+
+    build_player_input(player_index, controller_state_args)
+}
+
+fn build_player_input<'a>(
+    player_index: i32,
+    controller_state_args: flat::ControllerStateArgs,
+) -> flatbuffers::FlatBufferBuilder<'a> {
+    let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(1024);
+    let controller_state = Some(flat::ControllerState::create(
+        &mut builder,
+        &controller_state_args,
+    ));
+
+    let player_input = flat::PlayerInput::create(
+        &mut builder,
+        &flat::PlayerInputArgs {
+            playerIndex: player_index,
+            controllerState: controller_state,
+        },
+    );
+
+    builder.finish(player_input, None);
+    builder
 }
 
 /// Normalize an angle to between -PI and PI.

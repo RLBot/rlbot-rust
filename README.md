@@ -63,6 +63,14 @@ functions in RLBot's core interface require flatbuffers.
 cargo run --example simple_flatbuffer
 ```
 
+#### `examples/gravity`
+
+A fun example showing how to set game state using the low-level interface.
+
+```sh
+cargo run --example gravity
+```
+
 #### `examples/bot`
 
 This is a full-fledged bot that can run within the Python RLBot framework. It
@@ -163,7 +171,7 @@ After bindgen and its prerequisites are installed and working, run this
 delightfully short command:
 
 ```sh
-rlbot=<path-to-rlbot>
+rlbot=<absolute-path-to-rlbot>
 bindgen \
     "$rlbot"/src/main/cpp/RLBotInterface/RLBotInterface/Interface.hpp \
     -o src/ffi.rs \
@@ -176,6 +184,7 @@ bindgen \
     --whitelist-function GameFunctions::SetGameState \
     --whitelist-function GameFunctions::StartMatch \
     --whitelist-function GameFunctions::UpdateFieldInfo \
+    --whitelist-function GameFunctions::UpdateFieldInfoFlatbuffer \
     --whitelist-function GameFunctions::UpdateLiveDataPacket \
     --whitelist-function GameFunctions::UpdateLiveDataPacketFlatbuffer \
     --whitelist-function GameFunctions::SendQuickChat \
@@ -184,15 +193,32 @@ bindgen \
     --whitelist-function GameFunctions::UpdatePlayerInputFlatbuffer \
     --whitelist-function RenderFunctions::RenderGroup \
     -- \
+    -fdeclspec \
     -I "$rlbot"/src/main/cpp/RLBotInterface/RLBotMessages
 ```
 
 It should output errors in white text. Modify RLBot's source to fix the errors.
+
+If on an OS that uses forward slashes (ie not Windows), this can quickly
+alleviate some of the pain, run from the `RLBotInterface` directory:
+
+```sh
+find . | xargs perl -pi -e 's/([\w\.])\\(\w)/$1\/$2/g'
+```
+
+Commenting out includes that may fail to resolve:
+
+```sh
+find . | xargs perl -pi -e 's/\#include \<Windows.h\>/\/\/<Windows.h>/g'
+```
+
 For any problematic references to boost, it will be easiest to just purge
-indiscriminately. Keep running the above command and fixing errors (fun times!).
-After you've subjected yourself to enough pain, it will run successfully and
-output more errors, but in red text this time. As long as the errors are in red,
-that means it worked!
+indiscriminately. You may have to remove other things, like everything to do
+with `MessageStorage`, `GameInput`, `RenderOutput` and `CallbackOutput`. Keep
+running the above bindgen command and fixing errors (fun times!). After you've
+subjected yourself to enough pain, it will run successfully and output more
+errors, but in red text this time. As long as the errors are in red, that means
+it worked!
 
 Now open the resulting file (`src/ffi.rs`) and delete all the `extern "C" pub
 fn` declarations at the end. Since the DLL is actually loaded using this

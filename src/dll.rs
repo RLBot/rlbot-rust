@@ -14,6 +14,13 @@ type UpdateLiveDataPacket = extern "C" fn(*mut LiveDataPacket) -> RLBotCoreStatu
 type UpdateLiveDataPacketFlatbuffer = extern "C" fn() -> ByteBuffer;
 type StartMatch = extern "C" fn(MatchSettings, CallbackFunction, *mut c_uint) -> RLBotCoreStatus;
 type IsInitialized = extern "C" fn() -> bool;
+type UpdateFieldInfo = extern "C" fn(*mut FieldInfo) -> RLBotCoreStatus;
+type UpdateFieldInfoFlatbuffer = extern "C" fn() -> ByteBuffer;
+type SendChat =
+    extern "C" fn(QuickChatPreset, c_int, bool, CallbackFunction, *mut c_uint) -> RLBotCoreStatus;
+type SendQuickChat = extern "C" fn(*mut c_void, c_int) -> RLBotCoreStatus;
+type SetGameState = extern "C" fn(*mut c_void, c_int) -> RLBotCoreStatus;
+type RenderGroup = extern "C" fn(*mut c_void, c_int) -> RLBotCoreStatus;
 
 /// Tracks whether RLBot_Core_Interface has been loaded into this process.
 static INITIALIZED: AtomicBool = AtomicBool::new(false);
@@ -23,6 +30,13 @@ pub struct RLBotCoreInterface {
     pub update_player_input_flatbuffer: UpdatePlayerInputFlatbuffer,
     pub update_live_data_packet: UpdateLiveDataPacket,
     pub update_live_data_packet_flatbuffer: UpdateLiveDataPacketFlatbuffer,
+    pub update_field_info: UpdateFieldInfo,
+    pub update_field_info_flatbuffer: UpdateFieldInfoFlatbuffer,
+    pub set_game_state: SetGameState,
+    pub render_group: RenderGroup,
+    pub send_chat: SendChat,
+    /// Flatbuffer version of send_chat
+    pub send_quick_chat: SendQuickChat,
     pub start_match: StartMatch,
     pub is_initialized: IsInitialized,
 }
@@ -47,6 +61,12 @@ impl RLBotCoreInterface {
                 update_live_data_packet: *library.get(b"UpdateLiveDataPacket")?,
                 update_live_data_packet_flatbuffer: *library
                     .get(b"UpdateLiveDataPacketFlatbuffer")?,
+                update_field_info: *library.get(b"UpdateFieldInfo")?,
+                update_field_info_flatbuffer: *library.get(b"UpdateFieldInfoFlatbuffer")?,
+                set_game_state: *library.get(b"SetGameState")?,
+                render_group: *library.get(b"RenderGroup")?,
+                send_chat: *library.get(b"SendChat")?,
+                send_quick_chat: *library.get(b"SendQuickChat")?,
                 start_match: *library.get(b"StartMatch")?,
                 is_initialized: *library.get(b"IsInitialized")?,
             })

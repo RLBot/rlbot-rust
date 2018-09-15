@@ -63,6 +63,14 @@ functions in RLBot's core interface require flatbuffers.
 cargo run --example simple_flatbuffer
 ```
 
+#### `examples/gravity`
+
+A fun example showing how to set game state using the low-level interface.
+
+```sh
+cargo run --example gravity
+```
+
 #### `examples/bot`
 
 This is a full-fledged bot that can run within the Python RLBot framework. It
