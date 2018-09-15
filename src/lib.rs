@@ -33,10 +33,13 @@
 //!   structs.
 //! * [`examples/simple_flatbuffer`] – Demonstrates use of the [`init`] API with
 //!   FlatBuffers.
+//! * [`examples/gravity`] – Demonstrates use of the [`RLBot::set_game_state`]
+//!   API
 //!
 //! [`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
 //! [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 //! [`examples/simple_flatbuffer`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple_flatbuffer.rs
+//! [`examples/gravity`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/gravity.rs
 
 #![warn(missing_docs)]
 

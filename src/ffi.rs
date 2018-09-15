@@ -81,6 +81,11 @@ pub struct BoostInfo {
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
+pub struct TileInfo {
+    pub tileState: ::std::os::raw::c_int,
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct Touch {
     pub PlayerName: [u16; 32usize],
     pub TimeSeconds: f32,
@@ -113,6 +118,8 @@ pub struct LiveDataPacket {
     pub NumBoosts: ::std::os::raw::c_int,
     pub GameBall: BallInfo,
     pub GameInfo: GameInfo,
+    pub GameTiles: [TileInfo; 200usize],
+    pub NumTiles: ::std::os::raw::c_int,
 }
 impl Default for LiveDataPacket {
     fn default() -> Self {
@@ -137,7 +144,7 @@ pub struct BoostPad {
 pub struct FieldInfo {
     pub BoostPads: [BoostPad; 50usize],
     pub NumBoosts: ::std::os::raw::c_int,
-    pub Goals: [GoalInfo; 2usize],
+    pub Goals: [GoalInfo; 200usize],
     pub NumGoals: ::std::os::raw::c_int,
 }
 impl Default for FieldInfo {
@@ -191,39 +198,40 @@ pub enum GameMap {
     AquaDome = 8,
     StarbaseArc = 9,
     Farmstead = 10,
-    DFHStadium_Stormy = 11,
-    DFHStadium_Day = 12,
-    Mannfield_Stormy = 13,
-    Mannfield_Night = 14,
-    ChampionsField_Day = 15,
-    BeckwithPark_Stormy = 16,
-    BeckwithPark_Midnight = 17,
-    UrbanCentral_Night = 18,
-    UrbanCentral_Dawn = 19,
-    UtopiaColiseum_Dusk = 20,
-    DFHStadium_Snowy = 21,
-    Mannfield_Snowy = 22,
-    UtopiaColiseum_Snowy = 23,
-    Badlands = 24,
-    Badlands_Night = 25,
-    TokyoUnderpass = 26,
-    Arctagon = 27,
-    Pillars = 28,
-    Cosmic = 29,
-    DoubleGoal = 30,
-    Octagon = 31,
-    Underpass = 32,
-    UtopiaRetro = 33,
-    Hoops_DunkHouse = 34,
-    DropShot_Core707 = 35,
-    ThrowbackStadium = 36,
-    Workshop_Aerial_Map = 37,
-    Workshop_BeachVolley = 38,
-    Workshop_DribblingChallenge2 = 39,
-    Workshop_DribblingChallenge = 40,
-    Workshop_ObstacleCourse2 = 41,
-    Workshop_ObstacleCourse = 42,
-    Workshop_ShipYarr = 43,
+    SaltyShores = 11,
+    DFHStadium_Stormy = 12,
+    DFHStadium_Day = 13,
+    Mannfield_Stormy = 14,
+    Mannfield_Night = 15,
+    ChampionsField_Day = 16,
+    BeckwithPark_Stormy = 17,
+    BeckwithPark_Midnight = 18,
+    UrbanCentral_Night = 19,
+    UrbanCentral_Dawn = 20,
+    UtopiaColiseum_Dusk = 21,
+    DFHStadium_Snowy = 22,
+    Mannfield_Snowy = 23,
+    UtopiaColiseum_Snowy = 24,
+    Badlands = 25,
+    Badlands_Night = 26,
+    TokyoUnderpass = 27,
+    Arctagon = 28,
+    Pillars = 29,
+    Cosmic = 30,
+    DoubleGoal = 31,
+    Octagon = 32,
+    Underpass = 33,
+    UtopiaRetro = 34,
+    Hoops_DunkHouse = 35,
+    DropShot_Core707 = 36,
+    ThrowbackStadium = 37,
+    Workshop_Aerial_Map = 38,
+    Workshop_BeachVolley = 39,
+    Workshop_DribblingChallenge2 = 40,
+    Workshop_DribblingChallenge = 41,
+    Workshop_ObstacleCourse2 = 42,
+    Workshop_ObstacleCourse = 43,
+    Workshop_ShipYarr = 44,
 }
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -465,4 +473,9 @@ pub type CallbackFunction = ::std::option::Option<
 pub struct ByteBuffer {
     pub ptr: *mut ::std::os::raw::c_void,
     pub size: ::std::os::raw::c_int,
+}
+impl Default for ByteBuffer {
+    fn default() -> Self {
+        unsafe { ::std::mem::zeroed() }
+    }
 }

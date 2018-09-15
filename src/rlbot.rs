@@ -27,8 +27,10 @@ use std::slice;
 /// # Example
 ///
 /// ```no_run
+/// # extern crate flatbuffers;
+/// # extern crate rlbot;
 /// # use rlbot::ffi::MatchSettings;
-/// # use rlbot::flat::{ControllerStateArgs, GameTickPacket};
+/// # use rlbot::flat;
 /// #
 /// # fn main() -> Result<(), Box<::std::error::Error>> {
 /// let rlbot = rlbot::init()?;
@@ -42,8 +44,11 @@ use std::slice;
 ///
 /// loop {
 ///     let packet = packets.next_flatbuffer()?;
-///     let input: ControllerStateArgs = Default::default();
-///     rlbot.update_player_input_flatbuffer(0, input)?;
+///     let input_args: flat::PlayerInputArgs = Default::default();
+///     let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(1024);
+///     let player_input = flat::PlayerInput::create(&mut builder, &input_args);
+///     builder.finish(player_input, None);
+///     rlbot.update_player_input_flatbuffer(builder.finished_data())?;
 /// }
 /// # }
 /// ```
@@ -95,25 +100,15 @@ impl RLBot {
         core_result(status)
     }
 
-    /// Sends player input to RLBot using flatbuffers.
+    /// Sends player input to RLBot using flatbuffers. The buffer must be built
+    /// from a [`flat::PlayerInput`]
     pub fn update_player_input_flatbuffer(
         &self,
-        player_index: i32,
-        controller_state_args: flat::ControllerStateArgs,
+        player_input_buffer: &[u8],
     ) -> Result<(), RLBotError> {
-        let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(1024);
-        let controller_state = flat::ControllerState::create(&mut builder, &controller_state_args);
-        let player_input = flat::PlayerInput::create(
-            &mut builder,
-            &flat::PlayerInputArgs {
-                playerIndex: player_index,
-                controllerState: Some(controller_state),
-            },
-        );
-        builder.finish(player_input, None);
         let status = (self.interface.update_player_input_flatbuffer)(
-            builder.finished_data().as_ptr() as *mut c_void,
-            builder.finished_data().len() as c_int,
+            player_input_buffer.as_ptr() as *mut c_void,
+            player_input_buffer.len() as c_int,
         );
         core_result(status)
     }
@@ -129,7 +124,7 @@ impl RLBot {
         core_result(status)
     }
 
-    /// Grabs the current [`GameTickPacket`](flat::GameTickPacket) from RLBot,
+    /// Grabs the current [`flat::GameTickPacket`] from RLBot,
     /// if any. Consider using [`packeteer`](RLBot::packeteer) instead for
     /// a more convenient interface.
     pub fn update_live_data_packet_flatbuffer(&self) -> Option<flat::GameTickPacket> {
@@ -143,6 +138,55 @@ impl RLBot {
             };
             Some(flatbuffers::get_root::<flat::GameTickPacket>(&slice))
         }
+    }
+
+    /// Grabs the current [`ffi::FieldInfo`] from RLBot
+    pub fn update_field_info(&self, field_info: &mut ffi::FieldInfo) -> Result<(), RLBotError> {
+        let status = (self.interface.update_field_info)(field_info);
+        core_result(status)
+    }
+
+    /// Grabs the current [`flat::FieldInfo`] from RLBot, if any
+    pub fn update_field_info_flatbuffer(&self) -> Option<flat::FieldInfo> {
+        let byte_buffer = (self.interface.update_field_info_flatbuffer)();
+        if byte_buffer.size == 0 {
+            // game hasn't started yet
+            None
+        } else {
+            let slice: &[u8] = unsafe {
+                slice::from_raw_parts(byte_buffer.ptr as *const u8, byte_buffer.size as usize)
+            };
+            Some(flatbuffers::get_root::<flat::FieldInfo>(&slice))
+        }
+    }
+
+    /// Sets the desired game state. The buffer must be built from a
+    /// [`flat::DesiredGameState`]
+    pub fn set_game_state(&self, desired_game_state_buffer: &[u8]) -> Result<(), RLBotError> {
+        let status = (self.interface.set_game_state)(
+            desired_game_state_buffer.as_ptr() as *mut c_void,
+            desired_game_state_buffer.len() as c_int,
+        );
+        core_result(status)
+    }
+
+    /// Render a group of lines/text. The buffer must be built from a
+    /// [`flat::RenderGroup`]
+    pub fn render_group(&self, render_group_buffer: &[u8]) -> Result<(), RLBotError> {
+        let status = (self.interface.render_group)(
+            render_group_buffer.as_ptr() as *mut c_void,
+            render_group_buffer.len() as c_int,
+        );
+        core_result(status)
+    }
+
+    /// Send a quickchat. The buffer must be built from a [`flat::QuickChat`]
+    pub fn send_quick_chat(&self, quick_chat_buffer: &[u8]) -> Result<(), RLBotError> {
+        let status = (self.interface.send_quick_chat)(
+            quick_chat_buffer.as_ptr() as *mut c_void,
+            quick_chat_buffer.len() as c_int,
+        );
+        core_result(status)
     }
 
     /// Tell RLBot to start a match.
