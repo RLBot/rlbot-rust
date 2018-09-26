@@ -5,6 +5,7 @@ use flatbuffers;
 use inject;
 use packeteer::Packeteer;
 use physicist::Physicist;
+use render::RenderGroup;
 use rlbot_generated::rlbot::flat;
 use std::cell::Cell;
 use std::error::Error;
@@ -196,6 +197,19 @@ impl RLBot {
     pub fn start_match(&self, match_settings: ffi::MatchSettings) -> Result<(), RLBotError> {
         let status = (self.interface.start_match)(match_settings, None, null_mut());
         core_result(status)
+    }
+
+    /// Begin drawing to the screen.
+    ///
+    /// The ID identifies a group. Multiple groups can exist and be updated
+    /// independently. Drawings will remain on screen until they are replaced
+    /// by a group with the same ID.
+    ///
+    /// A group can be cleared from the screen by rendering an empty group.
+    ///
+    /// See [`RenderGroup`] for examples.
+    pub fn begin_render_group(&self, id: i32) -> RenderGroup {
+        RenderGroup::new(self, id)
     }
 
     /// Gets the framework's current prediction of ball motion as a FlatBuffer
