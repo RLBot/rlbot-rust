@@ -7,7 +7,7 @@ rust:
   - stable
 
 script:
-  - cargo rustc -- -D warnings
+  - cargo check --all-targets --features strict
   - cargo test
 
 matrix:
@@ -16,7 +16,7 @@ matrix:
       before_script:
         - rustup component add rustfmt-preview
       script:
-        - cargo rustc -- -D warnings
+        - cargo check --all-targets --features strict
         - cargo test
         - cargo fmt -- --check
         - cargo rustdoc -- --deny warnings

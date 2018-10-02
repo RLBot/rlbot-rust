@@ -1,4 +1,5 @@
 #![cfg(windows)]
+#![cfg_attr(feature = "strict", deny(warnings))]
 
 extern crate rlbot;
 extern crate winapi;

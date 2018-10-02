@@ -21,3 +21,6 @@ flatbuffers = "0.4.0"
 nalgebra = "0.16.0"
 winapi = { version = "0.3.5", features = ["synchapi"] }
 winproc = "0.5.1"
+
+[features]
+strict = []

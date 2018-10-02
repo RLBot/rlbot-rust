@@ -2,6 +2,8 @@
 //! blindly towards the ball no matter what is happening on the field (just
 //! like Dory from Finding Nemo).
 
+#![cfg_attr(feature = "strict", deny(warnings))]
+
 extern crate flatbuffers;
 extern crate nalgebra as na;
 extern crate rlbot;
