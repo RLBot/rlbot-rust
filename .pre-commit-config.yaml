@@ -10,7 +10,7 @@
       name: check
       language: system
       files: '[.]rs$'
-      entry: cargo rustc -- -D warnings
+      entry: cargo check --all-targets --features strict
       pass_filenames: false
 
     - id: test

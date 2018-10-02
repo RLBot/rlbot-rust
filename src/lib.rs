@@ -41,7 +41,7 @@
 //! [`examples/simple_flatbuffer`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple_flatbuffer.rs
 //! [`examples/gravity`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/gravity.rs
 
-#![warn(missing_docs)]
+#![cfg_attr(feature = "strict", deny(warnings, missing_docs))]
 
 extern crate flatbuffers;
 extern crate libloading;

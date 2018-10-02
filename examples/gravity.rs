@@ -1,5 +1,7 @@
 //! The ball is a neutron star. The cars are planets.
 
+#![cfg_attr(feature = "strict", deny(warnings))]
+
 extern crate flatbuffers;
 extern crate nalgebra as na;
 extern crate rlbot;
