@@ -3874,7 +3874,8 @@ pub mod rlbot {
                     .get::<QuickChatSelection>(
                         QuickChat::VT_QUICKCHATSELECTION,
                         Some(QuickChatSelection::Information_IGotIt),
-                    ).unwrap()
+                    )
+                    .unwrap()
             }
             /// The index of the player that sent the quick chat
             #[inline]
