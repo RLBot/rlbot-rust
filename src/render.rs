@@ -22,7 +22,8 @@ use std::error::Error;
 /// # fn main() -> Result<(), Box<Error>> {
 /// let rlbot = rlbot::init()?;
 /// let mut group = rlbot.begin_render_group(1234);
-/// group.draw_string_2d(10.0, 10.0, 2, 2, "I am text!", &ColorArgs::rgb(0, 255, 0));
+/// let green = group.color_rgb(0, 255, 0);
+/// group.draw_string_2d((10.0, 10.0), (2, 2), "I am text!", green);
 /// group.render()?;
 /// # Ok(())
 /// # }
@@ -49,15 +50,18 @@ pub struct RenderGroup<'a> {
 
 impl<'a> RenderGroup<'a> {
     pub(crate) fn new(rlbot: &'a RLBot, id: i32) -> RenderGroup<'a> {
-        let builder = FlatBufferBuilder::new_with_capacity(1024);
         RenderGroup {
             rlbot,
             id,
-            builder,
+            builder: FlatBufferBuilder::new_with_capacity(1024),
             messages: Vec::new(),
         }
     }
 }
+
+/// A color that can be used to draw in a [`RenderGroup`].
+#[derive(Copy, Clone)]
+pub struct Color<'a>(WIPOffset<flat::Color<'a>>);
 
 impl<'a> RenderGroup<'a> {
     /// Send the collected drawings to RLBot to be rendered to screen.
@@ -77,18 +81,59 @@ impl<'a> RenderGroup<'a> {
         Ok(())
     }
 
-    /// Draw a line using 2D coordinates.
+    /// Create a color with the given **a**lpha, **r**ed, **g**reen, and
+    /// **b**lue. An alpha of 255 is fully opaque, and 0 is fully transparent.
+    ///
+    /// A color can only be used with the `RenderGroup` that created it.
     ///
     /// # Example
     ///
     /// ```no_run
-    /// # use rlbot::flat::ColorArgs;
     /// # use rlbot::RenderGroup;
     /// # let mut group: RenderGroup = unsafe { ::std::mem::uninitialized() };
-    /// group.draw_line_2d(10.0, 10.0, 100.0, 100.0, &ColorArgs::rgb(0, 255, 0));
+    /// let transbluecent = group.color_argb(127, 0, 0, 255);
     /// ```
-    pub fn draw_line_2d(&mut self, x1: f32, y1: f32, x2: f32, y2: f32, color: &flat::ColorArgs) {
-        let color = flat::Color::create(&mut self.builder, &color);
+    pub fn color_argb(&mut self, a: u8, r: u8, g: u8, b: u8) -> Color<'a> {
+        Color(flat::Color::create(
+            &mut self.builder,
+            &flat::ColorArgs { a, r, g, b },
+        ))
+    }
+
+    /// Create an opaque color with the given, **r**ed, **g**reen, and **b**lue.
+    ///
+    /// A color can only be used with the `RenderGroup` that created it.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rlbot::RenderGroup;
+    /// # let mut group: RenderGroup = unsafe { ::std::mem::uninitialized() };
+    /// let green = group.color_rgb(0, 255, 0);
+    /// ```
+    pub fn color_rgb(&mut self, r: u8, g: u8, b: u8) -> Color<'a> {
+        Color(flat::Color::create(
+            &mut self.builder,
+            &flat::ColorArgs { a: 255, r, g, b },
+        ))
+    }
+
+    /// Draw a line using screen coordinates.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rlbot::RenderGroup;
+    /// # let mut group: RenderGroup = unsafe { ::std::mem::uninitialized() };
+    /// # let green = group.color_rgb(0, 255, 0);
+    /// group.draw_line_2d((10.0, 10.0), (100.0, 100.0), green);
+    /// ```
+    pub fn draw_line_2d(
+        &mut self,
+        (x1, y1): (f32, f32),
+        (x2, y2): (f32, f32),
+        Color(color): Color,
+    ) {
         let start = flat::Vector3::new(x1, y1, 0.0);
         let end = flat::Vector3::new(x2, y2, 0.0);
 
@@ -100,27 +145,110 @@ impl<'a> RenderGroup<'a> {
         self.messages.push(rm.finish());
     }
 
-    /// Draw a string at a 2D coordinate.
+    /// Draw a line using world coordinates.
     ///
     /// # Example
     ///
     /// ```no_run
-    /// # use rlbot::flat::ColorArgs;
     /// # use rlbot::RenderGroup;
     /// # let mut group: RenderGroup = unsafe { ::std::mem::uninitialized() };
-    /// group.draw_string_2d(10.0, 10.0, 2, 2, "I am text!", &ColorArgs::rgb(0, 255, 0));
+    /// # let green = group.color_rgb(0, 255, 0);
+    /// group.draw_line_3d((10.0, 10.0, 10.0), (100.0, 100.0, 100.0), green);
+    /// ```
+    pub fn draw_line_3d(
+        &mut self,
+        (x1, y1, z1): (f32, f32, f32),
+        (x2, y2, z2): (f32, f32, f32),
+        Color(color): Color,
+    ) {
+        let start = flat::Vector3::new(x1, y1, z1);
+        let end = flat::Vector3::new(x2, y2, z2);
+
+        let mut rm = flat::RenderMessageBuilder::new(&mut self.builder);
+        rm.add_renderType(flat::RenderType::DrawLine3D);
+        rm.add_color(color);
+        rm.add_start(&start);
+        rm.add_end(&end);
+        self.messages.push(rm.finish());
+    }
+
+    /// Draw a line with one endpoint in screen coordinates and the other at a
+    /// point projected from world coordinates to screen coordinates.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rlbot::RenderGroup;
+    /// # let mut group: RenderGroup = unsafe { ::std::mem::uninitialized() };
+    /// # let green = group.color_rgb(0, 255, 0);
+    /// group.draw_line_2d_3d((10.0, 10.0), (100.0, 100.0, 100.0), green);
+    /// ```
+    pub fn draw_line_2d_3d(
+        &mut self,
+        (x1, y1): (f32, f32),
+        (x2, y2, z2): (f32, f32, f32),
+        Color(color): Color,
+    ) {
+        let start = flat::Vector3::new(x1, y1, 0.0);
+        let end = flat::Vector3::new(x2, y2, z2);
+
+        let mut rm = flat::RenderMessageBuilder::new(&mut self.builder);
+        rm.add_renderType(flat::RenderType::DrawLine2D_3D);
+        rm.add_color(color);
+        rm.add_start(&start);
+        rm.add_end(&end);
+        self.messages.push(rm.finish());
+    }
+
+    /// Draw text using screen coordinates.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rlbot::RenderGroup;
+    /// # let mut group: RenderGroup = unsafe { ::std::mem::uninitialized() };
+    /// # let green = group.color_rgb(0, 255, 0);
+    /// group.draw_string_2d((10.0, 10.0), (2, 2), "I am text!", green);
     /// ```
     pub fn draw_string_2d(
         &mut self,
-        x: f32,
-        y: f32,
-        scale_x: i32,
-        scale_y: i32,
+        (x, y): (f32, f32),
+        (scale_x, scale_y): (i32, i32),
         text: impl AsRef<str>,
-        color: &flat::ColorArgs,
+        Color(color): Color,
     ) {
-        let color = flat::Color::create(&mut self.builder, color);
         let start = flat::Vector3::new(x, y, 0.0);
+        let text = self.builder.create_string(text.as_ref());
+
+        let mut rm = flat::RenderMessageBuilder::new(&mut self.builder);
+        rm.add_renderType(flat::RenderType::DrawString2D);
+        rm.add_color(color);
+        rm.add_start(&start);
+        rm.add_scaleX(scale_x);
+        rm.add_scaleY(scale_y);
+        rm.add_text(text);
+        self.messages.push(rm.finish());
+    }
+
+    /// Draw text at a point projected from world coordinates to screen
+    /// coordinates.
+    ///
+    /// # Example
+    ///
+    /// ```no_run
+    /// # use rlbot::RenderGroup;
+    /// # let mut group: RenderGroup = unsafe { ::std::mem::uninitialized() };
+    /// # let green = group.color_rgb(0, 255, 0);
+    /// group.draw_string_3d((10.0, 10.0, 10.0), (2, 2), "I am text!", green);
+    /// ```
+    pub fn draw_string_3d(
+        &mut self,
+        (x, y, z): (f32, f32, f32),
+        (scale_x, scale_y): (i32, i32),
+        text: impl AsRef<str>,
+        Color(color): Color,
+    ) {
+        let start = flat::Vector3::new(x, y, z);
         let text = self.builder.create_string(text.as_ref());
 
         let mut rm = flat::RenderMessageBuilder::new(&mut self.builder);

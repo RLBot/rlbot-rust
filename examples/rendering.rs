@@ -1,9 +1,11 @@
 //! Draws a clock in the corner of the screen.
 
+#![cfg_attr(feature = "strict", deny(warnings))]
+
 extern crate nalgebra as na;
 extern crate rlbot;
 
-use rlbot::{ffi, flat};
+use rlbot::ffi;
 use std::error::Error;
 use std::f32::consts::PI;
 
@@ -38,40 +40,34 @@ fn main() -> Result<(), Box<Error>> {
 
         let center_x = 100.0;
         let center_y = 150.0;
-        let r_min = 60.0;
-        let r_sec = 80.0;
-        let r_ms = 40.0;
+
+        let clock_hand = |fraction: f32, radius: f32| {
+            let t = fraction * 2.0 * PI - PI / 2.0;
+            (center_x + t.cos() * radius, center_y + t.sin() * radius)
+        };
 
         let mut group = rlbot.begin_render_group(0);
-        let green = flat::ColorArgs::argb(255, 0, 255, 0);
+        let green = group.color_rgb(0, 255, 0);
         group.draw_string_2d(
-            40.0,
-            20.0,
-            2,
-            2,
+            (40.0, 20.0),
+            (2, 2),
             format!("{}:{:02}.{:03}", min, sec, ms),
-            &green,
+            green,
         );
         group.draw_line_2d(
-            center_x,
-            center_y,
-            center_x + (min as f32 * 2.0 * PI / 60.0 - PI / 2.0).cos() * r_min,
-            center_y + (min as f32 * 2.0 * PI / 60.0 - PI / 2.0).sin() * r_min,
-            &green,
+            (center_x, center_y),
+            clock_hand(min as f32 / 60.0, 60.0),
+            green,
         );
         group.draw_line_2d(
-            center_x,
-            center_y,
-            center_x + (sec as f32 * 2.0 * PI / 60.0 - PI / 2.0).cos() * r_sec,
-            center_y + (sec as f32 * 2.0 * PI / 60.0 - PI / 2.0).sin() * r_sec,
-            &green,
+            (center_x, center_y),
+            clock_hand(sec as f32 / 60.0, 80.0),
+            green,
         );
         group.draw_line_2d(
-            center_x,
-            center_y,
-            center_x + (ms as f32 * 2.0 * PI / 1000.0 - PI / 2.0).cos() * r_ms,
-            center_y + (ms as f32 * 2.0 * PI / 1000.0 - PI / 2.0).sin() * r_ms,
-            &green,
+            (center_x, center_y),
+            clock_hand(ms as f32 / 1000.0, 40.0),
+            green,
         );
         group.render()?;
     }

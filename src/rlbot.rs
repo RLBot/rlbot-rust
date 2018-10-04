@@ -207,7 +207,7 @@ impl RLBot {
     ///
     /// A group can be cleared from the screen by rendering an empty group.
     ///
-    /// See [`RenderGroup`] for examples.
+    /// See [`RenderGroup`] for more info.
     pub fn begin_render_group(&self, id: i32) -> RenderGroup {
         RenderGroup::new(self, id)
     }

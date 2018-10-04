@@ -51,14 +51,13 @@ pub mod ffi;
 pub use framework::{run_bot, Bot};
 pub use packeteer::Packeteer;
 pub use physicist::Physicist;
-pub use render::RenderGroup;
+pub use render::{Color, RenderGroup};
 pub use rlbot::{init, RLBot};
 pub use rlbot_generated::rlbot::flat;
 
 mod dll;
 mod error;
 mod ffi_impls;
-mod flat_impls;
 mod framework;
 mod inject;
 mod packeteer;
