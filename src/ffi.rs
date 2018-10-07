@@ -24,6 +24,7 @@ pub enum RLBotCoreStatus {
     InvalidPlayerIndex = 16,
     InvalidQuickChatPreset = 17,
     InvalidRenderType = 18,
+    QuickChatRateExceeded = 19,
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
@@ -94,9 +95,17 @@ pub struct Touch {
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
+pub struct DropShotBallInfo {
+    pub AbsorbedForce: f32,
+    pub DamageIndex: ::std::os::raw::c_int,
+    pub ForceAccumRecent: f32,
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct BallInfo {
     pub Physics: Physics,
     pub LatestTouch: Touch,
+    pub DropShotInfo: DropShotBallInfo,
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
