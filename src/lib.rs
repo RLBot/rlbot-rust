@@ -50,6 +50,7 @@ extern crate ratelimit;
 pub mod ffi;
 pub use framework::{run_bot, Bot};
 pub use packeteer::Packeteer;
+pub use physicist::Physicist;
 pub use rlbot::{init, RLBot};
 pub use rlbot_generated::rlbot::flat;
 
@@ -59,6 +60,7 @@ mod ffi_impls;
 mod framework;
 mod inject;
 mod packeteer;
+mod physicist;
 mod rlbot;
 #[allow(non_camel_case_types, non_snake_case, missing_docs)]
 mod rlbot_generated;

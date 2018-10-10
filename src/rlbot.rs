@@ -4,6 +4,7 @@ use ffi;
 use flatbuffers;
 use inject;
 use packeteer::Packeteer;
+use physicist::Physicist;
 use rlbot_generated::rlbot::flat;
 use std::cell::Cell;
 use std::error::Error;
@@ -88,6 +89,12 @@ impl RLBot {
     /// as it occurs.
     pub fn packeteer(&self) -> Packeteer {
         Packeteer::new(self)
+    }
+
+    /// Returns a [`Physicist`] object, for conveniently accessing physics
+    /// ticks as they occur.
+    pub fn physicist(&self) -> Physicist {
+        Physicist::new(self)
     }
 
     /// Sends player input to RLBot.
