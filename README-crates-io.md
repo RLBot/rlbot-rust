@@ -8,8 +8,8 @@
 you write bots using a simple, safe interface that should feel comfortable to
 Rust developers.
 
-**Stability:** As you might notice, we're still on version 0.0.x. Breaking
-changes are likely at this stage. Join the [Discord] to keep up-to-date!
+**Stability:** As you might notice, we're still on version 0.x. Breaking changes
+are likely at this stage. Join the [Discord] to keep up-to-date!
 
 [RLBot]: https://github.com/RLBot/RLBot
 [Discord]: https://discordapp.com/invite/XhrQGf
