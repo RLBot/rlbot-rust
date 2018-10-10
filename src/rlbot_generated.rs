@@ -5,7 +5,6 @@
 extern crate flatbuffers;
 
 pub mod rlbot {
-    #![allow(non_camel_case_types, non_snake_case, missing_docs)]
     #![allow(dead_code)]
     #![allow(unused_imports)]
 
@@ -211,35 +210,35 @@ pub mod rlbot {
             PostGame_WhatAGame = 40,
             PostGame_NiceMoves = 41,
             PostGame_EverybodyDance = 42,
-
+            /// Custom text chats made by bot makers
             MaxPysonixQuickChatPresets = 43,
-
+            /// Waste of CPU cycles
             Custom_Toxic_WasteCPU = 44,
-
+            /// Git gud*
             Custom_Toxic_GitGut = 45,
-
+            /// De-Allocate Yourself
             Custom_Toxic_DeAlloc = 46,
-
+            /// 404: Your skill not found
             Custom_Toxic_404NoSkill = 47,
-
+            /// Get a virus
             Custom_Toxic_CatchVirus = 48,
-
+            /// Passing!
             Custom_Useful_Passing = 49,
-
+            /// Faking!
             Custom_Useful_Faking = 50,
-
+            /// Demoing!
             Custom_Useful_Demoing = 51,
-
+            /// BOOPING
             Custom_Useful_Bumping = 52,
-
+            /// The chances of that was 47525 to 1*
             Custom_Compliments_TinyChances = 53,
-
+            /// Who upped your skill level?
             Custom_Compliments_SkillLevel = 54,
-
+            /// Your programmer should be proud
             Custom_Compliments_proud = 55,
-
+            /// You're the GC of Bots
             Custom_Compliments_GC = 56,
-
+            /// Are you <Insert Pro>Bot? *
             Custom_Compliments_Pro = 57,
         }
 
@@ -470,6 +469,8 @@ pub mod rlbot {
             }
         }
 
+        /// Expresses the rotation state of an object in Euler angles, with
+        /// values in radians.
         // struct Rotator, aligned to 4
         #[repr(C, align(4))]
         #[derive(Clone, Copy, Debug, PartialEq)]
@@ -531,6 +532,84 @@ pub mod rlbot {
             }
             pub fn roll<'a>(&'a self) -> f32 {
                 self.roll_.from_little_endian()
+            }
+        }
+
+        /// Expresses the rotation state of an object.
+        /// Learn about quaternions here: https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
+        /// You can tinker with them here to build an intuition: https://quaternions.online/
+        // struct Quaternion, aligned to 4
+        #[repr(C, align(4))]
+        #[derive(Clone, Copy, Debug, PartialEq)]
+        pub struct Quaternion {
+            x_: f32,
+            y_: f32,
+            z_: f32,
+            w_: f32,
+        } // pub struct Quaternion
+        impl flatbuffers::SafeSliceAccess for Quaternion {}
+        impl<'a> flatbuffers::Follow<'a> for Quaternion {
+            type Inner = &'a Quaternion;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                <&'a Quaternion>::follow(buf, loc)
+            }
+        }
+        impl<'a> flatbuffers::Follow<'a> for &'a Quaternion {
+            type Inner = &'a Quaternion;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::follow_cast_ref::<Quaternion>(buf, loc)
+            }
+        }
+        impl<'b> flatbuffers::Push for Quaternion {
+            type Output = Quaternion;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                let src = unsafe {
+                    ::std::slice::from_raw_parts(
+                        self as *const Quaternion as *const u8,
+                        Self::size(),
+                    )
+                };
+                dst.copy_from_slice(src);
+            }
+        }
+        impl<'b> flatbuffers::Push for &'b Quaternion {
+            type Output = Quaternion;
+
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                let src = unsafe {
+                    ::std::slice::from_raw_parts(
+                        *self as *const Quaternion as *const u8,
+                        Self::size(),
+                    )
+                };
+                dst.copy_from_slice(src);
+            }
+        }
+
+        impl Quaternion {
+            pub fn new<'a>(_x: f32, _y: f32, _z: f32, _w: f32) -> Self {
+                Quaternion {
+                    x_: _x.to_little_endian(),
+                    y_: _y.to_little_endian(),
+                    z_: _z.to_little_endian(),
+                    w_: _w.to_little_endian(),
+                }
+            }
+            pub fn x<'a>(&'a self) -> f32 {
+                self.x_.from_little_endian()
+            }
+            pub fn y<'a>(&'a self) -> f32 {
+                self.y_.from_little_endian()
+            }
+            pub fn z<'a>(&'a self) -> f32 {
+                self.z_.from_little_endian()
+            }
+            pub fn w<'a>(&'a self) -> f32 {
+                self.w_.from_little_endian()
             }
         }
 
@@ -860,7 +939,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args PlayerInputArgs,
+                args: &'args PlayerInputArgs<'args>,
             ) -> flatbuffers::WIPOffset<PlayerInput<'bldr>> {
                 let mut builder = PlayerInputBuilder::new(_fbb);
                 if let Some(x) = args.controllerState {
@@ -1253,7 +1332,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args PhysicsArgs,
+                args: &'args PhysicsArgs<'args>,
             ) -> flatbuffers::WIPOffset<Physics<'bldr>> {
                 let mut builder = PhysicsBuilder::new(_fbb);
                 if let Some(x) = args.angularVelocity {
@@ -1594,6 +1673,119 @@ pub mod rlbot {
             }
         }
 
+        pub enum DropShotBallInfoOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct DropShotBallInfo<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for DropShotBallInfo<'a> {
+            type Inner = DropShotBallInfo<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> DropShotBallInfo<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                DropShotBallInfo { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args DropShotBallInfoArgs,
+            ) -> flatbuffers::WIPOffset<DropShotBallInfo<'bldr>> {
+                let mut builder = DropShotBallInfoBuilder::new(_fbb);
+                builder.add_forceAccumRecent(args.forceAccumRecent);
+                builder.add_damageIndex(args.damageIndex);
+                builder.add_absorbedForce(args.absorbedForce);
+                builder.finish()
+            }
+
+            pub const VT_ABSORBEDFORCE: flatbuffers::VOffsetT = 4;
+            pub const VT_DAMAGEINDEX: flatbuffers::VOffsetT = 6;
+            pub const VT_FORCEACCUMRECENT: flatbuffers::VOffsetT = 8;
+
+            #[inline]
+            pub fn absorbedForce(&'a self) -> f32 {
+                self._tab
+                    .get::<f32>(DropShotBallInfo::VT_ABSORBEDFORCE, Some(0.0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn damageIndex(&'a self) -> i32 {
+                self._tab
+                    .get::<i32>(DropShotBallInfo::VT_DAMAGEINDEX, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn forceAccumRecent(&'a self) -> f32 {
+                self._tab
+                    .get::<f32>(DropShotBallInfo::VT_FORCEACCUMRECENT, Some(0.0))
+                    .unwrap()
+            }
+        }
+
+        pub struct DropShotBallInfoArgs {
+            pub absorbedForce: f32,
+            pub damageIndex: i32,
+            pub forceAccumRecent: f32,
+        }
+        impl<'a> Default for DropShotBallInfoArgs {
+            #[inline]
+            fn default() -> Self {
+                DropShotBallInfoArgs {
+                    absorbedForce: 0.0,
+                    damageIndex: 0,
+                    forceAccumRecent: 0.0,
+                }
+            }
+        }
+        pub struct DropShotBallInfoBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> DropShotBallInfoBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_absorbedForce(&mut self, absorbedForce: f32) {
+                self.fbb_
+                    .push_slot::<f32>(DropShotBallInfo::VT_ABSORBEDFORCE, absorbedForce, 0.0);
+            }
+            #[inline]
+            pub fn add_damageIndex(&mut self, damageIndex: i32) {
+                self.fbb_
+                    .push_slot::<i32>(DropShotBallInfo::VT_DAMAGEINDEX, damageIndex, 0);
+            }
+            #[inline]
+            pub fn add_forceAccumRecent(&mut self, forceAccumRecent: f32) {
+                self.fbb_.push_slot::<f32>(
+                    DropShotBallInfo::VT_FORCEACCUMRECENT,
+                    forceAccumRecent,
+                    0.0,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> DropShotBallInfoBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                DropShotBallInfoBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<DropShotBallInfo<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
         pub enum BallInfoOffset {}
         #[derive(Copy, Clone, Debug, PartialEq)]
 
@@ -1619,9 +1811,12 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args BallInfoArgs,
+                args: &'args BallInfoArgs<'args>,
             ) -> flatbuffers::WIPOffset<BallInfo<'bldr>> {
                 let mut builder = BallInfoBuilder::new(_fbb);
+                if let Some(x) = args.dropShotInfo {
+                    builder.add_dropShotInfo(x);
+                }
                 if let Some(x) = args.latestTouch {
                     builder.add_latestTouch(x);
                 }
@@ -1633,6 +1828,7 @@ pub mod rlbot {
 
             pub const VT_PHYSICS: flatbuffers::VOffsetT = 4;
             pub const VT_LATESTTOUCH: flatbuffers::VOffsetT = 6;
+            pub const VT_DROPSHOTINFO: flatbuffers::VOffsetT = 8;
 
             #[inline]
             pub fn physics(&'a self) -> Option<Physics<'a>> {
@@ -1644,11 +1840,20 @@ pub mod rlbot {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Touch<'a>>>(BallInfo::VT_LATESTTOUCH, None)
             }
+            #[inline]
+            pub fn dropShotInfo(&'a self) -> Option<DropShotBallInfo<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<DropShotBallInfo<'a>>>(
+                        BallInfo::VT_DROPSHOTINFO,
+                        None,
+                    )
+            }
         }
 
         pub struct BallInfoArgs<'a> {
             pub physics: Option<flatbuffers::WIPOffset<Physics<'a>>>,
             pub latestTouch: Option<flatbuffers::WIPOffset<Touch<'a>>>,
+            pub dropShotInfo: Option<flatbuffers::WIPOffset<DropShotBallInfo<'a>>>,
         }
         impl<'a> Default for BallInfoArgs<'a> {
             #[inline]
@@ -1656,6 +1861,7 @@ pub mod rlbot {
                 BallInfoArgs {
                     physics: None,
                     latestTouch: None,
+                    dropShotInfo: None,
                 }
             }
         }
@@ -1678,6 +1884,17 @@ pub mod rlbot {
                     BallInfo::VT_LATESTTOUCH,
                     latestTouch,
                 );
+            }
+            #[inline]
+            pub fn add_dropShotInfo(
+                &mut self,
+                dropShotInfo: flatbuffers::WIPOffset<DropShotBallInfo<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<DropShotBallInfo>>(
+                        BallInfo::VT_DROPSHOTINFO,
+                        dropShotInfo,
+                    );
             }
             #[inline]
             pub fn new(
@@ -2258,6 +2475,471 @@ pub mod rlbot {
             }
         }
 
+        /// The state of a rigid body in Rocket League's physics engine.
+        /// This gets updated in time with the physics tick, not the rendering
+        /// framerate. The frame field will be incremented every time
+        /// the physics engine ticks.
+        pub enum RigidBodyStateOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct RigidBodyState<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for RigidBodyState<'a> {
+            type Inner = RigidBodyState<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> RigidBodyState<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                RigidBodyState { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args RigidBodyStateArgs<'args>,
+            ) -> flatbuffers::WIPOffset<RigidBodyState<'bldr>> {
+                let mut builder = RigidBodyStateBuilder::new(_fbb);
+                if let Some(x) = args.angularVelocity {
+                    builder.add_angularVelocity(x);
+                }
+                if let Some(x) = args.velocity {
+                    builder.add_velocity(x);
+                }
+                if let Some(x) = args.rotation {
+                    builder.add_rotation(x);
+                }
+                if let Some(x) = args.location {
+                    builder.add_location(x);
+                }
+                builder.add_frame(args.frame);
+                builder.finish()
+            }
+
+            pub const VT_FRAME: flatbuffers::VOffsetT = 4;
+            pub const VT_LOCATION: flatbuffers::VOffsetT = 6;
+            pub const VT_ROTATION: flatbuffers::VOffsetT = 8;
+            pub const VT_VELOCITY: flatbuffers::VOffsetT = 10;
+            pub const VT_ANGULARVELOCITY: flatbuffers::VOffsetT = 12;
+
+            #[inline]
+            pub fn frame(&'a self) -> i32 {
+                self._tab
+                    .get::<i32>(RigidBodyState::VT_FRAME, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn location(&'a self) -> Option<&'a Vector3> {
+                self._tab.get::<Vector3>(RigidBodyState::VT_LOCATION, None)
+            }
+            #[inline]
+            pub fn rotation(&'a self) -> Option<&'a Quaternion> {
+                self._tab
+                    .get::<Quaternion>(RigidBodyState::VT_ROTATION, None)
+            }
+            #[inline]
+            pub fn velocity(&'a self) -> Option<&'a Vector3> {
+                self._tab.get::<Vector3>(RigidBodyState::VT_VELOCITY, None)
+            }
+            #[inline]
+            pub fn angularVelocity(&'a self) -> Option<&'a Vector3> {
+                self._tab
+                    .get::<Vector3>(RigidBodyState::VT_ANGULARVELOCITY, None)
+            }
+        }
+
+        pub struct RigidBodyStateArgs<'a> {
+            pub frame: i32,
+            pub location: Option<&'a Vector3>,
+            pub rotation: Option<&'a Quaternion>,
+            pub velocity: Option<&'a Vector3>,
+            pub angularVelocity: Option<&'a Vector3>,
+        }
+        impl<'a> Default for RigidBodyStateArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                RigidBodyStateArgs {
+                    frame: 0,
+                    location: None,
+                    rotation: None,
+                    velocity: None,
+                    angularVelocity: None,
+                }
+            }
+        }
+        pub struct RigidBodyStateBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> RigidBodyStateBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_frame(&mut self, frame: i32) {
+                self.fbb_
+                    .push_slot::<i32>(RigidBodyState::VT_FRAME, frame, 0);
+            }
+            #[inline]
+            pub fn add_location(&mut self, location: &'b Vector3) {
+                self.fbb_
+                    .push_slot_always::<&Vector3>(RigidBodyState::VT_LOCATION, location);
+            }
+            #[inline]
+            pub fn add_rotation(&mut self, rotation: &'b Quaternion) {
+                self.fbb_
+                    .push_slot_always::<&Quaternion>(RigidBodyState::VT_ROTATION, rotation);
+            }
+            #[inline]
+            pub fn add_velocity(&mut self, velocity: &'b Vector3) {
+                self.fbb_
+                    .push_slot_always::<&Vector3>(RigidBodyState::VT_VELOCITY, velocity);
+            }
+            #[inline]
+            pub fn add_angularVelocity(&mut self, angularVelocity: &'b Vector3) {
+                self.fbb_.push_slot_always::<&Vector3>(
+                    RigidBodyState::VT_ANGULARVELOCITY,
+                    angularVelocity,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> RigidBodyStateBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                RigidBodyStateBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<RigidBodyState<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// Rigid body state for a player / car in the game. Includes the latest
+        /// controller input, which is otherwise difficult to correlate with
+        /// consequences.
+        pub enum PlayerRigidBodyStateOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct PlayerRigidBodyState<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for PlayerRigidBodyState<'a> {
+            type Inner = PlayerRigidBodyState<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> PlayerRigidBodyState<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                PlayerRigidBodyState { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args PlayerRigidBodyStateArgs<'args>,
+            ) -> flatbuffers::WIPOffset<PlayerRigidBodyState<'bldr>> {
+                let mut builder = PlayerRigidBodyStateBuilder::new(_fbb);
+                if let Some(x) = args.input {
+                    builder.add_input(x);
+                }
+                if let Some(x) = args.state {
+                    builder.add_state(x);
+                }
+                builder.finish()
+            }
+
+            pub const VT_STATE: flatbuffers::VOffsetT = 4;
+            pub const VT_INPUT: flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub fn state(&'a self) -> Option<RigidBodyState<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<RigidBodyState<'a>>>(
+                        PlayerRigidBodyState::VT_STATE,
+                        None,
+                    )
+            }
+            #[inline]
+            pub fn input(&'a self) -> Option<ControllerState<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<ControllerState<'a>>>(
+                        PlayerRigidBodyState::VT_INPUT,
+                        None,
+                    )
+            }
+        }
+
+        pub struct PlayerRigidBodyStateArgs<'a> {
+            pub state: Option<flatbuffers::WIPOffset<RigidBodyState<'a>>>,
+            pub input: Option<flatbuffers::WIPOffset<ControllerState<'a>>>,
+        }
+        impl<'a> Default for PlayerRigidBodyStateArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                PlayerRigidBodyStateArgs {
+                    state: None,
+                    input: None,
+                }
+            }
+        }
+        pub struct PlayerRigidBodyStateBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> PlayerRigidBodyStateBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_state(&mut self, state: flatbuffers::WIPOffset<RigidBodyState<'b>>) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<RigidBodyState>>(
+                        PlayerRigidBodyState::VT_STATE,
+                        state,
+                    );
+            }
+            #[inline]
+            pub fn add_input(&mut self, input: flatbuffers::WIPOffset<ControllerState<'b>>) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<ControllerState>>(
+                        PlayerRigidBodyState::VT_INPUT,
+                        input,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> PlayerRigidBodyStateBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                PlayerRigidBodyStateBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<PlayerRigidBodyState<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// Rigid body state for the ball.
+        pub enum BallRigidBodyStateOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct BallRigidBodyState<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for BallRigidBodyState<'a> {
+            type Inner = BallRigidBodyState<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> BallRigidBodyState<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                BallRigidBodyState { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args BallRigidBodyStateArgs<'args>,
+            ) -> flatbuffers::WIPOffset<BallRigidBodyState<'bldr>> {
+                let mut builder = BallRigidBodyStateBuilder::new(_fbb);
+                if let Some(x) = args.state {
+                    builder.add_state(x);
+                }
+                builder.finish()
+            }
+
+            pub const VT_STATE: flatbuffers::VOffsetT = 4;
+
+            #[inline]
+            pub fn state(&'a self) -> Option<RigidBodyState<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<RigidBodyState<'a>>>(
+                        BallRigidBodyState::VT_STATE,
+                        None,
+                    )
+            }
+        }
+
+        pub struct BallRigidBodyStateArgs<'a> {
+            pub state: Option<flatbuffers::WIPOffset<RigidBodyState<'a>>>,
+        }
+        impl<'a> Default for BallRigidBodyStateArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                BallRigidBodyStateArgs { state: None }
+            }
+        }
+        pub struct BallRigidBodyStateBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> BallRigidBodyStateBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_state(&mut self, state: flatbuffers::WIPOffset<RigidBodyState<'b>>) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<RigidBodyState>>(
+                        BallRigidBodyState::VT_STATE,
+                        state,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> BallRigidBodyStateBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                BallRigidBodyStateBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<BallRigidBodyState<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// Contains all rigid body state information.
+        pub enum RigidBodyTickOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct RigidBodyTick<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for RigidBodyTick<'a> {
+            type Inner = RigidBodyTick<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> RigidBodyTick<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                RigidBodyTick { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args RigidBodyTickArgs<'args>,
+            ) -> flatbuffers::WIPOffset<RigidBodyTick<'bldr>> {
+                let mut builder = RigidBodyTickBuilder::new(_fbb);
+                if let Some(x) = args.players {
+                    builder.add_players(x);
+                }
+                if let Some(x) = args.ball {
+                    builder.add_ball(x);
+                }
+                builder.finish()
+            }
+
+            pub const VT_BALL: flatbuffers::VOffsetT = 4;
+            pub const VT_PLAYERS: flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub fn ball(&'a self) -> Option<BallRigidBodyState<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<BallRigidBodyState<'a>>>(
+                        RigidBodyTick::VT_BALL,
+                        None,
+                    )
+            }
+            #[inline]
+            pub fn players(
+                &'a self,
+            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>>
+            {
+                self._tab.get::<flatbuffers::ForwardsUOffset<
+                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>,
+                >>(RigidBodyTick::VT_PLAYERS, None)
+            }
+        }
+
+        pub struct RigidBodyTickArgs<'a> {
+            pub ball: Option<flatbuffers::WIPOffset<BallRigidBodyState<'a>>>,
+            pub players: Option<
+                flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'a, flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>,
+                >,
+            >,
+        }
+        impl<'a> Default for RigidBodyTickArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                RigidBodyTickArgs {
+                    ball: None,
+                    players: None,
+                }
+            }
+        }
+        pub struct RigidBodyTickBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> RigidBodyTickBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_ball(&mut self, ball: flatbuffers::WIPOffset<BallRigidBodyState<'b>>) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<BallRigidBodyState>>(
+                        RigidBodyTick::VT_BALL,
+                        ball,
+                    );
+            }
+            #[inline]
+            pub fn add_players(
+                &mut self,
+                players: flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'b, flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'b>>>,
+                >,
+            ) {
+                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
+                    RigidBodyTick::VT_PLAYERS,
+                    players,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> RigidBodyTickBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                RigidBodyTickBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<RigidBodyTick<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
         pub enum GoalInfoOffset {}
         #[derive(Copy, Clone, Debug, PartialEq)]
 
@@ -2283,7 +2965,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args GoalInfoArgs,
+                args: &'args GoalInfoArgs<'args>,
             ) -> flatbuffers::WIPOffset<GoalInfo<'bldr>> {
                 let mut builder = GoalInfoBuilder::new(_fbb);
                 if let Some(x) = args.direction {
@@ -2390,7 +3072,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args BoostPadArgs,
+                args: &'args BoostPadArgs<'args>,
             ) -> flatbuffers::WIPOffset<BoostPad<'bldr>> {
                 let mut builder = BoostPadBuilder::new(_fbb);
                 if let Some(x) = args.location {
@@ -2610,7 +3292,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args Vector3PartialArgs,
+                args: &'args Vector3PartialArgs<'args>,
             ) -> flatbuffers::WIPOffset<Vector3Partial<'bldr>> {
                 let mut builder = Vector3PartialBuilder::new(_fbb);
                 if let Some(x) = args.z {
@@ -2720,7 +3402,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args RotatorPartialArgs,
+                args: &'args RotatorPartialArgs<'args>,
             ) -> flatbuffers::WIPOffset<RotatorPartial<'bldr>> {
                 let mut builder = RotatorPartialBuilder::new(_fbb);
                 if let Some(x) = args.roll {
@@ -2830,7 +3512,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args DesiredPhysicsArgs,
+                args: &'args DesiredPhysicsArgs<'args>,
             ) -> flatbuffers::WIPOffset<DesiredPhysics<'bldr>> {
                 let mut builder = DesiredPhysicsBuilder::new(_fbb);
                 if let Some(x) = args.angularVelocity {
@@ -2986,7 +3668,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args DesiredBallStateArgs,
+                args: &'args DesiredBallStateArgs<'args>,
             ) -> flatbuffers::WIPOffset<DesiredBallState<'bldr>> {
                 let mut builder = DesiredBallStateBuilder::new(_fbb);
                 if let Some(x) = args.physics {
@@ -3071,7 +3753,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args DesiredCarStateArgs,
+                args: &'args DesiredCarStateArgs<'args>,
             ) -> flatbuffers::WIPOffset<DesiredCarState<'bldr>> {
                 let mut builder = DesiredCarStateBuilder::new(_fbb);
                 if let Some(x) = args.doubleJumped {
@@ -3205,7 +3887,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args DesiredBoostStateArgs,
+                args: &'args DesiredBoostStateArgs<'args>,
             ) -> flatbuffers::WIPOffset<DesiredBoostState<'bldr>> {
                 let mut builder = DesiredBoostStateBuilder::new(_fbb);
                 if let Some(x) = args.respawnTime {
@@ -3975,7 +4657,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args TinyPlayerArgs,
+                args: &'args TinyPlayerArgs<'args>,
             ) -> flatbuffers::WIPOffset<TinyPlayer<'bldr>> {
                 let mut builder = TinyPlayerBuilder::new(_fbb);
                 builder.add_boost(args.boost);
@@ -4141,7 +4823,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args TinyBallArgs,
+                args: &'args TinyBallArgs<'args>,
             ) -> flatbuffers::WIPOffset<TinyBall<'bldr>> {
                 let mut builder = TinyBallBuilder::new(_fbb);
                 if let Some(x) = args.velocity {
@@ -4351,7 +5033,7 @@ pub mod rlbot {
             #[allow(unused_mut)]
             pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
                 _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
-                args: &'args PredictionSliceArgs,
+                args: &'args PredictionSliceArgs<'args>,
             ) -> flatbuffers::WIPOffset<PredictionSlice<'bldr>> {
                 let mut builder = PredictionSliceBuilder::new(_fbb);
                 if let Some(x) = args.physics {

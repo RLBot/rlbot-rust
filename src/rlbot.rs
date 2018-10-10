@@ -129,15 +129,19 @@ impl RLBot {
     /// a more convenient interface.
     pub fn update_live_data_packet_flatbuffer(&self) -> Option<flat::GameTickPacket> {
         let byte_buffer = (self.interface.update_live_data_packet_flatbuffer)();
-        if byte_buffer.size == 0 {
-            // game hasn't started yet
-            None
-        } else {
-            let slice: &[u8] = unsafe {
-                slice::from_raw_parts(byte_buffer.ptr as *const u8, byte_buffer.size as usize)
-            };
-            Some(flatbuffers::get_root::<flat::GameTickPacket>(&slice))
-        }
+        get_flatbuffer::<flat::GameTickPacket>(byte_buffer)
+    }
+
+    /// Grabs the current physics tick as a FlatBuffer table.
+    pub fn update_rigid_body_tick_flatbuffer(&self) -> Option<flat::RigidBodyTick> {
+        let byte_buffer = (self.interface.update_rigid_body_tick_flatbuffer)();
+        get_flatbuffer::<flat::RigidBodyTick>(byte_buffer)
+    }
+
+    /// Grabs the current physics tick as a struct.
+    pub fn update_rigid_body_tick(&self, tick: &mut ffi::RigidBodyTick) -> Result<(), RLBotError> {
+        let status = (self.interface.update_rigid_body_tick)(tick);
+        core_result(status)
     }
 
     /// Grabs the current [`ffi::FieldInfo`] from RLBot
@@ -149,15 +153,7 @@ impl RLBot {
     /// Grabs the current [`flat::FieldInfo`] from RLBot, if any
     pub fn update_field_info_flatbuffer(&self) -> Option<flat::FieldInfo> {
         let byte_buffer = (self.interface.update_field_info_flatbuffer)();
-        if byte_buffer.size == 0 {
-            // game hasn't started yet
-            None
-        } else {
-            let slice: &[u8] = unsafe {
-                slice::from_raw_parts(byte_buffer.ptr as *const u8, byte_buffer.size as usize)
-            };
-            Some(flatbuffers::get_root::<flat::FieldInfo>(&slice))
-        }
+        get_flatbuffer::<flat::FieldInfo>(byte_buffer)
     }
 
     /// Sets the desired game state. The buffer must be built from a
@@ -194,6 +190,28 @@ impl RLBot {
         let status = (self.interface.start_match)(match_settings, None, null_mut());
         core_result(status)
     }
+
+    /// Gets the framework's current prediction of ball motion as a FlatBuffer
+    /// table.
+    ///
+    /// Note that this method requires the framework's `BallPrediction.exe` to
+    /// be running in the background.
+    pub fn get_ball_prediction(&self) -> Option<flat::BallPrediction> {
+        let byte_buffer = (self.interface.get_ball_prediction)();
+        get_flatbuffer::<flat::BallPrediction>(byte_buffer)
+    }
+
+    /// Gets the framework's current prediction of ball motion as a struct.
+    ///
+    /// Note that this method requires the framework's `BallPrediction.exe` to
+    /// be running in the background.
+    pub fn get_ball_prediction_struct(
+        &self,
+        result: &mut ffi::BallPredictionPacket,
+    ) -> Result<(), RLBotError> {
+        let status = (self.interface.get_ball_prediction_struct)(result);
+        core_result(status)
+    }
 }
 
 fn core_result(status: ffi::RLBotCoreStatus) -> Result<(), RLBotError> {
@@ -201,4 +219,17 @@ fn core_result(status: ffi::RLBotCoreStatus) -> Result<(), RLBotError> {
         ffi::RLBotCoreStatus::Success => Ok(()),
         _ => Err(RLBotError { status }),
     }
+}
+
+fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
+    byte_buffer: ffi::ByteBuffer,
+) -> Option<T::Inner> {
+    if byte_buffer.size == 0 {
+        return None;
+    }
+
+    let ptr = byte_buffer.ptr as *const u8;
+    let size = byte_buffer.size as usize;
+    let slice = unsafe { slice::from_raw_parts(ptr, size) };
+    Some(flatbuffers::get_root::<T>(slice))
 }

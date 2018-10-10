@@ -102,6 +102,23 @@ pub struct DropShotBallInfo {
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
+pub struct Slice {
+    pub Physics: Physics,
+    pub GameSeconds: f32,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct BallPredictionPacket {
+    pub Slice: [Slice; 3600usize],
+    pub NumSlices: ::std::os::raw::c_int,
+}
+impl Default for BallPredictionPacket {
+    fn default() -> Self {
+        unsafe { ::std::mem::zeroed() }
+    }
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct BallInfo {
     pub Physics: Physics,
     pub LatestTouch: Touch,
@@ -487,4 +504,39 @@ impl Default for ByteBuffer {
     fn default() -> Self {
         unsafe { ::std::mem::zeroed() }
     }
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
+pub struct Quaternion {
+    pub X: f32,
+    pub Y: f32,
+    pub Z: f32,
+    pub W: f32,
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
+pub struct RigidBodyState {
+    pub Frame: ::std::os::raw::c_int,
+    pub Location: Vector3,
+    pub Rotation: Quaternion,
+    pub Velocity: Vector3,
+    pub AngularVelocity: Vector3,
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
+pub struct PlayerRigidBodyState {
+    pub State: RigidBodyState,
+    pub Input: PlayerInput,
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
+pub struct BallRigidBodyState {
+    pub State: RigidBodyState,
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
+pub struct RigidBodyTick {
+    pub Ball: BallRigidBodyState,
+    pub Players: [PlayerRigidBodyState; 10usize],
+    pub NumPlayers: ::std::os::raw::c_int,
 }

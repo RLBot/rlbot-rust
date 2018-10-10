@@ -60,4 +60,5 @@ mod framework;
 mod inject;
 mod packeteer;
 mod rlbot;
+#[allow(non_camel_case_types, non_snake_case, missing_docs)]
 mod rlbot_generated;

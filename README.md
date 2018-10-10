@@ -148,15 +148,10 @@ Get the most recent [flatbuffer schema]. Then compile the schema like so from
 this project's root:
 
 ```sh
-flatc -o src --rust rlbot.fbs && cargo fmt
+flatc -o src --rust rlbot.fbs && cargo +nightly fmt
 ```
 
-This will update the `src/rlbot_generated.rs` file. One manual addition that
-must be made is adding the following under the `rlbot` module defined within:
-
-```rust
-#![allow(non_camel_case_types, non_snake_case, missing_docs)]
-```
+This will update the `src/rlbot_generated.rs` file.
 
 [build flatc]: https://google.github.io/flatbuffers/flatbuffers_guide_building.html
 [flatbuffer schema]: https://github.com/RLBot/RLBot/blob/master/src/main/flatbuffers/rlbot.fbs
@@ -173,20 +168,25 @@ delightfully short command:
 ```sh
 rlbot=<absolute-path-to-rlbot>
 bindgen \
-    "$rlbot"/src/main/cpp/RLBotInterface/RLBotInterface/Interface.hpp \
+    cpp/rlbot.hpp \
     -o src/ffi.rs \
     --disable-name-namespacing \
     --no-layout-tests \
     --default-enum-style rust \
     --with-derive-default \
     --raw-line '#![allow(non_camel_case_types, non_snake_case, missing_docs)]' \
+    --whitelist-function BallPrediction::GetBallPrediction \
+    --whitelist-function BallPrediction::GetBallPredictionStruct \
     --whitelist-function Interface::IsInitialized \
+    --whitelist-function GameFunctions::Free \
     --whitelist-function GameFunctions::SetGameState \
     --whitelist-function GameFunctions::StartMatch \
     --whitelist-function GameFunctions::UpdateFieldInfo \
     --whitelist-function GameFunctions::UpdateFieldInfoFlatbuffer \
     --whitelist-function GameFunctions::UpdateLiveDataPacket \
     --whitelist-function GameFunctions::UpdateLiveDataPacketFlatbuffer \
+    --whitelist-function GameFunctions::UpdateRigidBodyTick \
+    --whitelist-function GameFunctions::UpdateRigidBodyTickFlatbuffer \
     --whitelist-function GameFunctions::SendQuickChat \
     --whitelist-function GameFunctions::SendChat \
     --whitelist-function GameFunctions::UpdatePlayerInput \
@@ -194,6 +194,7 @@ bindgen \
     --whitelist-function RenderFunctions::RenderGroup \
     -- \
     -fdeclspec \
+    -I "$rlbot"/src/main/cpp/RLBotInterface/RLBotInterface \
     -I "$rlbot"/src/main/cpp/RLBotInterface/RLBotMessages
 ```
 
