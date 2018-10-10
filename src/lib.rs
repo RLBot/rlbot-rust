@@ -3,7 +3,6 @@
 //! [![Build Status](https://travis-ci.org/whatisaphone/rlbot-rust.svg?branch=master)](https://travis-ci.org/whatisaphone/rlbot-rust)
 //!
 //! <img src="https://github.com/whatisaphone/rlbot-rust/raw/master/assets/logo.png" height="128" style="float:left;margin:0 16px 0 0" />
-//! <img src="https://github.com/RLBot/RLBot/raw/674a96b3330cd4de80eb50458dae97488723e187/images/RLBot.png" height="96" style="float:right;margin:0 0 0 16px" />
 //!
 //! [RLBot] is a framework for creating offline Rocket League bots. This crate
 //! lets you write bots using a simple, safe interface that should feel
