@@ -771,56 +771,56 @@ pub mod rlbot {
 
             /// -1 for full reverse, 1 for full forward
             #[inline]
-            pub fn throttle(&'a self) -> f32 {
+            pub fn throttle(&self) -> f32 {
                 self._tab
                     .get::<f32>(ControllerState::VT_THROTTLE, Some(0.0))
                     .unwrap()
             }
             /// -1 for full left, 1 for full right
             #[inline]
-            pub fn steer(&'a self) -> f32 {
+            pub fn steer(&self) -> f32 {
                 self._tab
                     .get::<f32>(ControllerState::VT_STEER, Some(0.0))
                     .unwrap()
             }
             /// -1 for nose down, 1 for nose up
             #[inline]
-            pub fn pitch(&'a self) -> f32 {
+            pub fn pitch(&self) -> f32 {
                 self._tab
                     .get::<f32>(ControllerState::VT_PITCH, Some(0.0))
                     .unwrap()
             }
             /// -1 for full left, 1 for full right
             #[inline]
-            pub fn yaw(&'a self) -> f32 {
+            pub fn yaw(&self) -> f32 {
                 self._tab
                     .get::<f32>(ControllerState::VT_YAW, Some(0.0))
                     .unwrap()
             }
             /// -1 for roll left, 1 for roll right
             #[inline]
-            pub fn roll(&'a self) -> f32 {
+            pub fn roll(&self) -> f32 {
                 self._tab
                     .get::<f32>(ControllerState::VT_ROLL, Some(0.0))
                     .unwrap()
             }
             /// true if you want to press the jump button
             #[inline]
-            pub fn jump(&'a self) -> bool {
+            pub fn jump(&self) -> bool {
                 self._tab
                     .get::<bool>(ControllerState::VT_JUMP, Some(false))
                     .unwrap()
             }
             /// true if you want to press the boost button
             #[inline]
-            pub fn boost(&'a self) -> bool {
+            pub fn boost(&self) -> bool {
                 self._tab
                     .get::<bool>(ControllerState::VT_BOOST, Some(false))
                     .unwrap()
             }
             /// true if you want to press the handbrake button
             #[inline]
-            pub fn handbrake(&'a self) -> bool {
+            pub fn handbrake(&self) -> bool {
                 self._tab
                     .get::<bool>(ControllerState::VT_HANDBRAKE, Some(false))
                     .unwrap()
@@ -953,13 +953,13 @@ pub mod rlbot {
             pub const VT_CONTROLLERSTATE: flatbuffers::VOffsetT = 6;
 
             #[inline]
-            pub fn playerIndex(&'a self) -> i32 {
+            pub fn playerIndex(&self) -> i32 {
                 self._tab
                     .get::<i32>(PlayerInput::VT_PLAYERINDEX, Some(0))
                     .unwrap()
             }
             #[inline]
-            pub fn controllerState(&'a self) -> Option<ControllerState<'a>> {
+            pub fn controllerState(&self) -> Option<ControllerState<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<ControllerState<'a>>>(
                         PlayerInput::VT_CONTROLLERSTATE,
@@ -1067,25 +1067,25 @@ pub mod rlbot {
 
             /// The name of the player involved with the touch.
             #[inline]
-            pub fn playerName(&'a self) -> Option<&'a str> {
+            pub fn playerName(&self) -> Option<&'a str> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<&str>>(Touch::VT_PLAYERNAME, None)
             }
             /// Seconds that had elapsed in the game when the touch occurred.
             #[inline]
-            pub fn gameSeconds(&'a self) -> f32 {
+            pub fn gameSeconds(&self) -> f32 {
                 self._tab
                     .get::<f32>(Touch::VT_GAMESECONDS, Some(0.0))
                     .unwrap()
             }
             /// The point of contact for the touch.
             #[inline]
-            pub fn location(&'a self) -> Option<&'a Vector3> {
+            pub fn location(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(Touch::VT_LOCATION, None)
             }
             /// The direction of the touch.
             #[inline]
-            pub fn normal(&'a self) -> Option<&'a Vector3> {
+            pub fn normal(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(Touch::VT_NORMAL, None)
             }
         }
@@ -1196,35 +1196,35 @@ pub mod rlbot {
             pub const VT_DEMOLITIONS: flatbuffers::VOffsetT = 16;
 
             #[inline]
-            pub fn score(&'a self) -> i32 {
+            pub fn score(&self) -> i32 {
                 self._tab.get::<i32>(ScoreInfo::VT_SCORE, Some(0)).unwrap()
             }
             #[inline]
-            pub fn goals(&'a self) -> i32 {
+            pub fn goals(&self) -> i32 {
                 self._tab.get::<i32>(ScoreInfo::VT_GOALS, Some(0)).unwrap()
             }
             #[inline]
-            pub fn ownGoals(&'a self) -> i32 {
+            pub fn ownGoals(&self) -> i32 {
                 self._tab
                     .get::<i32>(ScoreInfo::VT_OWNGOALS, Some(0))
                     .unwrap()
             }
             #[inline]
-            pub fn assists(&'a self) -> i32 {
+            pub fn assists(&self) -> i32 {
                 self._tab
                     .get::<i32>(ScoreInfo::VT_ASSISTS, Some(0))
                     .unwrap()
             }
             #[inline]
-            pub fn saves(&'a self) -> i32 {
+            pub fn saves(&self) -> i32 {
                 self._tab.get::<i32>(ScoreInfo::VT_SAVES, Some(0)).unwrap()
             }
             #[inline]
-            pub fn shots(&'a self) -> i32 {
+            pub fn shots(&self) -> i32 {
                 self._tab.get::<i32>(ScoreInfo::VT_SHOTS, Some(0)).unwrap()
             }
             #[inline]
-            pub fn demolitions(&'a self) -> i32 {
+            pub fn demolitions(&self) -> i32 {
                 self._tab
                     .get::<i32>(ScoreInfo::VT_DEMOLITIONS, Some(0))
                     .unwrap()
@@ -1356,19 +1356,19 @@ pub mod rlbot {
             pub const VT_ANGULARVELOCITY: flatbuffers::VOffsetT = 10;
 
             #[inline]
-            pub fn location(&'a self) -> Option<&'a Vector3> {
+            pub fn location(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(Physics::VT_LOCATION, None)
             }
             #[inline]
-            pub fn rotation(&'a self) -> Option<&'a Rotator> {
+            pub fn rotation(&self) -> Option<&'a Rotator> {
                 self._tab.get::<Rotator>(Physics::VT_ROTATION, None)
             }
             #[inline]
-            pub fn velocity(&'a self) -> Option<&'a Vector3> {
+            pub fn velocity(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(Physics::VT_VELOCITY, None)
             }
             #[inline]
-            pub fn angularVelocity(&'a self) -> Option<&'a Vector3> {
+            pub fn angularVelocity(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(Physics::VT_ANGULARVELOCITY, None)
             }
         }
@@ -1491,12 +1491,12 @@ pub mod rlbot {
             pub const VT_BOOST: flatbuffers::VOffsetT = 24;
 
             #[inline]
-            pub fn physics(&'a self) -> Option<Physics<'a>> {
+            pub fn physics(&self) -> Option<Physics<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Physics<'a>>>(PlayerInfo::VT_PHYSICS, None)
             }
             #[inline]
-            pub fn scoreInfo(&'a self) -> Option<ScoreInfo<'a>> {
+            pub fn scoreInfo(&self) -> Option<ScoreInfo<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<ScoreInfo<'a>>>(
                         PlayerInfo::VT_SCOREINFO,
@@ -1504,59 +1504,59 @@ pub mod rlbot {
                     )
             }
             #[inline]
-            pub fn isDemolished(&'a self) -> bool {
+            pub fn isDemolished(&self) -> bool {
                 self._tab
                     .get::<bool>(PlayerInfo::VT_ISDEMOLISHED, Some(false))
                     .unwrap()
             }
-            /// True if your wheels are on the ground, the wall, or the
-            /// ceiling. False if you're midair or turtling.
+            /// True if your wheels are on the ground, the wall, or the ceiling.
+            /// False if you're midair or turtling.
             #[inline]
-            pub fn hasWheelContact(&'a self) -> bool {
+            pub fn hasWheelContact(&self) -> bool {
                 self._tab
                     .get::<bool>(PlayerInfo::VT_HASWHEELCONTACT, Some(false))
                     .unwrap()
             }
             #[inline]
-            pub fn isSupersonic(&'a self) -> bool {
+            pub fn isSupersonic(&self) -> bool {
                 self._tab
                     .get::<bool>(PlayerInfo::VT_ISSUPERSONIC, Some(false))
                     .unwrap()
             }
             #[inline]
-            pub fn isBot(&'a self) -> bool {
+            pub fn isBot(&self) -> bool {
                 self._tab
                     .get::<bool>(PlayerInfo::VT_ISBOT, Some(false))
                     .unwrap()
             }
-            /// True if the player has jumped. Falling off the ceiling /
-            /// driving off the goal post does not count.
+            /// True if the player has jumped. Falling off the ceiling / driving
+            /// off the goal post does not count.
             #[inline]
-            pub fn jumped(&'a self) -> bool {
+            pub fn jumped(&self) -> bool {
                 self._tab
                     .get::<bool>(PlayerInfo::VT_JUMPED, Some(false))
                     .unwrap()
             }
-            /// True if player has double jumped. False does not mean you have
-            /// a jump remaining, because the aerial timer can run
+            ///  True if player has double jumped. False does not mean you have
+            /// a jump remaining, because the  aerial timer can run
             /// out, and that doesn't affect this flag.
             #[inline]
-            pub fn doubleJumped(&'a self) -> bool {
+            pub fn doubleJumped(&self) -> bool {
                 self._tab
                     .get::<bool>(PlayerInfo::VT_DOUBLEJUMPED, Some(false))
                     .unwrap()
             }
             #[inline]
-            pub fn name(&'a self) -> Option<&'a str> {
+            pub fn name(&self) -> Option<&'a str> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<&str>>(PlayerInfo::VT_NAME, None)
             }
             #[inline]
-            pub fn team(&'a self) -> i32 {
+            pub fn team(&self) -> i32 {
                 self._tab.get::<i32>(PlayerInfo::VT_TEAM, Some(0)).unwrap()
             }
             #[inline]
-            pub fn boost(&'a self) -> i32 {
+            pub fn boost(&self) -> i32 {
                 self._tab.get::<i32>(PlayerInfo::VT_BOOST, Some(0)).unwrap()
             }
         }
@@ -1712,19 +1712,19 @@ pub mod rlbot {
             pub const VT_FORCEACCUMRECENT: flatbuffers::VOffsetT = 8;
 
             #[inline]
-            pub fn absorbedForce(&'a self) -> f32 {
+            pub fn absorbedForce(&self) -> f32 {
                 self._tab
                     .get::<f32>(DropShotBallInfo::VT_ABSORBEDFORCE, Some(0.0))
                     .unwrap()
             }
             #[inline]
-            pub fn damageIndex(&'a self) -> i32 {
+            pub fn damageIndex(&self) -> i32 {
                 self._tab
                     .get::<i32>(DropShotBallInfo::VT_DAMAGEINDEX, Some(0))
                     .unwrap()
             }
             #[inline]
-            pub fn forceAccumRecent(&'a self) -> f32 {
+            pub fn forceAccumRecent(&self) -> f32 {
                 self._tab
                     .get::<f32>(DropShotBallInfo::VT_FORCEACCUMRECENT, Some(0.0))
                     .unwrap()
@@ -1831,17 +1831,17 @@ pub mod rlbot {
             pub const VT_DROPSHOTINFO: flatbuffers::VOffsetT = 8;
 
             #[inline]
-            pub fn physics(&'a self) -> Option<Physics<'a>> {
+            pub fn physics(&self) -> Option<Physics<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Physics<'a>>>(BallInfo::VT_PHYSICS, None)
             }
             #[inline]
-            pub fn latestTouch(&'a self) -> Option<Touch<'a>> {
+            pub fn latestTouch(&self) -> Option<Touch<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Touch<'a>>>(BallInfo::VT_LATESTTOUCH, None)
             }
             #[inline]
-            pub fn dropShotInfo(&'a self) -> Option<DropShotBallInfo<'a>> {
+            pub fn dropShotInfo(&self) -> Option<DropShotBallInfo<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<DropShotBallInfo<'a>>>(
                         BallInfo::VT_DROPSHOTINFO,
@@ -1951,15 +1951,15 @@ pub mod rlbot {
 
             /// True if the boost can be picked up
             #[inline]
-            pub fn isActive(&'a self) -> bool {
+            pub fn isActive(&self) -> bool {
                 self._tab
                     .get::<bool>(BoostPadState::VT_ISACTIVE, Some(false))
                     .unwrap()
             }
-            /// The number of seconds since the boost has been picked up, or
-            /// 0.0 if the boost is active.
+            /// The number of seconds since the boost has been picked up, or 0.0
+            /// if the boost is active.
             #[inline]
-            pub fn timer(&'a self) -> f32 {
+            pub fn timer(&self) -> f32 {
                 self._tab
                     .get::<f32>(BoostPadState::VT_TIMER, Some(0.0))
                     .unwrap()
@@ -2047,7 +2047,7 @@ pub mod rlbot {
 
             /// True if the tile is damaged
             #[inline]
-            pub fn tileState(&'a self) -> TileState {
+            pub fn tileState(&self) -> TileState {
                 self._tab
                     .get::<TileState>(DropshotTile::VT_TILESTATE, Some(TileState::Unknown))
                     .unwrap()
@@ -2142,25 +2142,25 @@ pub mod rlbot {
             pub const VT_ISMATCHENDED: flatbuffers::VOffsetT = 16;
 
             #[inline]
-            pub fn secondsElapsed(&'a self) -> f32 {
+            pub fn secondsElapsed(&self) -> f32 {
                 self._tab
                     .get::<f32>(GameInfo::VT_SECONDSELAPSED, Some(0.0))
                     .unwrap()
             }
             #[inline]
-            pub fn gameTimeRemaining(&'a self) -> f32 {
+            pub fn gameTimeRemaining(&self) -> f32 {
                 self._tab
                     .get::<f32>(GameInfo::VT_GAMETIMEREMAINING, Some(0.0))
                     .unwrap()
             }
             #[inline]
-            pub fn isOvertime(&'a self) -> bool {
+            pub fn isOvertime(&self) -> bool {
                 self._tab
                     .get::<bool>(GameInfo::VT_ISOVERTIME, Some(false))
                     .unwrap()
             }
             #[inline]
-            pub fn isUnlimitedTime(&'a self) -> bool {
+            pub fn isUnlimitedTime(&self) -> bool {
                 self._tab
                     .get::<bool>(GameInfo::VT_ISUNLIMITEDTIME, Some(false))
                     .unwrap()
@@ -2168,27 +2168,27 @@ pub mod rlbot {
             /// True when cars are allowed to move, and during the pause menu.
             /// False during replays.
             #[inline]
-            pub fn isRoundActive(&'a self) -> bool {
+            pub fn isRoundActive(&self) -> bool {
                 self._tab
                     .get::<bool>(GameInfo::VT_ISROUNDACTIVE, Some(false))
                     .unwrap()
             }
-            /// Only true during a kickoff, when the car is allowed to move,
-            /// and the ball has not been hit, and the game clock
-            /// has not started yet. If both players sit still, game clock will
+            /// Only true during a kickoff, when the car is allowed to move, and
+            /// the ball has not been hit, and the game clock has
+            /// not started yet. If both players sit still, game clock will
             /// eventually start and this will become false.
             #[inline]
-            pub fn isKickoffPause(&'a self) -> bool {
+            pub fn isKickoffPause(&self) -> bool {
                 self._tab
                     .get::<bool>(GameInfo::VT_ISKICKOFFPAUSE, Some(false))
                     .unwrap()
             }
             /// Turns true after final replay, the moment the 'winner' screen
             /// appears. Remains true during next match
-            /// countdown. Turns false again the moment the 'choose team'
-            /// screen appears.
+            /// countdown. Turns false again the moment the 'choose team' screen
+            /// appears.
             #[inline]
-            pub fn isMatchEnded(&'a self) -> bool {
+            pub fn isMatchEnded(&self) -> bool {
                 self._tab
                     .get::<bool>(GameInfo::VT_ISMATCHENDED, Some(false))
                     .unwrap()
@@ -2329,7 +2329,7 @@ pub mod rlbot {
 
             #[inline]
             pub fn players(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerInfo<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -2338,7 +2338,7 @@ pub mod rlbot {
             }
             #[inline]
             pub fn boostPadStates(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<BoostPadState<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -2346,14 +2346,14 @@ pub mod rlbot {
                 >>(GameTickPacket::VT_BOOSTPADSTATES, None)
             }
             #[inline]
-            pub fn ball(&'a self) -> Option<BallInfo<'a>> {
+            pub fn ball(&self) -> Option<BallInfo<'a>> {
                 self._tab.get::<flatbuffers::ForwardsUOffset<BallInfo<'a>>>(
                     GameTickPacket::VT_BALL,
                     None,
                 )
             }
             #[inline]
-            pub fn gameInfo(&'a self) -> Option<GameInfo<'a>> {
+            pub fn gameInfo(&self) -> Option<GameInfo<'a>> {
                 self._tab.get::<flatbuffers::ForwardsUOffset<GameInfo<'a>>>(
                     GameTickPacket::VT_GAMEINFO,
                     None,
@@ -2361,7 +2361,7 @@ pub mod rlbot {
             }
             #[inline]
             pub fn tileInformation(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<DropshotTile<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -2530,26 +2530,26 @@ pub mod rlbot {
             pub const VT_ANGULARVELOCITY: flatbuffers::VOffsetT = 12;
 
             #[inline]
-            pub fn frame(&'a self) -> i32 {
+            pub fn frame(&self) -> i32 {
                 self._tab
                     .get::<i32>(RigidBodyState::VT_FRAME, Some(0))
                     .unwrap()
             }
             #[inline]
-            pub fn location(&'a self) -> Option<&'a Vector3> {
+            pub fn location(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(RigidBodyState::VT_LOCATION, None)
             }
             #[inline]
-            pub fn rotation(&'a self) -> Option<&'a Quaternion> {
+            pub fn rotation(&self) -> Option<&'a Quaternion> {
                 self._tab
                     .get::<Quaternion>(RigidBodyState::VT_ROTATION, None)
             }
             #[inline]
-            pub fn velocity(&'a self) -> Option<&'a Vector3> {
+            pub fn velocity(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(RigidBodyState::VT_VELOCITY, None)
             }
             #[inline]
-            pub fn angularVelocity(&'a self) -> Option<&'a Vector3> {
+            pub fn angularVelocity(&self) -> Option<&'a Vector3> {
                 self._tab
                     .get::<Vector3>(RigidBodyState::VT_ANGULARVELOCITY, None)
             }
@@ -2667,7 +2667,7 @@ pub mod rlbot {
             pub const VT_INPUT: flatbuffers::VOffsetT = 6;
 
             #[inline]
-            pub fn state(&'a self) -> Option<RigidBodyState<'a>> {
+            pub fn state(&self) -> Option<RigidBodyState<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<RigidBodyState<'a>>>(
                         PlayerRigidBodyState::VT_STATE,
@@ -2675,7 +2675,7 @@ pub mod rlbot {
                     )
             }
             #[inline]
-            pub fn input(&'a self) -> Option<ControllerState<'a>> {
+            pub fn input(&self) -> Option<ControllerState<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<ControllerState<'a>>>(
                         PlayerRigidBodyState::VT_INPUT,
@@ -2773,7 +2773,7 @@ pub mod rlbot {
             pub const VT_STATE: flatbuffers::VOffsetT = 4;
 
             #[inline]
-            pub fn state(&'a self) -> Option<RigidBodyState<'a>> {
+            pub fn state(&self) -> Option<RigidBodyState<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<RigidBodyState<'a>>>(
                         BallRigidBodyState::VT_STATE,
@@ -2863,7 +2863,7 @@ pub mod rlbot {
             pub const VT_PLAYERS: flatbuffers::VOffsetT = 6;
 
             #[inline]
-            pub fn ball(&'a self) -> Option<BallRigidBodyState<'a>> {
+            pub fn ball(&self) -> Option<BallRigidBodyState<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<BallRigidBodyState<'a>>>(
                         RigidBodyTick::VT_BALL,
@@ -2872,7 +2872,7 @@ pub mod rlbot {
             }
             #[inline]
             pub fn players(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -2983,15 +2983,15 @@ pub mod rlbot {
             pub const VT_DIRECTION: flatbuffers::VOffsetT = 8;
 
             #[inline]
-            pub fn teamNum(&'a self) -> i32 {
+            pub fn teamNum(&self) -> i32 {
                 self._tab.get::<i32>(GoalInfo::VT_TEAMNUM, Some(0)).unwrap()
             }
             #[inline]
-            pub fn location(&'a self) -> Option<&'a Vector3> {
+            pub fn location(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(GoalInfo::VT_LOCATION, None)
             }
             #[inline]
-            pub fn direction(&'a self) -> Option<&'a Vector3> {
+            pub fn direction(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(GoalInfo::VT_DIRECTION, None)
             }
         }
@@ -3086,11 +3086,11 @@ pub mod rlbot {
             pub const VT_ISFULLBOOST: flatbuffers::VOffsetT = 6;
 
             #[inline]
-            pub fn location(&'a self) -> Option<&'a Vector3> {
+            pub fn location(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(BoostPad::VT_LOCATION, None)
             }
             #[inline]
-            pub fn isFullBoost(&'a self) -> bool {
+            pub fn isFullBoost(&self) -> bool {
                 self._tab
                     .get::<bool>(BoostPad::VT_ISFULLBOOST, Some(false))
                     .unwrap()
@@ -3184,7 +3184,7 @@ pub mod rlbot {
 
             #[inline]
             pub fn boostPads(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<BoostPad<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -3193,7 +3193,7 @@ pub mod rlbot {
             }
             #[inline]
             pub fn goals(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<GoalInfo<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -3312,15 +3312,15 @@ pub mod rlbot {
             pub const VT_Z: flatbuffers::VOffsetT = 8;
 
             #[inline]
-            pub fn x(&'a self) -> Option<&'a Float> {
+            pub fn x(&self) -> Option<&'a Float> {
                 self._tab.get::<Float>(Vector3Partial::VT_X, None)
             }
             #[inline]
-            pub fn y(&'a self) -> Option<&'a Float> {
+            pub fn y(&self) -> Option<&'a Float> {
                 self._tab.get::<Float>(Vector3Partial::VT_Y, None)
             }
             #[inline]
-            pub fn z(&'a self) -> Option<&'a Float> {
+            pub fn z(&self) -> Option<&'a Float> {
                 self._tab.get::<Float>(Vector3Partial::VT_Z, None)
             }
         }
@@ -3422,15 +3422,15 @@ pub mod rlbot {
             pub const VT_ROLL: flatbuffers::VOffsetT = 8;
 
             #[inline]
-            pub fn pitch(&'a self) -> Option<&'a Float> {
+            pub fn pitch(&self) -> Option<&'a Float> {
                 self._tab.get::<Float>(RotatorPartial::VT_PITCH, None)
             }
             #[inline]
-            pub fn yaw(&'a self) -> Option<&'a Float> {
+            pub fn yaw(&self) -> Option<&'a Float> {
                 self._tab.get::<Float>(RotatorPartial::VT_YAW, None)
             }
             #[inline]
-            pub fn roll(&'a self) -> Option<&'a Float> {
+            pub fn roll(&self) -> Option<&'a Float> {
                 self._tab.get::<Float>(RotatorPartial::VT_ROLL, None)
             }
         }
@@ -3536,7 +3536,7 @@ pub mod rlbot {
             pub const VT_ANGULARVELOCITY: flatbuffers::VOffsetT = 10;
 
             #[inline]
-            pub fn location(&'a self) -> Option<Vector3Partial<'a>> {
+            pub fn location(&self) -> Option<Vector3Partial<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Vector3Partial<'a>>>(
                         DesiredPhysics::VT_LOCATION,
@@ -3544,7 +3544,7 @@ pub mod rlbot {
                     )
             }
             #[inline]
-            pub fn rotation(&'a self) -> Option<RotatorPartial<'a>> {
+            pub fn rotation(&self) -> Option<RotatorPartial<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<RotatorPartial<'a>>>(
                         DesiredPhysics::VT_ROTATION,
@@ -3552,7 +3552,7 @@ pub mod rlbot {
                     )
             }
             #[inline]
-            pub fn velocity(&'a self) -> Option<Vector3Partial<'a>> {
+            pub fn velocity(&self) -> Option<Vector3Partial<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Vector3Partial<'a>>>(
                         DesiredPhysics::VT_VELOCITY,
@@ -3560,7 +3560,7 @@ pub mod rlbot {
                     )
             }
             #[inline]
-            pub fn angularVelocity(&'a self) -> Option<Vector3Partial<'a>> {
+            pub fn angularVelocity(&self) -> Option<Vector3Partial<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Vector3Partial<'a>>>(
                         DesiredPhysics::VT_ANGULARVELOCITY,
@@ -3680,7 +3680,7 @@ pub mod rlbot {
             pub const VT_PHYSICS: flatbuffers::VOffsetT = 4;
 
             #[inline]
-            pub fn physics(&'a self) -> Option<DesiredPhysics<'a>> {
+            pub fn physics(&self) -> Option<DesiredPhysics<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<DesiredPhysics<'a>>>(
                         DesiredBallState::VT_PHYSICS,
@@ -3777,7 +3777,7 @@ pub mod rlbot {
             pub const VT_DOUBLEJUMPED: flatbuffers::VOffsetT = 10;
 
             #[inline]
-            pub fn physics(&'a self) -> Option<DesiredPhysics<'a>> {
+            pub fn physics(&self) -> Option<DesiredPhysics<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<DesiredPhysics<'a>>>(
                         DesiredCarState::VT_PHYSICS,
@@ -3785,16 +3785,16 @@ pub mod rlbot {
                     )
             }
             #[inline]
-            pub fn boostAmount(&'a self) -> Option<&'a Float> {
+            pub fn boostAmount(&self) -> Option<&'a Float> {
                 self._tab
                     .get::<Float>(DesiredCarState::VT_BOOSTAMOUNT, None)
             }
             #[inline]
-            pub fn jumped(&'a self) -> Option<&'a Bool> {
+            pub fn jumped(&self) -> Option<&'a Bool> {
                 self._tab.get::<Bool>(DesiredCarState::VT_JUMPED, None)
             }
             #[inline]
-            pub fn doubleJumped(&'a self) -> Option<&'a Bool> {
+            pub fn doubleJumped(&self) -> Option<&'a Bool> {
                 self._tab
                     .get::<Bool>(DesiredCarState::VT_DOUBLEJUMPED, None)
             }
@@ -3899,7 +3899,7 @@ pub mod rlbot {
             pub const VT_RESPAWNTIME: flatbuffers::VOffsetT = 4;
 
             #[inline]
-            pub fn respawnTime(&'a self) -> Option<&'a Float> {
+            pub fn respawnTime(&self) -> Option<&'a Float> {
                 self._tab
                     .get::<Float>(DesiredBoostState::VT_RESPAWNTIME, None)
             }
@@ -3986,7 +3986,7 @@ pub mod rlbot {
             pub const VT_BOOSTSTATES: flatbuffers::VOffsetT = 8;
 
             #[inline]
-            pub fn ballState(&'a self) -> Option<DesiredBallState<'a>> {
+            pub fn ballState(&self) -> Option<DesiredBallState<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<DesiredBallState<'a>>>(
                         DesiredGameState::VT_BALLSTATE,
@@ -3995,7 +3995,7 @@ pub mod rlbot {
             }
             #[inline]
             pub fn carStates(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<DesiredCarState<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -4004,7 +4004,7 @@ pub mod rlbot {
             }
             #[inline]
             pub fn boostStates(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<DesiredBoostState<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -4134,19 +4134,19 @@ pub mod rlbot {
             pub const VT_B: flatbuffers::VOffsetT = 10;
 
             #[inline]
-            pub fn a(&'a self) -> u8 {
+            pub fn a(&self) -> u8 {
                 self._tab.get::<u8>(Color::VT_A, Some(0)).unwrap()
             }
             #[inline]
-            pub fn r(&'a self) -> u8 {
+            pub fn r(&self) -> u8 {
                 self._tab.get::<u8>(Color::VT_R, Some(0)).unwrap()
             }
             #[inline]
-            pub fn g(&'a self) -> u8 {
+            pub fn g(&self) -> u8 {
                 self._tab.get::<u8>(Color::VT_G, Some(0)).unwrap()
             }
             #[inline]
-            pub fn b(&'a self) -> u8 {
+            pub fn b(&self) -> u8 {
                 self._tab.get::<u8>(Color::VT_B, Some(0)).unwrap()
             }
         }
@@ -4261,30 +4261,30 @@ pub mod rlbot {
             pub const VT_ISFILLED: flatbuffers::VOffsetT = 18;
 
             #[inline]
-            pub fn renderType(&'a self) -> RenderType {
+            pub fn renderType(&self) -> RenderType {
                 self._tab
                     .get::<RenderType>(RenderMessage::VT_RENDERTYPE, Some(RenderType::DrawLine2D))
                     .unwrap()
             }
             #[inline]
-            pub fn color(&'a self) -> Option<Color<'a>> {
+            pub fn color(&self) -> Option<Color<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<Color<'a>>>(RenderMessage::VT_COLOR, None)
             }
             /// For 2d renders this only grabs x and y
             #[inline]
-            pub fn start(&'a self) -> Option<&'a Vector3> {
+            pub fn start(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(RenderMessage::VT_START, None)
             }
             /// For 2d renders this only grabs x and y
             #[inline]
-            pub fn end(&'a self) -> Option<&'a Vector3> {
+            pub fn end(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(RenderMessage::VT_END, None)
             }
             /// Scales the x size of the text/rectangle, is used for rectangles
             /// assuming an initial value of 1
             #[inline]
-            pub fn scaleX(&'a self) -> i32 {
+            pub fn scaleX(&self) -> i32 {
                 self._tab
                     .get::<i32>(RenderMessage::VT_SCALEX, Some(1))
                     .unwrap()
@@ -4292,19 +4292,19 @@ pub mod rlbot {
             /// Scales the y size of the text/rectangle, is used for rectangles
             /// assuming an initial value of 1
             #[inline]
-            pub fn scaleY(&'a self) -> i32 {
+            pub fn scaleY(&self) -> i32 {
                 self._tab
                     .get::<i32>(RenderMessage::VT_SCALEY, Some(1))
                     .unwrap()
             }
             #[inline]
-            pub fn text(&'a self) -> Option<&'a str> {
+            pub fn text(&self) -> Option<&'a str> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<&str>>(RenderMessage::VT_TEXT, None)
             }
             /// Rectangles can be filled or just outlines.
             #[inline]
-            pub fn isFilled(&'a self) -> bool {
+            pub fn isFilled(&self) -> bool {
                 self._tab
                     .get::<bool>(RenderMessage::VT_ISFILLED, Some(false))
                     .unwrap()
@@ -4443,7 +4443,7 @@ pub mod rlbot {
 
             #[inline]
             pub fn renderMessages(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<RenderMessage<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -4452,7 +4452,7 @@ pub mod rlbot {
             }
             /// The id of the render group
             #[inline]
-            pub fn id(&'a self) -> i32 {
+            pub fn id(&self) -> i32 {
                 self._tab.get::<i32>(RenderGroup::VT_ID, Some(0)).unwrap()
             }
         }
@@ -4551,7 +4551,7 @@ pub mod rlbot {
             pub const VT_TEAMONLY: flatbuffers::VOffsetT = 8;
 
             #[inline]
-            pub fn quickChatSelection(&'a self) -> QuickChatSelection {
+            pub fn quickChatSelection(&self) -> QuickChatSelection {
                 self._tab
                     .get::<QuickChatSelection>(
                         QuickChat::VT_QUICKCHATSELECTION,
@@ -4561,14 +4561,14 @@ pub mod rlbot {
             }
             /// The index of the player that sent the quick chat
             #[inline]
-            pub fn playerIndex(&'a self) -> i32 {
+            pub fn playerIndex(&self) -> i32 {
                 self._tab
                     .get::<i32>(QuickChat::VT_PLAYERINDEX, Some(0))
                     .unwrap()
             }
             /// True if the chat is team only false if everyone can see it.
             #[inline]
-            pub fn teamOnly(&'a self) -> bool {
+            pub fn teamOnly(&self) -> bool {
                 self._tab
                     .get::<bool>(QuickChat::VT_TEAMONLY, Some(false))
                     .unwrap()
@@ -4685,35 +4685,35 @@ pub mod rlbot {
             pub const VT_BOOST: flatbuffers::VOffsetT = 16;
 
             #[inline]
-            pub fn location(&'a self) -> Option<&'a Vector3> {
+            pub fn location(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(TinyPlayer::VT_LOCATION, None)
             }
             #[inline]
-            pub fn rotation(&'a self) -> Option<&'a Rotator> {
+            pub fn rotation(&self) -> Option<&'a Rotator> {
                 self._tab.get::<Rotator>(TinyPlayer::VT_ROTATION, None)
             }
             #[inline]
-            pub fn velocity(&'a self) -> Option<&'a Vector3> {
+            pub fn velocity(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(TinyPlayer::VT_VELOCITY, None)
             }
             #[inline]
-            pub fn hasWheelContact(&'a self) -> bool {
+            pub fn hasWheelContact(&self) -> bool {
                 self._tab
                     .get::<bool>(TinyPlayer::VT_HASWHEELCONTACT, Some(false))
                     .unwrap()
             }
             #[inline]
-            pub fn isSupersonic(&'a self) -> bool {
+            pub fn isSupersonic(&self) -> bool {
                 self._tab
                     .get::<bool>(TinyPlayer::VT_ISSUPERSONIC, Some(false))
                     .unwrap()
             }
             #[inline]
-            pub fn team(&'a self) -> i32 {
+            pub fn team(&self) -> i32 {
                 self._tab.get::<i32>(TinyPlayer::VT_TEAM, Some(0)).unwrap()
             }
             #[inline]
-            pub fn boost(&'a self) -> i32 {
+            pub fn boost(&self) -> i32 {
                 self._tab.get::<i32>(TinyPlayer::VT_BOOST, Some(0)).unwrap()
             }
         }
@@ -4839,11 +4839,11 @@ pub mod rlbot {
             pub const VT_VELOCITY: flatbuffers::VOffsetT = 6;
 
             #[inline]
-            pub fn location(&'a self) -> Option<&'a Vector3> {
+            pub fn location(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(TinyBall::VT_LOCATION, None)
             }
             #[inline]
-            pub fn velocity(&'a self) -> Option<&'a Vector3> {
+            pub fn velocity(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(TinyBall::VT_VELOCITY, None)
             }
         }
@@ -4937,7 +4937,7 @@ pub mod rlbot {
 
             #[inline]
             pub fn players(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<TinyPlayer<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
@@ -4945,7 +4945,7 @@ pub mod rlbot {
                 >>(TinyPacket::VT_PLAYERS, None)
             }
             #[inline]
-            pub fn ball(&'a self) -> Option<TinyBall<'a>> {
+            pub fn ball(&self) -> Option<TinyBall<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<TinyBall<'a>>>(TinyPacket::VT_BALL, None)
             }
@@ -5049,14 +5049,14 @@ pub mod rlbot {
             /// The moment in game time that this prediction corresponds to.
             /// This corresponds to 'secondsElapsed' in the GameInfo table.
             #[inline]
-            pub fn gameSeconds(&'a self) -> f32 {
+            pub fn gameSeconds(&self) -> f32 {
                 self._tab
                     .get::<f32>(PredictionSlice::VT_GAMESECONDS, Some(0.0))
                     .unwrap()
             }
             /// The predicted location and motion of the object.
             #[inline]
-            pub fn physics(&'a self) -> Option<Physics<'a>> {
+            pub fn physics(&self) -> Option<Physics<'a>> {
                 self._tab.get::<flatbuffers::ForwardsUOffset<Physics<'a>>>(
                     PredictionSlice::VT_PHYSICS,
                     None,
@@ -5154,7 +5154,7 @@ pub mod rlbot {
             /// have a consistent amount of time between slices.
             #[inline]
             pub fn slices(
-                &'a self,
+                &self,
             ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<PredictionSlice<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
