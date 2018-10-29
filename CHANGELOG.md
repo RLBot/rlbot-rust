@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.1.1 – 2018-10-28
+
+### Changed
+
+* Upgraded `flatbuffers`. ([@whatisaphone])
+* Bumped the minimum supported Rust version to 1.28. ([@whatisaphone])
+
 ## v0.1.0 – 2018-10-10
 
 ### Added
