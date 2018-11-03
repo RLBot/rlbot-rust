@@ -16,6 +16,7 @@ travis-ci = { repository = "whatisaphone/rlbot-rust" }
 libloading = "0.5.0"
 ratelimit = "0.4.3"
 flatbuffers = "0.5.0"
+nalgebra = { version = "0.16.8", optional = true }
 
 [dev-dependencies]
 nalgebra = "0.16.0"
@@ -23,4 +24,6 @@ winapi = { version = "0.3.5", features = ["synchapi"] }
 winproc = "0.5.1"
 
 [features]
+default = ["use-nalgebra"]
+use-nalgebra = ["nalgebra"]
 strict = []

@@ -48,6 +48,8 @@
 
 extern crate flatbuffers;
 extern crate libloading;
+#[cfg(feature = "use-nalgebra")]
+extern crate nalgebra as na;
 extern crate ratelimit;
 
 pub mod ffi;
@@ -69,3 +71,6 @@ mod render;
 mod rlbot;
 #[allow(non_camel_case_types, non_snake_case, missing_docs)]
 mod rlbot_generated;
+pub mod state;
+#[cfg(feature = "use-nalgebra")]
+mod state_nalgebra;

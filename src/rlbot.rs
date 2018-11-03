@@ -7,6 +7,7 @@ use packeteer::Packeteer;
 use physicist::Physicist;
 use render::RenderGroup;
 use rlbot_generated::rlbot::flat;
+use state;
 use std::cell::Cell;
 use std::error::Error;
 use std::marker::PhantomData;
@@ -174,6 +175,15 @@ impl RLBot {
         core_result(status)
     }
 
+    /// Sets the game state.
+    pub fn set_game_state_struct(
+        &self,
+        desired_game_state: state::DesiredGameState,
+    ) -> Result<(), RLBotError> {
+        let buffer = desired_game_state.serialize();
+        self.set_game_state(buffer.finished_data())
+    }
+
     /// Render a group of lines/text. The buffer must be built from a
     /// [`flat::RenderGroup`]
     pub fn render_group(&self, render_group_buffer: &[u8]) -> Result<(), RLBotError> {
@@ -197,6 +207,25 @@ impl RLBot {
     pub fn start_match(&self, match_settings: ffi::MatchSettings) -> Result<(), RLBotError> {
         let status = (self.interface.start_match)(match_settings, None, null_mut());
         core_result(status)
+    }
+
+    /// Spin-waits until a match is active.
+    ///
+    /// Call `start_match` before calling this method.
+    pub fn wait_for_match_start(&self) -> Result<(), Box<Error>> {
+        let mut packets = self.packeteer();
+        let mut count = 0;
+
+        // Sometimes we get a few stray ticks from a previous game while the next game
+        // is loading. Wait for RoundActive to stabilize before trusting it.
+        while count < 5 {
+            if packets.next()?.GameInfo.RoundActive {
+                count += 1;
+            } else {
+                count = 0;
+            }
+        }
+        Ok(())
     }
 
     /// Begin drawing to the screen.
