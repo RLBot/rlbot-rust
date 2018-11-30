@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+* Loosened the unnecessarily restrictive lifetimes for flatbuffers.
+  ([@whatisaphone])
+
 ## v0.1.1 – 2018-10-28
 
 ### Changed
