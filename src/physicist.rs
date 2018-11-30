@@ -1,7 +1,9 @@
+use ffi;
 use flat;
 use ratelimit;
 use rlbot::RLBot;
 use std::error::Error;
+use std::mem;
 use std::time::{Duration, Instant};
 
 /// An iterator-like object that yields physics ticks from the game as they
@@ -34,20 +36,34 @@ impl<'a> Physicist<'a> {
     /// This function returns an error if five seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
-    pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<Error>> {
-        let started = Instant::now();
+    pub fn next(&mut self) -> Result<ffi::RigidBodyTick, Box<Error>> {
+        self.spin(|this| Ok(this.try_next()?))
+    }
 
-        loop {
-            self.ratelimiter.wait();
-
-            if let Some(tick) = self.try_next_flat() {
-                return Ok(tick);
-            }
-
-            if Instant::now() - started > Duration::from_secs(5) {
-                return Err(From::from("no physics tick received after five seconds"));
-            }
+    /// Polls for a new physics tick.
+    ///
+    /// If there is a tick that is newer than the previous tick, it is
+    /// returned. Otherwise, `None` is returned.
+    pub fn try_next(&mut self) -> Result<Option<ffi::RigidBodyTick>, Box<Error>> {
+        let mut result = unsafe { mem::uninitialized() };
+        self.rlbot.update_rigid_body_tick(&mut result)?;
+        if result.Ball.State.Frame != self.prev_ball_frame {
+            self.prev_ball_frame = result.Ball.State.Frame;
+            Ok(Some(result))
+        } else {
+            Ok(None)
         }
+    }
+
+    /// Block until the next physics tick occurs, and then return it.
+    ///
+    /// # Errors
+    ///
+    /// This function returns an error if five seconds pass without a new tick
+    /// being received. The assumption is that the game froze or crashed, and
+    /// waiting longer will not help.
+    pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<Error>> {
+        self.spin(|this| Ok(this.try_next_flat()))
     }
 
     /// Polls for a new physics tick.
@@ -66,5 +82,26 @@ impl<'a> Physicist<'a> {
             }
         }
         None
+    }
+
+    /// Keep trying `f` until the timeout elapses.
+    fn spin<R>(
+        &mut self,
+        f: impl Fn(&mut Self) -> Result<Option<R>, Box<Error>>,
+    ) -> Result<R, Box<Error>> {
+        let start = Instant::now();
+
+        loop {
+            self.ratelimiter.wait();
+
+            if let Some(tick) = f(self)? {
+                return Ok(tick);
+            }
+
+            let elapsed = Instant::now() - start;
+            if elapsed > Duration::from_secs(5) {
+                return Err(From::from("no physics tick received after five seconds"));
+            }
+        }
     }
 }
