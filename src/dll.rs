@@ -14,17 +14,19 @@ type UpdateLiveDataPacket = extern "C" fn(pLiveData: *mut LiveDataPacket) -> RLB
 type UpdateRigidBodyTickFlatbuffer = extern "C" fn() -> ByteBuffer;
 type UpdateRigidBodyTick = extern "C" fn(rigidBodyTick: *mut RigidBodyTick) -> RLBotCoreStatus;
 type Free = extern "C" fn(ptr: *mut ::std::os::raw::c_void);
-type SetGameState =
-    extern "C" fn(gameStateData: *mut ::std::os::raw::c_void, size: ::std::os::raw::c_int)
-        -> RLBotCoreStatus;
+type SetGameState = extern "C" fn(
+    gameStateData: *mut ::std::os::raw::c_void,
+    size: ::std::os::raw::c_int,
+) -> RLBotCoreStatus;
 type StartMatch = extern "C" fn(
     matchSettings: MatchSettings,
     callback: CallbackFunction,
     pID: *mut ::std::os::raw::c_uint,
 ) -> RLBotCoreStatus;
-type SendQuickChat =
-    extern "C" fn(quickChatMessage: *mut ::std::os::raw::c_void, protoSize: ::std::os::raw::c_int)
-        -> RLBotCoreStatus;
+type SendQuickChat = extern "C" fn(
+    quickChatMessage: *mut ::std::os::raw::c_void,
+    protoSize: ::std::os::raw::c_int,
+) -> RLBotCoreStatus;
 type SendChat = extern "C" fn(
     quickChatPreset: QuickChatPreset,
     playerIndex: ::std::os::raw::c_int,
@@ -34,12 +36,14 @@ type SendChat = extern "C" fn(
 ) -> RLBotCoreStatus;
 type UpdatePlayerInput =
     extern "C" fn(playerInput: PlayerInput, playerIndex: ::std::os::raw::c_int) -> RLBotCoreStatus;
-type UpdatePlayerInputFlatbuffer =
-    extern "C" fn(playerInput: *mut ::std::os::raw::c_void, size: ::std::os::raw::c_int)
-        -> RLBotCoreStatus;
-type RenderGroup =
-    extern "C" fn(renderGroup: *mut ::std::os::raw::c_void, protoSize: ::std::os::raw::c_int)
-        -> RLBotCoreStatus;
+type UpdatePlayerInputFlatbuffer = extern "C" fn(
+    playerInput: *mut ::std::os::raw::c_void,
+    size: ::std::os::raw::c_int,
+) -> RLBotCoreStatus;
+type RenderGroup = extern "C" fn(
+    renderGroup: *mut ::std::os::raw::c_void,
+    protoSize: ::std::os::raw::c_int,
+) -> RLBotCoreStatus;
 type IsInitialized = extern "C" fn() -> bool;
 type GetBallPrediction = extern "C" fn() -> ByteBuffer;
 type GetBallPredictionStruct =
