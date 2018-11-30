@@ -135,13 +135,13 @@ impl RLBot {
     /// Grabs the current [`flat::GameTickPacket`] from RLBot,
     /// if any. Consider using [`packeteer`](RLBot::packeteer) instead for
     /// a more convenient interface.
-    pub fn update_live_data_packet_flatbuffer(&self) -> Option<flat::GameTickPacket> {
+    pub fn update_live_data_packet_flatbuffer<'fb>(&self) -> Option<flat::GameTickPacket<'fb>> {
         let byte_buffer = (self.interface.update_live_data_packet_flatbuffer)();
         get_flatbuffer::<flat::GameTickPacket>(byte_buffer)
     }
 
     /// Grabs the current physics tick as a FlatBuffer table.
-    pub fn update_rigid_body_tick_flatbuffer(&self) -> Option<flat::RigidBodyTick> {
+    pub fn update_rigid_body_tick_flatbuffer<'fb>(&self) -> Option<flat::RigidBodyTick<'fb>> {
         let byte_buffer = (self.interface.update_rigid_body_tick_flatbuffer)();
         get_flatbuffer::<flat::RigidBodyTick>(byte_buffer)
     }
@@ -159,7 +159,7 @@ impl RLBot {
     }
 
     /// Grabs the current [`flat::FieldInfo`] from RLBot, if any
-    pub fn update_field_info_flatbuffer(&self) -> Option<flat::FieldInfo> {
+    pub fn update_field_info_flatbuffer<'fb>(&self) -> Option<flat::FieldInfo<'fb>> {
         let byte_buffer = (self.interface.update_field_info_flatbuffer)();
         get_flatbuffer::<flat::FieldInfo>(byte_buffer)
     }
@@ -217,7 +217,7 @@ impl RLBot {
     ///
     /// Note that this method requires the framework's `BallPrediction.exe` to
     /// be running in the background.
-    pub fn get_ball_prediction(&self) -> Option<flat::BallPrediction> {
+    pub fn get_ball_prediction<'fb>(&self) -> Option<flat::BallPrediction<'fb>> {
         let byte_buffer = (self.interface.get_ball_prediction)();
         get_flatbuffer::<flat::BallPrediction>(byte_buffer)
     }
@@ -253,4 +253,33 @@ fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
     let size = byte_buffer.size as usize;
     let slice = unsafe { slice::from_raw_parts(ptr, size) };
     Some(flatbuffers::get_root::<T>(slice))
+}
+
+#[cfg(test)]
+mod tests {
+    use ffi;
+    use rlbot::RLBot;
+    use std::error::Error;
+    use std::mem;
+
+    #[test]
+    #[ignore(note = "compile-only test")]
+    fn game_data_is_send() -> Result<(), Box<Error>> {
+        fn assert_send<T: Send + 'static>(_: T) {}
+
+        assert_send(ffi::LiveDataPacket::default());
+        assert_send(ffi::RigidBodyTick::default());
+        assert_send(ffi::FieldInfo::default());
+        assert_send(ffi::BallPredictionPacket::default());
+
+        let rlbot: RLBot = unsafe { mem::uninitialized() };
+        assert_send(rlbot.physicist().next_flat()?);
+        assert_send(rlbot.packeteer().next()?);
+        assert_send(rlbot.packeteer().next_flatbuffer()?);
+        assert_send(rlbot.update_live_data_packet_flatbuffer());
+        assert_send(rlbot.update_rigid_body_tick_flatbuffer());
+        assert_send(rlbot.update_field_info_flatbuffer());
+        assert_send(rlbot.get_ball_prediction());
+        Ok(())
+    }
 }

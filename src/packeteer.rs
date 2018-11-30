@@ -69,7 +69,7 @@ impl<'a> Packeteer<'a> {
     /// This function returns an error if ten seconds pass without a new
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
-    pub fn next_flatbuffer(&mut self) -> Result<GameTickPacket, Box<Error>> {
+    pub fn next_flatbuffer<'fb>(&mut self) -> Result<GameTickPacket<'fb>, Box<Error>> {
         let started = Instant::now();
 
         loop {

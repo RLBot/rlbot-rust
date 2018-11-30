@@ -34,7 +34,7 @@ impl<'a> Physicist<'a> {
     /// This function returns an error if five seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
-    pub fn next_flat(&mut self) -> Result<flat::RigidBodyTick<'a>, Box<Error>> {
+    pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<Error>> {
         let started = Instant::now();
 
         loop {
@@ -54,7 +54,7 @@ impl<'a> Physicist<'a> {
     ///
     /// If there is a tick that is newer than the previous tick, it is
     /// returned. Otherwise, `None` is returned.
-    pub fn try_next_flat(&mut self) -> Option<flat::RigidBodyTick<'a>> {
+    pub fn try_next_flat<'fb>(&mut self) -> Option<flat::RigidBodyTick<'fb>> {
         if let Some(tick) = self.rlbot.update_rigid_body_tick_flatbuffer() {
             let ball = tick.ball();
             match ball.as_ref().and_then(|b| b.state()).map(|s| s.frame()) {
