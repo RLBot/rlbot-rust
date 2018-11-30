@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## v0.1.2 – 2018-11-30
+
+### Added
+
+* Physicist gained `next` and `try_next`. Packeteer gained `try_next` and
+  `try_next_flat`. This brings the two objects to feature parity with each
+  other. ([@whatisaphone])
 
 ### Changed
 
