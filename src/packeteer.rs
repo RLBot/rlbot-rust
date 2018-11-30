@@ -38,27 +38,24 @@ impl<'a> Packeteer<'a> {
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
     pub fn next(&mut self) -> Result<LiveDataPacket, Box<Error>> {
-        let started = Instant::now();
+        self.spin(Self::try_next)
+    }
+
+    /// Polls for the next [`LiveDataPacket`].
+    ///
+    /// If there is a packet that is newer than the previous packet, it is
+    /// returned. Otherwise, `None` is returned.
+    pub fn try_next(&mut self) -> Result<Option<LiveDataPacket>, Box<Error>> {
         let mut packet = unsafe { mem::uninitialized() };
+        self.rlbot.update_live_data_packet(&mut packet)?;
 
-        loop {
-            self.ratelimiter.wait();
-
-            self.rlbot.update_live_data_packet(&mut packet)?;
-
-            // Wait until another "tick" has happened so we don't return duplicate data.
-            let game_time = packet.GameInfo.TimeSeconds;
-            if game_time != self.prev_game_time {
-                self.prev_game_time = game_time;
-                break;
-            }
-
-            if Instant::now() - started > Duration::from_secs(5) {
-                return Err(From::from("no packet received after five seconds"));
-            }
+        let game_time = packet.GameInfo.TimeSeconds;
+        if game_time != self.prev_game_time {
+            self.prev_game_time = game_time;
+            Ok(Some(packet))
+        } else {
+            Ok(None)
         }
-
-        Ok(packet)
     }
 
     /// Block until we receive the next unique
@@ -70,25 +67,43 @@ impl<'a> Packeteer<'a> {
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
     pub fn next_flatbuffer<'fb>(&mut self) -> Result<GameTickPacket<'fb>, Box<Error>> {
-        let started = Instant::now();
+        self.spin(|this| Ok(this.try_next_flat()))
+    }
+
+    /// Polls for the next [`GameTickPacket`].
+    ///
+    /// If there is a packet that is newer than the previous packet, it is
+    /// returned. Otherwise, `None` is returned.
+    pub fn try_next_flat<'fb>(&mut self) -> Option<GameTickPacket<'fb>> {
+        if let Some(packet) = self.rlbot.update_live_data_packet_flatbuffer() {
+            let game_time = packet.gameInfo().map(|gi| gi.secondsElapsed());
+            if let Some(game_time) = game_time {
+                if game_time != self.prev_game_time {
+                    self.prev_game_time = game_time;
+                    return Some(packet);
+                }
+            }
+        }
+        None
+    }
+
+    /// Keep trying `f` until the timeout elapses.
+    fn spin<R>(
+        &mut self,
+        f: impl Fn(&mut Self) -> Result<Option<R>, Box<Error>>,
+    ) -> Result<R, Box<Error>> {
+        let start = Instant::now();
 
         loop {
             self.ratelimiter.wait();
 
-            if let Some(packet) = self.rlbot.update_live_data_packet_flatbuffer() {
-                // Wait until another "tick" has happened so we don't return duplicate data.
-                let game_time = packet
-                    .gameInfo()
-                    .ok_or("Missing gameInfo")?
-                    .secondsElapsed();
-                if game_time != self.prev_game_time {
-                    self.prev_game_time = game_time;
-                    return Ok(packet);
-                }
+            if let Some(tick) = f(self)? {
+                return Ok(tick);
             }
 
-            if Instant::now() - started > Duration::from_secs(10) {
-                return Err(From::from("no packet received after ten seconds"));
+            let elapsed = Instant::now() - start;
+            if elapsed > Duration::from_secs(5) {
+                return Err(From::from("no physics tick received after five seconds"));
             }
         }
     }
