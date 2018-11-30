@@ -63,6 +63,15 @@ functions in RLBot's core interface require flatbuffers.
 cargo run --example simple_flatbuffer
 ```
 
+#### `examples/rendering`
+
+Shows how to draw simple shapes to the game window. If you don't see anything,
+try pressing PageUp, which is RLBot's shortcut for turning on rendering.
+
+```sh
+cargo run --example rendering
+```
+
 #### `examples/gravity`
 
 A fun example showing how to set game state using the low-level interface.

@@ -16,12 +16,13 @@
 //!
 //! There are two ways to use this crate:
 //!
-//! 1. [`run_bot`] – This is the **high-level** interface. It plays a single
-//!    match from start to finish. It expects the app to have been launched by
-//!    the RLBot framework, and runs its own game loop under framework control.
-//! 2. [`init`] – This is the **low-level** interface. You can use this to
-//!    directly access the innards of RLBot for scripting, integration tests, or
-//!    any other custom use-case.
+//! 1. [`run_bot`] and [`Bot`] – This is the **high-level** interface. It plays
+//!    a single match from start to finish. It expects the app to have been
+//!    launched by the RLBot framework, and runs its own game loop under
+//!    framework control.
+//! 2. [`init`] and [`RLBot`] – This is the **low-level** interface. You can use
+//!    this to directly access the innards of RLBot for scripting, integration
+//!    tests, or any other custom use-case.
 //!
 //! # Examples
 //!
@@ -32,12 +33,15 @@
 //!   structs.
 //! * [`examples/simple_flatbuffer`] – Demonstrates use of the [`init`] API with
 //!   FlatBuffers.
+//! * [`examples/rendering`] – Demonstrates use of the
+//!   [`RLBot::begin_render_group`] API.
 //! * [`examples/gravity`] – Demonstrates use of the [`RLBot::set_game_state`]
-//!   API
+//!   API.
 //!
 //! [`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
 //! [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 //! [`examples/simple_flatbuffer`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple_flatbuffer.rs
+//! [`examples/rendering`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/rendering.rs
 //! [`examples/gravity`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/gravity.rs
 
 #![cfg_attr(feature = "strict", deny(warnings, missing_docs))]
