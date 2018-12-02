@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.0 – 2018-12-02
+
+### Added
+
+* High-level state setting interface. ([@whatisaphone])
+
 ## v0.1.2 – 2018-11-30
 
 ### Added
