@@ -34,65 +34,10 @@ impl rlbot::Bot for MyBot {
 }
 ```
 
-See [`examples/bot`] for a complete example.
+This library comes with plenty of examples to get you started. For a list of
+examples, check out the [docs].
 
-[`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
-
-### Quick start
-
-This repo comes with a few examples to get you started.
-
-#### `examples/simple`
-
-This is a simple ATBA, or Always Towards Ball Agent. It can run with no
-dependencies other than RLBot itself. You can run it like this:
-
-```sh
-cargo run --example simple
-```
-
-If you get an error, chances are you need to download the framework! Follow the
-instructions under **Installing the framework**.
-
-#### `examples/simple_flatbuffer`
-
-Another ATBA, but using a secondary interface which uses flatbuffers. Many
-functions in RLBot's core interface require flatbuffers.
-
-```sh
-cargo run --example simple_flatbuffer
-```
-
-#### `examples/rendering`
-
-Shows how to draw simple shapes to the game window. If you don't see anything,
-try pressing PageUp, which is RLBot's shortcut for turning on rendering.
-
-```sh
-cargo run --example rendering
-```
-
-#### `examples/gravity`
-
-A fun example showing how to set game state using the low-level interface.
-
-```sh
-cargo run --example gravity
-```
-
-#### `examples/bot`
-
-This is a full-fledged bot that can run within the Python RLBot framework. It
-requires a working RLBot Python setup. Follow the instructions in
-[RLBotPythonExample] to make sure you have all the necessary dependencies
-installed. Once you have that working, you should be able to run a Rust bot
-within the framework with this command:
-
-```sh
-cargo build --example bot && python -c "from rlbot import runner; runner.main()"
-```
-
-[RLBotPythonExample]: https://github.com/RLBot/RLBotPythonExample
+[docs]: https://docs.rs/rlbot/
 
 ### Installing the framework
 
