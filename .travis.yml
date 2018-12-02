@@ -5,18 +5,22 @@ cache: cargo
 rust:
   - 1.28.0
   - stable
+  - nightly
+
+env:
+  - FEATURES='--no-default-features --features strict'
+  - FEATURES='--features strict'
 
 script:
-  - cargo check --all-targets --features strict
-  - cargo test
+  - cargo check --all-targets $FEATURES
+  - cargo test $FEATURES
 
 matrix:
   include:
     - rust: nightly
+      env: {}
       before_script:
         - rustup component add rustfmt-preview
       script:
-        - cargo check --all-targets --features strict
-        - cargo test
         - cargo fmt -- --check
-        - cargo rustdoc -- --deny warnings
+        - cargo rustdoc --all-features -- --deny warnings

@@ -1,4 +1,5 @@
 #![cfg(windows)]
+#![cfg(feature = "use-nalgebra")]
 #![cfg_attr(feature = "strict", deny(warnings))]
 
 extern crate flatbuffers;
