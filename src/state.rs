@@ -3,6 +3,7 @@
 
 use flatbuffers;
 use rlbot_generated::rlbot::flat;
+use state_convert::{Point3Into, Vector3Into};
 
 /// Represents a vector in 3D space.
 #[derive(Clone, Default)]
@@ -126,26 +127,26 @@ impl DesiredPhysics {
     }
 
     /// Sets the location.
-    pub fn location(mut self, location: Vector3Partial) -> Self {
-        self.location = Some(location);
+    pub fn location(mut self, location: impl Point3Into<Vector3Partial>) -> Self {
+        self.location = Some(location.into());
         self
     }
 
     /// Sets the rotation.
-    pub fn rotation(mut self, rotation: RotatorPartial) -> Self {
-        self.rotation = Some(rotation);
+    pub fn rotation(mut self, rotation: impl Into<RotatorPartial>) -> Self {
+        self.rotation = Some(rotation.into());
         self
     }
 
     /// Sets the velocity.
-    pub fn velocity(mut self, velocity: Vector3Partial) -> Self {
-        self.velocity = Some(velocity);
+    pub fn velocity(mut self, velocity: impl Vector3Into<Vector3Partial>) -> Self {
+        self.velocity = Some(velocity.into());
         self
     }
 
     /// Sets the angular velocity.
-    pub fn angular_velocity(mut self, angular_velocity: Vector3Partial) -> Self {
-        self.angular_velocity = Some(angular_velocity);
+    pub fn angular_velocity(mut self, angular_velocity: impl Vector3Into<Vector3Partial>) -> Self {
+        self.angular_velocity = Some(angular_velocity.into());
         self
     }
 
@@ -359,5 +360,20 @@ impl DesiredGameState {
 
         builder.finish(root, None);
         builder
+    }
+}
+
+#[cfg(feature = "use-nalgebra")]
+#[cfg(test)]
+mod tests {
+    use na::{Point3, Vector3};
+    use state;
+
+    #[test]
+    fn test_nalgebra_arguments() {
+        let _ = state::DesiredPhysics::new()
+            .location(Point3::origin())
+            .velocity(Vector3::zeros())
+            .angular_velocity(Vector3::zeros());
     }
 }

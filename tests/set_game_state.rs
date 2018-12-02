@@ -2,10 +2,12 @@
 #![cfg_attr(feature = "strict", deny(warnings))]
 
 extern crate flatbuffers;
+extern crate nalgebra as na;
 extern crate rlbot;
 extern crate winapi;
 extern crate winproc;
 
+use na::Point3;
 use rlbot::state;
 use std::error::Error;
 use std::thread;
@@ -29,8 +31,7 @@ fn integration_set_game_state() -> Result<(), Box<Error>> {
 }
 
 fn teleport_to_sky() -> state::DesiredGameState {
-    let car_state = state::DesiredCarState::new().physics(
-        state::DesiredPhysics::new().location(state::Vector3Partial::new().x(0.0).y(0.0).z(1500.0)),
-    );
+    let car_state = state::DesiredCarState::new()
+        .physics(state::DesiredPhysics::new().location(Point3::new(0.0, 0.0, 1500.0)));
     state::DesiredGameState::new().car_state(0, car_state)
 }

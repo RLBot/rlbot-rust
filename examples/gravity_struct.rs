@@ -61,7 +61,7 @@ fn get_desired_state<'a>(packet: &rlbot::ffi::LiveDataPacket) -> state::DesiredG
         let v = car_phys.Velocity;
         let a = gravitate_towards_ball(&ball_loc, &car);
 
-        let new_velocity = Vector3::new(v.X + a.x, v.Y + a.y, v.Z + a.z).into();
+        let new_velocity = Vector3::new(v.X + a.x, v.Y + a.y, v.Z + a.z);
         let physics = state::DesiredPhysics::new().velocity(new_velocity);
         let car_state = state::DesiredCarState::new().physics(physics);
         desired_game_state = desired_game_state.car_state(i, car_state);

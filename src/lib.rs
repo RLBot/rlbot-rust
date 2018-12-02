@@ -72,5 +72,6 @@ mod rlbot;
 #[allow(non_camel_case_types, non_snake_case, missing_docs)]
 mod rlbot_generated;
 pub mod state;
+mod state_convert;
 #[cfg(feature = "use-nalgebra")]
 mod state_nalgebra;
