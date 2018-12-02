@@ -14,6 +14,7 @@ pub struct Vector3Partial {
     pub y: Option<f32>,
     /// The Z coordinate.
     pub z: Option<f32>,
+    non_exhaustive: (),
 }
 
 impl Vector3Partial {
@@ -65,6 +66,7 @@ pub struct RotatorPartial {
     pub yaw: Option<f32>,
     /// The roll.
     pub roll: Option<f32>,
+    non_exhaustive: (),
 }
 
 impl RotatorPartial {
@@ -118,6 +120,7 @@ pub struct DesiredPhysics {
     pub velocity: Option<Vector3Partial>,
     /// The angular velocity of the rigid body.
     pub angular_velocity: Option<Vector3Partial>,
+    non_exhaustive: (),
 }
 
 impl DesiredPhysics {
@@ -169,6 +172,7 @@ impl DesiredPhysics {
 pub struct DesiredBallState {
     /// The ball's physics.
     pub physics: Option<DesiredPhysics>,
+    non_exhaustive: (),
 }
 
 impl DesiredBallState {
@@ -205,6 +209,7 @@ pub struct DesiredCarState {
     pub jumped: Option<bool>,
     /// Whether the car has used its second jump.
     pub double_jumped: Option<bool>,
+    non_exhaustive: (),
 }
 
 impl DesiredCarState {
@@ -259,6 +264,7 @@ impl DesiredCarState {
 pub struct DesiredBoostState {
     /// The amount of time until the boost pickup respawns.
     pub respawn_time: Option<f32>,
+    non_exhaustive: (),
 }
 
 impl DesiredBoostState {
@@ -298,6 +304,7 @@ pub struct DesiredGameState {
     pub car_states: Vec<Option<DesiredCarState>>,
     /// The state of each boost pickup.
     pub boost_states: Vec<Option<DesiredBoostState>>,
+    non_exhaustive: (),
 }
 
 impl DesiredGameState {
