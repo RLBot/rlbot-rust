@@ -6,12 +6,32 @@ extern crate flatbuffers;
 extern crate nalgebra as na;
 extern crate rlbot;
 
-use na::{Unit, Vector3};
-use rlbot::{ffi::MatchSettings, flat};
+use na::{Point3, Vector3};
+use rlbot::ffi::MatchSettings;
+use rlbot::state;
 use std::error::Error;
 
 fn main() -> Result<(), Box<Error>> {
     let rlbot = rlbot::init()?;
+    start_match(&rlbot)?;
+
+    let mut packets = rlbot.packeteer();
+
+    let mut i = 0;
+    loop {
+        let packet = packets.next()?;
+
+        // Check that match is started and not showing a replay.
+        // Also don't set state on each frame, that can make it laggy
+        if packet.GameInfo.RoundActive && i % 8 == 0 {
+            let desired_state = get_desired_state(&packet);
+            rlbot.set_game_state_struct(desired_state)?;
+        }
+        i += 1;
+    }
+}
+
+fn start_match(rlbot: &rlbot::RLBot) -> Result<(), Box<Error>> {
     let mut settings = MatchSettings {
         NumPlayers: 2,
         ..Default::default()
@@ -27,92 +47,44 @@ fn main() -> Result<(), Box<Error>> {
     settings.PlayerConfiguration[1].Team = 1;
 
     rlbot.start_match(settings)?;
-
-    let mut packets = rlbot.packeteer();
-
-    let mut i = 0;
-    loop {
-        let packet = packets.next_flatbuffer()?;
-
-        // check that match is started and not showing a replay.
-        // `packets.next_flatbuffer()` sleeps until the next packet is
-        // available, so this loop will not roast your CPU :)
-        // also don't set state on each frame, that can make it laggy
-        if packet.gameInfo().unwrap().isRoundActive() && i % 8 == 0 {
-            let desired_state = get_desired_state(&packet);
-            rlbot.set_game_state(desired_state.finished_data())?;
-        }
-        i += 1;
-    }
+    rlbot.wait_for_match_start()
 }
 
-fn get_desired_state<'a>(packet: &flat::GameTickPacket) -> flatbuffers::FlatBufferBuilder<'a> {
-    let ball = packet.ball().expect("Missing ball");
-    let ball_phys = ball.physics().expect("Missing ball physics");
-    let flat_ball_loc = ball_phys.location().expect("Missing ball location");
-    let ball_loc = Vector3::new(flat_ball_loc.x(), flat_ball_loc.y(), flat_ball_loc.z());
-    let cars = packet.players().expect("Missing players");
+fn get_desired_state<'a>(packet: &rlbot::ffi::LiveDataPacket) -> state::DesiredGameState {
+    let ball_loc = packet.GameBall.Physics.Location;
+    let ball_loc = Point3::new(ball_loc.X, ball_loc.Y, ball_loc.Z);
 
-    let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(1024);
+    let mut desired_game_state = state::DesiredGameState::new();
 
-    let mut car_offsets = Vec::with_capacity(cars.len());
-    let mut i = 0;
-    while i < cars.len() {
-        let car = cars.get(i);
-        let car_phys = car.physics().expect("Missing player physics");
-        let v = car_phys.velocity().expect("Missing player velocity");
+    for (i, car) in packet.cars().enumerate() {
+        let car_phys = car.Physics;
+        let v = car_phys.Velocity;
         let a = gravitate_towards_ball(&ball_loc, &car);
 
-        let new_velocity = flat::Vector3Partial::create(
-            &mut builder,
-            &flat::Vector3PartialArgs {
-                x: Some(&flat::Float::new(v.x() + a.x)),
-                y: Some(&flat::Float::new(v.y() + a.y)),
-                z: Some(&flat::Float::new(v.z() + a.z)),
-            },
-        );
+        // Note: You can ordinarily just use `na::Vector3::new(x, y, z)` here. There's a
+        // cargo build oddity which prevents that from working in code inside the
+        // `examples/` directory.
+        let new_velocity = rlbot::state::Vector3Partial::new()
+            .x(v.X + a.x)
+            .y(v.Y + a.y)
+            .z(v.Z + a.z);
 
-        let physics = flat::DesiredPhysics::create(
-            &mut builder,
-            &flat::DesiredPhysicsArgs {
-                velocity: Some(new_velocity),
-                ..Default::default()
-            },
-        );
-
-        let car_state = flat::DesiredCarState::create(
-            &mut builder,
-            &flat::DesiredCarStateArgs {
-                physics: Some(physics),
-                ..Default::default()
-            },
-        );
-        car_offsets.push(car_state);
-        i += 1;
+        let physics = state::DesiredPhysics::new().velocity(new_velocity);
+        let car_state = state::DesiredCarState::new().physics(physics);
+        desired_game_state = desired_game_state.car_state(i, car_state);
     }
-    let car_states = builder.create_vector(&car_offsets);
 
-    let desired_game_state = flat::DesiredGameState::create(
-        &mut builder,
-        &flat::DesiredGameStateArgs {
-            carStates: Some(car_states),
-            ..Default::default()
-        },
-    );
-
-    builder.finish(desired_game_state, None);
-    builder
+    desired_game_state
 }
 
 /// Generate an acceleration to apply to the car towards the ball, as if the
 /// ball exerted a large gravitational force
-fn gravitate_towards_ball(ball_loc: &Vector3<f32>, car: &flat::PlayerInfo) -> Vector3<f32> {
-    let car_phys = car.physics().expect("Missing player physics");
-    let flat_car_loc = car_phys.location().expect("Missing player location");
-    let car_loc = Vector3::new(flat_car_loc.x(), flat_car_loc.y(), flat_car_loc.z());
+fn gravitate_towards_ball(ball_loc: &Point3<f32>, car: &rlbot::ffi::PlayerInfo) -> Vector3<f32> {
+    let car_loc = car.Physics.Location;
+    let car_loc = Point3::new(car_loc.X, car_loc.Y, car_loc.Z);
     let ball_delta = ball_loc - car_loc;
     let distance = ball_delta.norm();
     let k = 1000_000.0;
     let a = k / (distance / 5.0).powf(2.0);
-    a * Unit::new_normalize(ball_delta).unwrap()
+    a * ball_delta.normalize()
 }
