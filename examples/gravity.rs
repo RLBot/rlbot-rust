@@ -45,7 +45,7 @@ fn start_match(rlbot: &rlbot::RLBot) -> Result<(), Box<Error>> {
     rlbot.wait_for_match_start()
 }
 
-fn get_desired_state<'a>(packet: &rlbot::ffi::LiveDataPacket) -> state::DesiredGameState {
+fn get_desired_state(packet: &rlbot::ffi::LiveDataPacket) -> state::DesiredGameState {
     let ball_loc = packet.GameBall.Physics.Location;
     let ball_loc = Point3::new(ball_loc.X, ball_loc.Y, ball_loc.Z);
 
