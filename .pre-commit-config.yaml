@@ -1,29 +1,32 @@
-- repo: local
-  hooks:
-    - id: fmt
-      name: fmt
-      language: system
-      files: '[.]rs$'
-      entry: rustup run nightly rustfmt
+fail_fast: true
 
-    - id: check
-      name: check
-      language: system
-      files: '[.]rs$'
-      entry: cargo check --all-targets --features strict
-      pass_filenames: false
+repos:
+  - repo: local
+    hooks:
+      - id: fmt
+        name: fmt
+        language: system
+        files: '[.]rs$'
+        entry: rustup run nightly rustfmt
 
-    - id: test
-      name: test
-      language: system
-      files: '[.]rs$'
-      # Skip the slow tests that launch the game
-      entry: cargo test -- --skip integration
-      pass_filenames: false
+      - id: check
+        name: check
+        language: system
+        files: '[.]rs$'
+        entry: cargo check --all-targets --features strict
+        pass_filenames: false
 
-    - id: doc
-      name: doc
-      language: system
-      files: '[.]rs$'
-      entry: cargo +nightly rustdoc -- --deny warnings
-      pass_filenames: false
+      - id: test
+        name: test
+        language: system
+        files: '[.]rs$'
+        # Skip the slow tests that launch the game
+        entry: cargo test -- --skip integration
+        pass_filenames: false
+
+      - id: doc
+        name: doc
+        language: system
+        files: '[.]rs$'
+        entry: cargo +nightly rustdoc -- --deny warnings
+        pass_filenames: false
