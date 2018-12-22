@@ -375,10 +375,8 @@ impl DesiredGameState {
 #[cfg(feature = "use-nalgebra")]
 #[cfg(test)]
 mod tests {
-    use crate::{
-        na::{Point3, Vector3},
-        state,
-    };
+    use crate::state;
+    use na::{Point3, Vector3};
 
     #[test]
     fn test_nalgebra_arguments() {

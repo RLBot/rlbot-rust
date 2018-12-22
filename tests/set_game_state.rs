@@ -8,7 +8,7 @@ extern crate rlbot;
 extern crate winapi;
 extern crate winproc;
 
-use crate::na::Point3;
+use na::Point3;
 use rlbot::state;
 use std::{error::Error, thread, time::Duration};
 

@@ -6,7 +6,7 @@ extern crate flatbuffers;
 extern crate nalgebra as na;
 extern crate rlbot;
 
-use crate::na::{Unit, Vector3};
+use na::{Unit, Vector3};
 use rlbot::{ffi::MatchSettings, flat};
 use std::error::Error;
 

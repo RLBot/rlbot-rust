@@ -1,7 +1,7 @@
 extern crate nalgebra as na;
 extern crate rlbot;
 
-use crate::na::Vector2;
+use na::Vector2;
 use rlbot::ffi;
 use std::{error::Error, f32::consts::PI};
 
