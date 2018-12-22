@@ -94,10 +94,8 @@ impl<'a> RenderGroup<'a> {
     /// let transbluecent = group.color_argb(127, 0, 0, 255);
     /// ```
     pub fn color_argb(&mut self, a: u8, r: u8, g: u8, b: u8) -> Color<'a> {
-        Color(flat::Color::create(
-            &mut self.builder,
-            &flat::ColorArgs { a, r, g, b },
-        ))
+        let args = flat::ColorArgs { a, r, g, b };
+        Color(flat::Color::create(&mut self.builder, &args))
     }
 
     /// Create an opaque color with the given, **r**ed, **g**reen, and **b**lue.
@@ -112,10 +110,8 @@ impl<'a> RenderGroup<'a> {
     /// let green = group.color_rgb(0, 255, 0);
     /// ```
     pub fn color_rgb(&mut self, r: u8, g: u8, b: u8) -> Color<'a> {
-        Color(flat::Color::create(
-            &mut self.builder,
-            &flat::ColorArgs { a: 255, r, g, b },
-        ))
+        let args = flat::ColorArgs { a: 255, r, g, b };
+        Color(flat::Color::create(&mut self.builder, &args))
     }
 
     /// Draw a line using screen coordinates.

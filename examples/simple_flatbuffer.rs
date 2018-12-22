@@ -67,13 +67,10 @@ fn build_player_input<'a>(
         &controller_state_args,
     ));
 
-    let player_input = flat::PlayerInput::create(
-        &mut builder,
-        &flat::PlayerInputArgs {
-            playerIndex: player_index,
-            controllerState: controller_state,
-        },
-    );
+    let player_input = flat::PlayerInput::create(&mut builder, &flat::PlayerInputArgs {
+        playerIndex: player_index,
+        controllerState: controller_state,
+    });
 
     builder.finish(player_input, None);
     builder

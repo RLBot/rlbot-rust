@@ -63,42 +63,31 @@ fn get_desired_state<'a>(packet: &flat::GameTickPacket) -> flatbuffers::FlatBuff
         let v = car_phys.velocity().expect("Missing player velocity");
         let a = gravitate_towards_ball(&ball_loc, &car);
 
-        let new_velocity = flat::Vector3Partial::create(
-            &mut builder,
-            &flat::Vector3PartialArgs {
-                x: Some(&flat::Float::new(v.x() + a.x)),
-                y: Some(&flat::Float::new(v.y() + a.y)),
-                z: Some(&flat::Float::new(v.z() + a.z)),
-            },
-        );
+        let new_velocity = flat::Vector3Partial::create(&mut builder, &flat::Vector3PartialArgs {
+            x: Some(&flat::Float::new(v.x() + a.x)),
+            y: Some(&flat::Float::new(v.y() + a.y)),
+            z: Some(&flat::Float::new(v.z() + a.z)),
+        });
 
-        let physics = flat::DesiredPhysics::create(
-            &mut builder,
-            &flat::DesiredPhysicsArgs {
-                velocity: Some(new_velocity),
-                ..Default::default()
-            },
-        );
+        let physics = flat::DesiredPhysics::create(&mut builder, &flat::DesiredPhysicsArgs {
+            velocity: Some(new_velocity),
+            ..Default::default()
+        });
 
-        let car_state = flat::DesiredCarState::create(
-            &mut builder,
-            &flat::DesiredCarStateArgs {
-                physics: Some(physics),
-                ..Default::default()
-            },
-        );
+        let car_state = flat::DesiredCarState::create(&mut builder, &flat::DesiredCarStateArgs {
+            physics: Some(physics),
+            ..Default::default()
+        });
         car_offsets.push(car_state);
         i += 1;
     }
     let car_states = builder.create_vector(&car_offsets);
 
-    let desired_game_state = flat::DesiredGameState::create(
-        &mut builder,
-        &flat::DesiredGameStateArgs {
+    let desired_game_state =
+        flat::DesiredGameState::create(&mut builder, &flat::DesiredGameStateArgs {
             carStates: Some(car_states),
             ..Default::default()
-        },
-    );
+        });
 
     builder.finish(desired_game_state, None);
     builder
