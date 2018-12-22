@@ -8,8 +8,13 @@
 you write bots using a simple, safe interface that should feel comfortable to
 Rust developers.
 
+**Documentation:** [We have it.](https://docs.rs/rlbot/)
+
 **Stability:** As you might notice, we're still on version 0.x. Breaking changes
-are likely at this stage. Join the [Discord] to keep up-to-date!
+are still possible at this stage. Join the [Discord] to keep up-to-date!
+
+**Compatibility**: We target the latest version of RLBot, and the latest stable
+version of Rust.
 
 [RLBot]: https://github.com/RLBot/RLBot
 [Discord]: https://discordapp.com/invite/XhrQGf
