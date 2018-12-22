@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "strict", deny(warnings))]
+
 use na::Vector2;
 use rlbot::ffi;
 use std::{error::Error, f32::consts::PI};
