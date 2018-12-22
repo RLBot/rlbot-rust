@@ -28,11 +28,15 @@
 //!
 //! This crate comes with plenty examples to get you started. All the examples
 //! can be run directly from the repo. For example, to run the `simple` example,
-//! run this command:
+//! follow these steps:
 //!
-//! ```sh
-//! cargo run --example simple
-//! ```
+//! 1. Run Rocket League.
+//!
+//! 1. Run the example:
+//!
+//!    ```sh
+//!    cargo run --example simple
+//!    ```
 //!
 //! ### examples/simple ([Source][`examples/simple`])
 //!
