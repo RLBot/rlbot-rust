@@ -1,8 +1,7 @@
 //! Rendering is RLBot's ability to draw directly inside the game window.
 
-use flat;
+use crate::{flat, rlbot::RLBot};
 use flatbuffers::{FlatBufferBuilder, WIPOffset};
-use rlbot::RLBot;
 use std::error::Error;
 
 /// A render group in the process of being built.

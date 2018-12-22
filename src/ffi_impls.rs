@@ -1,4 +1,4 @@
-use ffi;
+use crate::ffi;
 
 impl ffi::LiveDataPacket {
     /// Yields the [`PlayerInfo`](ffi::PlayerInfo) for each player in the match.

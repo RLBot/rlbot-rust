@@ -1,6 +1,7 @@
 [package]
 name = "rlbot"
 version = "0.2.0"
+edition = "2018"
 authors = ["John Simon <john@whatisaph.one>"]
 description = "RLBot bindings for Rust"
 documentation = "https://docs.rs/rlbot/"

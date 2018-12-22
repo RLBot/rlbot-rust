@@ -1,4 +1,4 @@
-use ffi::*;
+use crate::ffi::*;
 use libloading::Library;
 use std::{
     error::Error,

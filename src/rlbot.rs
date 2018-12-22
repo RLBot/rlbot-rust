@@ -1,13 +1,8 @@
-use dll::RLBotCoreInterface;
-use error::RLBotError;
-use ffi;
+use crate::{
+    dll::RLBotCoreInterface, error::RLBotError, ffi, inject, packeteer::Packeteer,
+    physicist::Physicist, render::RenderGroup, rlbot_generated::rlbot::flat, state,
+};
 use flatbuffers;
-use inject;
-use packeteer::Packeteer;
-use physicist::Physicist;
-use render::RenderGroup;
-use rlbot_generated::rlbot::flat;
-use state;
 use std::{
     cell::Cell,
     error::Error,
@@ -288,8 +283,7 @@ fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
 
 #[cfg(test)]
 mod tests {
-    use ffi;
-    use rlbot::RLBot;
+    use crate::{ffi, rlbot::RLBot};
     use std::{error::Error, mem};
 
     #[test]

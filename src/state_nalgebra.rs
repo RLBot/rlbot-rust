@@ -1,6 +1,8 @@
-use na::{Point3, Vector3};
-use state;
-use state_convert::{FromPoint3, FromVector3};
+use crate::{
+    na::{Point3, Vector3},
+    state,
+    state_convert::{FromPoint3, FromVector3},
+};
 
 impl FromVector3<Vector3<f32>> for state::Vector3Partial {
     fn from(v: Vector3<f32>) -> Self {

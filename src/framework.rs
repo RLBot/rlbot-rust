@@ -1,7 +1,6 @@
 //! This module contains code for interoperating with RLBot's BotManager.
 
-use ffi;
-use rlbot;
+use crate::{ffi, rlbot};
 use std::{env, error::Error};
 
 /// A bot that can run within the RLBot framework. Instances of `Bot` are used

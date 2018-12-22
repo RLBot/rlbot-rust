@@ -1,7 +1,5 @@
-use ffi;
-use flat;
+use crate::{ffi, flat, rlbot::RLBot};
 use ratelimit;
-use rlbot::RLBot;
 use std::{
     error::Error,
     mem,

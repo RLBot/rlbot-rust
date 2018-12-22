@@ -1,4 +1,4 @@
-use ffi::RLBotCoreStatus;
+use crate::ffi::RLBotCoreStatus;
 use std::{error::Error, fmt};
 
 /// An error code from the RLBot interface.

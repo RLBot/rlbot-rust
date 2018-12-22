@@ -118,12 +118,14 @@ extern crate nalgebra as na;
 extern crate ratelimit;
 
 pub mod ffi;
-pub use framework::{run_bot, Bot};
-pub use packeteer::Packeteer;
-pub use physicist::Physicist;
-pub use render::{Color, RenderGroup};
-pub use rlbot::{init, RLBot};
-pub use rlbot_generated::rlbot::flat;
+pub use crate::{
+    framework::{run_bot, Bot},
+    packeteer::Packeteer,
+    physicist::Physicist,
+    render::{Color, RenderGroup},
+    rlbot::{init, RLBot},
+    rlbot_generated::rlbot::flat,
+};
 
 mod dll;
 mod error;

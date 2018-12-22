@@ -1,7 +1,5 @@
-use ffi::LiveDataPacket;
+use crate::{ffi::LiveDataPacket, rlbot::RLBot, rlbot_generated::rlbot::flat::GameTickPacket};
 use ratelimit;
-use rlbot::RLBot;
-use rlbot_generated::rlbot::flat::GameTickPacket;
 use std::{
     error::Error,
     mem,
@@ -31,8 +29,8 @@ impl<'a> Packeteer<'a> {
         }
     }
 
-    /// Block until we receive the next unique
-    /// [`LiveDataPacket`](::ffi::LiveDataPacket), and then return it.
+    /// Block until we receive the next unique [`LiveDataPacket`], and then
+    /// return it.
     ///
     /// # Errors
     ///
@@ -60,8 +58,8 @@ impl<'a> Packeteer<'a> {
         }
     }
 
-    /// Block until we receive the next unique
-    /// [`GameTickPacket`](::flat::GameTickPacket), and then return it.
+    /// Block until we receive the next unique [`GameTickPacket`], and then
+    /// return it.
     ///
     /// # Errors
     ///

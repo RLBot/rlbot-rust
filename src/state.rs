@@ -1,9 +1,11 @@
 //! This module contains data structures used by
 //! [`RLBot::set_game_state_struct`] for state setting.
 
+use crate::{
+    rlbot_generated::rlbot::flat,
+    state_convert::{Point3Into, Vector3Into},
+};
 use flatbuffers;
-use rlbot_generated::rlbot::flat;
-use state_convert::{Point3Into, Vector3Into};
 
 /// Represents a vector in 3D space.
 #[derive(Clone, Default)]
@@ -373,8 +375,10 @@ impl DesiredGameState {
 #[cfg(feature = "use-nalgebra")]
 #[cfg(test)]
 mod tests {
-    use na::{Point3, Vector3};
-    use state;
+    use crate::{
+        na::{Point3, Vector3},
+        state,
+    };
 
     #[test]
     fn test_nalgebra_arguments() {
