@@ -2,12 +2,6 @@
 #![cfg(feature = "use-nalgebra")]
 #![cfg_attr(feature = "strict", deny(warnings))]
 
-extern crate flatbuffers;
-extern crate nalgebra as na;
-extern crate rlbot;
-extern crate winapi;
-extern crate winproc;
-
 use na::Point3;
 use rlbot::state;
 use std::{error::Error, thread, time::Duration};

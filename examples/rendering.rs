@@ -2,9 +2,6 @@
 
 #![cfg_attr(feature = "strict", deny(warnings))]
 
-extern crate nalgebra as na;
-extern crate rlbot;
-
 use rlbot::ffi;
 use std::{error::Error, f32::consts::PI};
 

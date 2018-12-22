@@ -27,8 +27,6 @@ use std::{
 /// # Example
 ///
 /// ```no_run
-/// # extern crate flatbuffers;
-/// # extern crate rlbot;
 /// # use rlbot::ffi::MatchSettings;
 /// # use rlbot::flat;
 /// #

@@ -111,12 +111,6 @@
 
 #![cfg_attr(feature = "strict", deny(warnings, missing_docs))]
 
-extern crate flatbuffers;
-extern crate libloading;
-#[cfg(feature = "use-nalgebra")]
-extern crate nalgebra as na;
-extern crate ratelimit;
-
 pub mod ffi;
 pub use crate::{
     framework::{run_bot, Bot},

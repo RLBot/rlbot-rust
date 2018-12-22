@@ -1,10 +1,6 @@
 #![cfg(windows)]
 #![cfg_attr(feature = "strict", deny(warnings))]
 
-extern crate rlbot;
-extern crate winapi;
-extern crate winproc;
-
 use std::{error::Error, thread, time::Duration};
 
 mod common;
