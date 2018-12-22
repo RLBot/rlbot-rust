@@ -1,10 +1,12 @@
 use ffi::*;
 use libloading::Library;
-use std::error::Error;
-use std::io;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::thread::sleep;
-use std::time::Duration;
+use std::{
+    error::Error,
+    io,
+    sync::atomic::{AtomicBool, Ordering},
+    thread::sleep,
+    time::Duration,
+};
 
 // These type signatures came from bindgen.
 type UpdateFieldInfoFlatbuffer = extern "C" fn() -> ByteBuffer;

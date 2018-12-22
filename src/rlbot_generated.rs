@@ -8,8 +8,7 @@ pub mod rlbot {
     #![allow(dead_code)]
     #![allow(unused_imports)]
 
-    use std::cmp::Ordering;
-    use std::mem;
+    use std::{cmp::Ordering, mem};
 
     extern crate flatbuffers;
     use self::flatbuffers::EndianScalar;
@@ -17,8 +16,7 @@ pub mod rlbot {
         #![allow(dead_code)]
         #![allow(unused_imports)]
 
-        use std::cmp::Ordering;
-        use std::mem;
+        use std::{cmp::Ordering, mem};
 
         extern crate flatbuffers;
         use self::flatbuffers::EndianScalar;

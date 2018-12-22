@@ -2,8 +2,7 @@
 
 use ffi;
 use rlbot;
-use std::env;
-use std::error::Error;
+use std::{env, error::Error};
 
 /// A bot that can run within the RLBot framework. Instances of `Bot` are used
 /// by the [`run_bot`] function.

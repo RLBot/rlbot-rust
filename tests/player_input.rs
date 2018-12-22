@@ -5,9 +5,7 @@ extern crate rlbot;
 extern crate winapi;
 extern crate winproc;
 
-use std::error::Error;
-use std::thread;
-use std::time::Duration;
+use std::{error::Error, thread, time::Duration};
 
 mod common;
 

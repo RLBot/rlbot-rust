@@ -2,9 +2,11 @@ use ffi;
 use flat;
 use ratelimit;
 use rlbot::RLBot;
-use std::error::Error;
-use std::mem;
-use std::time::{Duration, Instant};
+use std::{
+    error::Error,
+    mem,
+    time::{Duration, Instant},
+};
 
 /// An iterator-like object that yields physics ticks from the game as they
 /// occur.

@@ -10,8 +10,7 @@ extern crate rlbot;
 
 use na::Vector2;
 use rlbot::{ffi::MatchSettings, flat};
-use std::error::Error;
-use std::f32::consts::PI;
+use std::{error::Error, f32::consts::PI};
 
 fn main() -> Result<(), Box<Error>> {
     let rlbot = rlbot::init()?;

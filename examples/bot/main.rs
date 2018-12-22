@@ -3,8 +3,7 @@ extern crate rlbot;
 
 use na::Vector2;
 use rlbot::ffi;
-use std::error::Error;
-use std::f32::consts::PI;
+use std::{error::Error, f32::consts::PI};
 
 fn main() -> Result<(), Box<Error>> {
     rlbot::run_bot(MyBot { player_index: 0 })

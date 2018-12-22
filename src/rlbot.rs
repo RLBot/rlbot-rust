@@ -8,12 +8,14 @@ use physicist::Physicist;
 use render::RenderGroup;
 use rlbot_generated::rlbot::flat;
 use state;
-use std::cell::Cell;
-use std::error::Error;
-use std::marker::PhantomData;
-use std::os::raw::{c_int, c_void};
-use std::ptr::null_mut;
-use std::slice;
+use std::{
+    cell::Cell,
+    error::Error,
+    marker::PhantomData,
+    os::raw::{c_int, c_void},
+    ptr::null_mut,
+    slice,
+};
 
 /// Initializes RLBot and returns a ready-to-use [`RLBot`] object.
 ///
@@ -288,8 +290,7 @@ fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
 mod tests {
     use ffi;
     use rlbot::RLBot;
-    use std::error::Error;
-    use std::mem;
+    use std::{error::Error, mem};
 
     #[test]
     #[ignore(note = "compile-only test")]

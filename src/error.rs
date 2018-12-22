@@ -1,6 +1,5 @@
 use ffi::RLBotCoreStatus;
-use std::error::Error;
-use std::fmt;
+use std::{error::Error, fmt};
 
 /// An error code from the RLBot interface.
 #[derive(Debug)]

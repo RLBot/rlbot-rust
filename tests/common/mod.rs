@@ -1,15 +1,10 @@
 #![allow(dead_code)] // Not all tests use every helper here.
 
 use rlbot;
-use std::io;
-use std::panic;
-use std::path::Path;
-use std::process::Command;
-use std::thread;
-use std::time::Duration;
-use winapi::um::processthreadsapi::TerminateProcess;
-use winapi::um::synchapi::WaitForSingleObject;
-use winapi::um::winbase::WAIT_OBJECT_0;
+use std::{io, panic, path::Path, process::Command, thread, time::Duration};
+use winapi::um::{
+    processthreadsapi::TerminateProcess, synchapi::WaitForSingleObject, winbase::WAIT_OBJECT_0,
+};
 use winproc::Process;
 
 /// Runs a controlled copy of Rocket League alongside a closure. It will start

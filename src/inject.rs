@@ -2,12 +2,7 @@
 //! injector. It is basically a reimplementation of
 //! https://github.com/RLBot/RLBot/blob/928d0b1660618ef2c88b8aaf218189e8fb6b744b/src/main/python/rlbot/utils/structures/game_interface.py#L175
 
-use std::error::Error;
-use std::fmt;
-use std::mem;
-use std::process::Command;
-use std::thread::sleep;
-use std::time::Duration;
+use std::{error::Error, fmt, mem, process::Command, thread::sleep, time::Duration};
 
 pub fn inject_dll() -> Result<InjectorCode, Box<Error>> {
     let code = Command::new("RLBot_Injector")
