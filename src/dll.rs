@@ -1,8 +1,9 @@
-use crate::ffi::*;
+use crate::{ffi::*, utils::maybe_join};
 use libloading::Library;
 use std::{
     error::Error,
     io,
+    path::Path,
     sync::atomic::{AtomicBool, Ordering},
     thread::sleep,
     time::Duration,
@@ -76,12 +77,13 @@ pub struct RLBotCoreInterface {
 }
 
 impl RLBotCoreInterface {
-    pub fn load() -> io::Result<RLBotCoreInterface> {
+    pub fn load(rlbot_dll_directory: Option<&Path>) -> io::Result<RLBotCoreInterface> {
         if INITIALIZED.swap(true, Ordering::SeqCst) {
             panic!("RLBot can only be initialized once");
         }
 
-        let library = Library::new("RLBot_Core_Interface.dll")?;
+        let filename = maybe_join(rlbot_dll_directory, "RLBot_Core_Interface.dll");
+        let library = Library::new(filename)?;
 
         // This DLL does not seem to clean itself up all the way when unloaded, so to
         // avoid segfaults/etc we need to make sure it stays loaded until the process

@@ -117,7 +117,7 @@
 
 pub mod ffi;
 pub use crate::{
-    framework::{run_bot, Bot},
+    framework::{parse_framework_args, run_bot, Bot, FrameworkArgs},
     packeteer::Packeteer,
     physicist::Physicist,
     render::{Color, RenderGroup},
@@ -140,3 +140,4 @@ pub mod state;
 mod state_convert;
 #[cfg(feature = "use-nalgebra")]
 mod state_nalgebra;
+mod utils;

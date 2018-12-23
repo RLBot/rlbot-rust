@@ -7,6 +7,7 @@ use std::{
     error::Error,
     marker::PhantomData,
     os::raw::{c_int, c_void},
+    path::PathBuf,
     ptr::null_mut,
     slice,
 };
@@ -50,12 +51,34 @@ use std::{
 ///
 /// [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 pub fn init() -> Result<RLBot, Box<Error>> {
-    inject::inject_dll()?;
+    init_with_options(Default::default())
+}
 
-    let interface = RLBotCoreInterface::load()?;
+pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<Error>> {
+    let rlbot_dll_directory = options.rlbot_dll_directory.as_ref().map(|p| p.as_path());
+
+    inject::inject_dll(rlbot_dll_directory)?;
+
+    let interface = RLBotCoreInterface::load(rlbot_dll_directory)?;
     interface.wait_for_initialized()?;
 
     Ok(RLBot::new(interface))
+}
+
+#[derive(Default)]
+pub struct InitOptions {
+    rlbot_dll_directory: Option<PathBuf>,
+}
+
+impl InitOptions {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn rlbot_dll_directory(mut self, rlbot_dll_directory: impl Into<PathBuf>) -> Self {
+        self.rlbot_dll_directory = Some(rlbot_dll_directory.into());
+        self
+    }
 }
 
 /// The low-level interface to RLBot. All RLBot calls that are available can be
