@@ -121,7 +121,7 @@ pub use crate::{
     packeteer::Packeteer,
     physicist::Physicist,
     render::{Color, RenderGroup},
-    rlbot::{init, RLBot},
+    rlbot::{init, init_with_options, InitOptions, RLBot},
     rlbot_generated::rlbot::flat,
 };
 

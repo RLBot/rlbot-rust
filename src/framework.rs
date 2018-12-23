@@ -59,17 +59,17 @@ pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<Error>> {
         .map_err(|_| Box::<Error>::from("could not parse framework arguments"))?
         .ok_or_else(|| Box::<Error>::from("not launched by framework"))?;
 
-    let rlbot = rlbot::init_with_options(
-        rlbot::InitOptions::new().rlbot_dll_directory(args.rlbot_dll_directory),
-    )?;
+    let player_index = args.player_index;
 
-    bot.set_player_index(args.player_index as usize);
+    let rlbot = rlbot::init_with_options(args.into())?;
+
+    bot.set_player_index(player_index as usize);
 
     let mut packets = rlbot.packeteer();
     loop {
         let packet = packets.next()?;
         let input = bot.tick(&packet);
-        rlbot.update_player_input(input, args.player_index)?;
+        rlbot.update_player_input(input, player_index)?;
     }
 }
 
@@ -135,6 +135,12 @@ pub struct FrameworkArgs {
     pub player_index: i32,
 
     _non_exhaustive: (),
+}
+
+impl From<FrameworkArgs> for rlbot::InitOptions {
+    fn from(args: FrameworkArgs) -> Self {
+        Self::new().rlbot_dll_directory(args.rlbot_dll_directory)
+    }
 }
 
 #[cfg(test)]

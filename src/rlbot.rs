@@ -14,6 +14,14 @@ use std::{
 
 /// Initializes RLBot and returns a ready-to-use [`RLBot`] object.
 ///
+/// This function works exactly as [`init_with_options`]. Take a look there for
+/// more details.
+pub fn init() -> Result<RLBot, Box<Error>> {
+    init_with_options(Default::default())
+}
+
+/// Initializes RLBot and returns a ready-to-use [`RLBot`] object.
+///
 /// This function will inject the RLBot core DLL into Rocket League, and then
 /// load the interface DLL. It might sleep for some time while it waits for
 /// RLBot to fully initialize.
@@ -50,10 +58,6 @@ use std::{
 /// See [`examples/simple`] for a complete example.
 ///
 /// [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
-pub fn init() -> Result<RLBot, Box<Error>> {
-    init_with_options(Default::default())
-}
-
 pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<Error>> {
     let rlbot_dll_directory = options.rlbot_dll_directory.as_ref().map(|p| p.as_path());
 
@@ -65,16 +69,25 @@ pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<Error>> {
     Ok(RLBot::new(interface))
 }
 
+/// Options for customizing the way the framework is initialized.
 #[derive(Default)]
 pub struct InitOptions {
     rlbot_dll_directory: Option<PathBuf>,
 }
 
 impl InitOptions {
+    /// Constructs a new `InitOptions`.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Sets the directory in which to search for the RLBot DLLs.
+    ///
+    /// This should be set to the directory containing [these
+    /// files][rlbot-dlls]. If this not set, the system's standard DLL search
+    /// order will be used.
+    ///
+    /// [rlbot-dlls]: https://github.com/RLBot/RLBot/tree/cf5ca2794e153eef583eec093c2d9ea6e7afccd9/src/main/python/rlbot/dll
     pub fn rlbot_dll_directory(mut self, rlbot_dll_directory: impl Into<PathBuf>) -> Self {
         self.rlbot_dll_directory = Some(rlbot_dll_directory.into());
         self
