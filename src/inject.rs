@@ -2,10 +2,12 @@
 //! injector. It is basically a reimplementation of
 //! https://github.com/RLBot/RLBot/blob/928d0b1660618ef2c88b8aaf218189e8fb6b744b/src/main/python/rlbot/utils/structures/game_interface.py#L175
 
-use std::{error::Error, fmt, mem, process::Command, thread::sleep, time::Duration};
+use crate::utils::maybe_join;
+use std::{error::Error, fmt, mem, path::Path, process::Command, thread::sleep, time::Duration};
 
-pub fn inject_dll() -> Result<InjectorCode, Box<Error>> {
-    let code = Command::new("RLBot_Injector")
+pub fn inject_dll(rlbot_dll_directory: Option<&Path>) -> Result<InjectorCode, Box<Error>> {
+    let program = maybe_join(rlbot_dll_directory, "RLBot_Injector");
+    let code = Command::new(program)
         .arg("hidden")
         .status()?
         .code()
