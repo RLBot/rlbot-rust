@@ -46,6 +46,25 @@ impl ffi::MatchSettings {
 
         result
     }
+
+    /// Create a `MatchSettings` for a 1v1 game with two Psyonix all-star bots.
+    pub fn allstar_vs_allstar(blue_name: &str, orange_name: &str) -> Self {
+        let mut result = ffi::MatchSettings {
+            NumPlayers: 2,
+            ..Default::default()
+        };
+
+        result.PlayerConfiguration[0].Bot = true;
+        result.PlayerConfiguration[0].BotSkill = 1.0;
+        result.PlayerConfiguration[0].set_name(blue_name);
+
+        result.PlayerConfiguration[1].Bot = true;
+        result.PlayerConfiguration[1].BotSkill = 1.0;
+        result.PlayerConfiguration[1].set_name(orange_name);
+        result.PlayerConfiguration[1].Team = 1;
+
+        result
+    }
 }
 
 impl ffi::PlayerConfiguration {

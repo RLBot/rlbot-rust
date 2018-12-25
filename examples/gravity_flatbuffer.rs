@@ -9,21 +9,7 @@ use std::error::Error;
 fn main() -> Result<(), Box<Error>> {
     let rlbot = rlbot::init()?;
 
-    let mut settings = MatchSettings {
-        NumPlayers: 2,
-        ..Default::default()
-    };
-
-    settings.PlayerConfiguration[0].Bot = true;
-    settings.PlayerConfiguration[0].BotSkill = 1.0;
-    settings.PlayerConfiguration[0].set_name("Earth");
-
-    settings.PlayerConfiguration[1].Bot = true;
-    settings.PlayerConfiguration[1].BotSkill = 1.0;
-    settings.PlayerConfiguration[1].set_name("Mars");
-    settings.PlayerConfiguration[1].Team = 1;
-
-    rlbot.start_match(settings)?;
+    rlbot.start_match(MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;
     rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();
