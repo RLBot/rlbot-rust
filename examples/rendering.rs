@@ -18,13 +18,9 @@ fn main() -> Result<(), Box<Error>> {
         match_settings.PlayerConfiguration[i].Team = (i % 2) as u8;
     }
     rlbot.start_match(match_settings)?;
+    rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();
-
-    // Wait for the match to start. `packets.next()` sleeps until the next
-    // packet is available, so this loop will not roast your CPU :)
-    while !packets.next()?.GameInfo.RoundActive {}
-
     loop {
         let packet = packets.next()?;
         let mut total_ms = (packet.GameInfo.TimeSeconds * 1000.0) as i32;

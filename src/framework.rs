@@ -69,7 +69,6 @@ pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<Error>> {
     bot.set_player_index(player_index as usize);
 
     let mut packets = rlbot.packeteer();
-
     loop {
         let packet = packets.next()?;
         let input = bot.tick(&packet);

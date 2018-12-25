@@ -10,14 +10,11 @@ use std::{error::Error, f32::consts::PI};
 
 fn main() -> Result<(), Box<Error>> {
     let rlbot = rlbot::init()?;
+
     rlbot.start_match(ffi::MatchSettings::simple_1v1("ATBA", "All-Star"))?;
+    rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();
-
-    // Wait for the match to start. `packets.next()` sleeps until the next
-    // packet is available, so this loop will not roast your CPU :)
-    while !packets.next()?.GameInfo.RoundActive {}
-
     loop {
         let packet = packets.next()?;
         let input = get_input(&packet);

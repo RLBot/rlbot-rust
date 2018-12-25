@@ -33,13 +33,9 @@ use std::{
 /// # fn main() -> Result<(), Box<::std::error::Error>> {
 /// let rlbot = rlbot::init()?;
 /// rlbot.start_match(MatchSettings::simple_1v1("Hero", "Villain"))?;
+/// rlbot.wait_for_match_start()?;
 ///
 /// let mut packets = rlbot.packeteer();
-///
-/// // Wait for the match to start. `packets.next_flatbuffer()` sleeps until the next
-/// // packet is available, so this loop will not roast your CPU :)
-/// while !packets.next()?.GameInfo.RoundActive {}
-///
 /// loop {
 ///     let packet = packets.next_flatbuffer()?;
 ///     let input_args: flat::PlayerInputArgs = Default::default();

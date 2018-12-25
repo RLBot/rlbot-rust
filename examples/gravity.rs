@@ -8,16 +8,16 @@ use std::error::Error;
 
 fn main() -> Result<(), Box<Error>> {
     let rlbot = rlbot::init()?;
+
     start_match(&rlbot)?;
 
     let mut packets = rlbot.packeteer();
-
     let mut i = 0;
     loop {
         let packet = packets.next()?;
 
-        // Check that match is started and not showing a replay.
-        // Also don't set state on each frame, that can make it laggy
+        // Check that the game is not showing a replay.
+        // Also don't set state on every frame, that can make it laggy.
         if packet.GameInfo.RoundActive && i % 8 == 0 {
             let desired_state = get_desired_state(&packet);
             rlbot.set_game_state_struct(desired_state)?;

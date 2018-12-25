@@ -9,18 +9,11 @@ mod common;
 fn integration_player_input() -> Result<(), Box<Error>> {
     common::with_rocket_league(|| {
         let rlbot = rlbot::init()?;
-        let mut packeteer = rlbot.packeteer();
 
         rlbot.start_match(common::one_player_match())?;
+        rlbot.wait_for_match_start()?;
 
-        // Wait for the match to start.
-        loop {
-            let packet = packeteer.next()?;
-            if packet.GameInfo.RoundActive && !packet.GameInfo.MatchEnded {
-                break;
-            }
-        }
-
+        let mut packeteer = rlbot.packeteer();
         let start = packeteer.next()?;
 
         let input = rlbot::ffi::PlayerInput {
@@ -32,6 +25,7 @@ fn integration_player_input() -> Result<(), Box<Error>> {
         thread::sleep(Duration::from_secs(1));
         let end = packeteer.next()?;
 
+        // The car should be accelerating forward.
         assert!(end.GameCars[0].Physics.Location.Y > start.GameCars[0].Physics.Location.Y);
         Ok(())
     })

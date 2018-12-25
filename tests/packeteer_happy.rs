@@ -11,6 +11,7 @@ fn integration_packeteer_happy() -> Result<(), Box<Error>> {
         let rlbot = rlbot::init()?;
 
         rlbot.start_match(rlbot::ffi::MatchSettings::simple_1v1("Hero", "Villain"))?;
+        rlbot.wait_for_match_start()?;
 
         let mut packeteer = rlbot.packeteer();
         let first = packeteer.next()?.GameInfo.TimeSeconds;

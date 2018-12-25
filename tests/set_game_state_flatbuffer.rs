@@ -9,24 +9,17 @@ mod common;
 fn integration_set_game_state() -> Result<(), Box<Error>> {
     common::with_rocket_league(|| {
         let rlbot = rlbot::init()?;
-        let mut packeteer = rlbot.packeteer();
 
         rlbot.start_match(common::one_player_match())?;
-
-        // Wait for the match to start.
-        loop {
-            let packet = packeteer.next()?;
-            if packet.GameInfo.RoundActive && !packet.GameInfo.MatchEnded {
-                break;
-            }
-        }
+        rlbot.wait_for_match_start()?;
 
         let desired_state = teleport_to_sky();
         rlbot.set_game_state(desired_state.finished_data())?;
 
+        // Sometimes setting the state takes a few frames, so wait a bit.
         thread::sleep(Duration::from_millis(100));
 
-        let packet = packeteer.next()?;
+        let packet = rlbot.packeteer().next()?;
         assert!(packet.GameCars[0].Physics.Location.Z > 1000.0);
         Ok(())
     })
