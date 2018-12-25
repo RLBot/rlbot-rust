@@ -21,10 +21,15 @@ impl ffi::LiveDataPacket {
 }
 
 impl ffi::MatchSettings {
-    /// Create a simple 1v1 match with sensible defaults and the given player
-    /// names. Team Blue will be RLBot-controlled, and Team Orange will be a
-    /// Psyonix all-star bot.
-    pub fn simple_1v1(hero: &str, villain: &str) -> Self {
+    #[doc(hidden)]
+    #[deprecated(note = "this method has been renamed to `rlbot_vs_allstar`")]
+    pub fn simple_1v1(rlbot_name: &str, allstar_name: &str) -> Self {
+        Self::rlbot_vs_allstar(rlbot_name, allstar_name)
+    }
+
+    /// Create a `MatchSettings` for a 1v1 game with Team Blue as an
+    /// RLBot-controlled bot, and Team Orange as a Psyonix all-star bot.
+    pub fn rlbot_vs_allstar(rlbot_name: &str, allstar_name: &str) -> Self {
         let mut result = ffi::MatchSettings {
             NumPlayers: 2,
             ..Default::default()
@@ -32,11 +37,11 @@ impl ffi::MatchSettings {
 
         result.PlayerConfiguration[0].Bot = true;
         result.PlayerConfiguration[0].RLBotControlled = true;
-        result.PlayerConfiguration[0].set_name(hero);
+        result.PlayerConfiguration[0].set_name(rlbot_name);
 
         result.PlayerConfiguration[1].Bot = true;
         result.PlayerConfiguration[1].BotSkill = 1.0;
-        result.PlayerConfiguration[1].set_name(villain);
+        result.PlayerConfiguration[1].set_name(allstar_name);
         result.PlayerConfiguration[1].Team = 1;
 
         result

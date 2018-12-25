@@ -11,7 +11,7 @@ use std::{error::Error, f32::consts::PI};
 fn main() -> Result<(), Box<Error>> {
     let rlbot = rlbot::init()?;
 
-    rlbot.start_match(MatchSettings::simple_1v1("ATBA", "All-Star"))?;
+    rlbot.start_match(MatchSettings::rlbot_vs_allstar("ATBA", "All-Star"))?;
     rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();
