@@ -134,6 +134,7 @@ pub struct GameInfo {
     pub RoundActive: bool,
     pub KickoffPause: bool,
     pub MatchEnded: bool,
+    pub WorldGravityZ: f32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -200,6 +201,14 @@ pub struct PlayerConfiguration {
     pub EngineAudioID: ::std::os::raw::c_int,
     pub TrailsID: ::std::os::raw::c_int,
     pub GoalExplosionID: ::std::os::raw::c_int,
+    pub CarPaintID: ::std::os::raw::c_int,
+    pub DecalPaintID: ::std::os::raw::c_int,
+    pub WheelsPaintID: ::std::os::raw::c_int,
+    pub BoostPaintID: ::std::os::raw::c_int,
+    pub AntennaPaintID: ::std::os::raw::c_int,
+    pub HatPaintID: ::std::os::raw::c_int,
+    pub TrailsPaintID: ::std::os::raw::c_int,
+    pub GoalExplosionPaintID: ::std::os::raw::c_int,
 }
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -489,7 +498,22 @@ pub enum QuickChatPreset {
     PostGame_WhatAGame = 40,
     PostGame_NiceMoves = 41,
     PostGame_EverybodyDance = 42,
-    MaxQuickChatPresets = 43,
+    MaxPysonixQuickChatPresets = 43,
+    Custom_Toxic_WasteCPU = 44,
+    Custom_Toxic_GitGut = 45,
+    Custom_Toxic_DeAlloc = 46,
+    Custom_Toxic_404NoSkill = 47,
+    Custom_Toxic_CatchVirus = 48,
+    Custom_Useful_Passing = 49,
+    Custom_Useful_Faking = 50,
+    Custom_Useful_Demoing = 51,
+    Custom_Useful_Bumping = 52,
+    Custom_Compliments_TinyChances = 53,
+    Custom_Compliments_SkillLevel = 54,
+    Custom_Compliments_proud = 55,
+    Custom_Compliments_GC = 56,
+    Custom_Compliments_Pro = 57,
+    MaxQuickChatPresets = 58,
 }
 pub type CallbackFunction = ::std::option::Option<
     unsafe extern "C" fn(id: ::std::os::raw::c_uint, status: RLBotCoreStatus),
