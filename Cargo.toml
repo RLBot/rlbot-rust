@@ -21,6 +21,7 @@ na = { version = "0.16.8", package = "nalgebra", optional = true }
 
 [dev-dependencies]
 na = { version = "0.16.0", package = "nalgebra" }
+rand = "0.6.1"
 winapi = { version = "0.3.5", features = ["synchapi"] }
 winproc = "0.5.1"
 
