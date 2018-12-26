@@ -1,5 +1,4 @@
 use crate::{ffi::LiveDataPacket, rlbot::RLBot, rlbot_generated::rlbot::flat::GameTickPacket};
-use ratelimit;
 use std::{
     error::Error,
     mem,

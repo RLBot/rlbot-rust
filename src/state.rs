@@ -5,7 +5,6 @@ use crate::{
     rlbot_generated::rlbot::flat,
     state_convert::{Point3Into, Vector3Into},
 };
-use flatbuffers;
 
 /// Represents a vector in 3D space.
 #[derive(Clone, Default)]

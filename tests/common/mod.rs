@@ -1,6 +1,5 @@
 #![allow(dead_code)] // Not all tests use every helper here.
 
-use rlbot;
 use std::{io, panic, path::Path, process::Command, thread, time::Duration};
 use winapi::um::{
     processthreadsapi::TerminateProcess, synchapi::WaitForSingleObject, winbase::WAIT_OBJECT_0,

@@ -2,7 +2,6 @@ use crate::{
     dll::RLBotCoreInterface, error::RLBotError, ffi, inject, packeteer::Packeteer,
     physicist::Physicist, render::RenderGroup, rlbot_generated::rlbot::flat, state,
 };
-use flatbuffers;
 use std::{
     cell::Cell,
     error::Error,

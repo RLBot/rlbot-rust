@@ -1,5 +1,4 @@
 use crate::{ffi, flat, rlbot::RLBot};
-use ratelimit;
 use std::{
     error::Error,
     mem,
