@@ -1,10 +1,28 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+* Load DLLs from their framework location, if given. ([@whatisaphone])
+* An example showing off quick-chat with FlatBuffers. ([@whatisaphone])
+
+### Changed
+
+* Deprecated `MatchSettings::simple_1v1` in favor of functions with more
+  descriptive names (`rlbot_vs_allstar` and `allstar_vs_allstar`).
+  ([@whatisaphone])
+
+### Fixed
+
+* Updated to the latest framework version. ([@whatisaphone])
+
 ## v0.2.0 – 2018-12-02
 
 ### Added
 
 * High-level state setting interface. ([@whatisaphone])
+* `wait_for_match_start` function. ([@whatisaphone])
 
 ## v0.1.2 – 2018-11-30
 
