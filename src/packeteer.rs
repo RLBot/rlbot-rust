@@ -33,7 +33,7 @@ impl<'a> Packeteer<'a> {
     ///
     /// # Errors
     ///
-    /// This function returns an error if five seconds pass without a new
+    /// This function returns an error if ten seconds pass without a new
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
     pub fn next(&mut self) -> Result<LiveDataPacket, Box<Error>> {
@@ -101,8 +101,8 @@ impl<'a> Packeteer<'a> {
             }
 
             let elapsed = Instant::now() - start;
-            if elapsed > Duration::from_secs(5) {
-                return Err(From::from("no physics tick received after five seconds"));
+            if elapsed > Duration::from_secs(10) {
+                return Err(From::from("no physics tick received after ten seconds"));
             }
         }
     }

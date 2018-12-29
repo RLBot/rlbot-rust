@@ -12,6 +12,8 @@
 * Deprecated `MatchSettings::simple_1v1` in favor of functions with more
   descriptive names (`rlbot_vs_allstar` and `allstar_vs_allstar`).
   ([@whatisaphone])
+* Wait longer in `Physicist` and `Packeteer` before giving up and returning an
+  error. ([@whatisaphone])
 
 ### Fixed
 

@@ -32,7 +32,7 @@ impl<'a> Physicist<'a> {
     ///
     /// # Errors
     ///
-    /// This function returns an error if five seconds pass without a new tick
+    /// This function returns an error if ten seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
     pub fn next(&mut self) -> Result<ffi::RigidBodyTick, Box<Error>> {
@@ -58,7 +58,7 @@ impl<'a> Physicist<'a> {
     ///
     /// # Errors
     ///
-    /// This function returns an error if five seconds pass without a new tick
+    /// This function returns an error if ten seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
     pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<Error>> {
@@ -98,8 +98,8 @@ impl<'a> Physicist<'a> {
             }
 
             let elapsed = Instant::now() - start;
-            if elapsed > Duration::from_secs(5) {
-                return Err(From::from("no physics tick received after five seconds"));
+            if elapsed > Duration::from_secs(10) {
+                return Err(From::from("no physics tick received after ten seconds"));
             }
         }
     }
