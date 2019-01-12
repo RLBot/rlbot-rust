@@ -16,7 +16,7 @@ use std::{
 ///
 /// This function works exactly as [`init_with_options`]. Take a look there for
 /// more details.
-pub fn init() -> Result<RLBot, Box<Error>> {
+pub fn init() -> Result<RLBot, Box<dyn Error>> {
     init_with_options(Default::default())
 }
 
@@ -58,7 +58,7 @@ pub fn init() -> Result<RLBot, Box<Error>> {
 /// See [`examples/simple`] for a complete example.
 ///
 /// [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
-pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<Error>> {
+pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<dyn Error>> {
     let rlbot_dll_directory = options.rlbot_dll_directory.as_ref().map(|p| p.as_path());
 
     inject::inject_dll(rlbot_dll_directory)?;
@@ -115,13 +115,13 @@ impl RLBot {
 
     /// Returns a [`Packeteer`] object, for conveniently accessing game state
     /// as it occurs.
-    pub fn packeteer(&self) -> Packeteer {
+    pub fn packeteer(&self) -> Packeteer<'_> {
         Packeteer::new(self)
     }
 
     /// Returns a [`Physicist`] object, for conveniently accessing physics
     /// ticks as they occur.
-    pub fn physicist(&self) -> Physicist {
+    pub fn physicist(&self) -> Physicist<'_> {
         Physicist::new(self)
     }
 
@@ -164,13 +164,13 @@ impl RLBot {
     /// a more convenient interface.
     pub fn update_live_data_packet_flatbuffer<'fb>(&self) -> Option<flat::GameTickPacket<'fb>> {
         let byte_buffer = (self.interface.update_live_data_packet_flatbuffer)();
-        get_flatbuffer::<flat::GameTickPacket>(byte_buffer)
+        get_flatbuffer::<flat::GameTickPacket<'_>>(byte_buffer)
     }
 
     /// Grabs the current physics tick as a FlatBuffer table.
     pub fn update_rigid_body_tick_flatbuffer<'fb>(&self) -> Option<flat::RigidBodyTick<'fb>> {
         let byte_buffer = (self.interface.update_rigid_body_tick_flatbuffer)();
-        get_flatbuffer::<flat::RigidBodyTick>(byte_buffer)
+        get_flatbuffer::<flat::RigidBodyTick<'_>>(byte_buffer)
     }
 
     /// Grabs the current physics tick as a struct.
@@ -188,7 +188,7 @@ impl RLBot {
     /// Grabs the current [`flat::FieldInfo`] from RLBot, if any
     pub fn update_field_info_flatbuffer<'fb>(&self) -> Option<flat::FieldInfo<'fb>> {
         let byte_buffer = (self.interface.update_field_info_flatbuffer)();
-        get_flatbuffer::<flat::FieldInfo>(byte_buffer)
+        get_flatbuffer::<flat::FieldInfo<'_>>(byte_buffer)
     }
 
     /// Sets the desired game state. The buffer must be built from a
@@ -238,7 +238,7 @@ impl RLBot {
     /// Spin-waits until a match is active.
     ///
     /// Call `start_match` before calling this method.
-    pub fn wait_for_match_start(&self) -> Result<(), Box<Error>> {
+    pub fn wait_for_match_start(&self) -> Result<(), Box<dyn Error>> {
         let mut packets = self.packeteer();
         let mut count = 0;
 
@@ -263,7 +263,7 @@ impl RLBot {
     /// A group can be cleared from the screen by rendering an empty group.
     ///
     /// See [`RenderGroup`] for more info.
-    pub fn begin_render_group(&self, id: i32) -> RenderGroup {
+    pub fn begin_render_group(&self, id: i32) -> RenderGroup<'_> {
         RenderGroup::new(self, id)
     }
 
@@ -274,7 +274,7 @@ impl RLBot {
     /// be running in the background.
     pub fn get_ball_prediction<'fb>(&self) -> Option<flat::BallPrediction<'fb>> {
         let byte_buffer = (self.interface.get_ball_prediction)();
-        get_flatbuffer::<flat::BallPrediction>(byte_buffer)
+        get_flatbuffer::<flat::BallPrediction<'_>>(byte_buffer)
     }
 
     /// Gets the framework's current prediction of ball motion as a struct.
@@ -317,7 +317,7 @@ mod tests {
 
     #[test]
     #[ignore(note = "compile-only test")]
-    fn game_data_is_send() -> Result<(), Box<Error>> {
+    fn game_data_is_send() -> Result<(), Box<dyn Error>> {
         fn assert_send<T: Send + 'static>(_: T) {}
 
         assert_send(ffi::LiveDataPacket::default());

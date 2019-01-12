@@ -54,10 +54,10 @@ pub trait Bot {
 /// See [`examples/bot`] for a complete example.
 ///
 /// [`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
-pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<Error>> {
+pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<dyn Error>> {
     let args = parse_framework_args()
-        .map_err(|_| Box::<Error>::from("could not parse framework arguments"))?
-        .ok_or_else(|| Box::<Error>::from("not launched by framework"))?;
+        .map_err(|_| Box::<dyn Error>::from("could not parse framework arguments"))?
+        .ok_or_else(|| Box::<dyn Error>::from("not launched by framework"))?;
 
     let player_index = args.player_index;
 

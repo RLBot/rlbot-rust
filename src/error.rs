@@ -10,7 +10,7 @@ pub struct RLBotError {
 impl Error for RLBotError {}
 
 impl fmt::Display for RLBotError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "RLBotError({:?})", self.status)
     }
 }

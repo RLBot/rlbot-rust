@@ -1,11 +1,12 @@
 //! Draws a clock in the corner of the screen.
 
+#![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
 
 use rlbot::ffi;
 use std::{error::Error, f32::consts::PI};
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
     let mut match_settings = ffi::MatchSettings::default();

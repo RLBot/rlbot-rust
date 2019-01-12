@@ -14,7 +14,7 @@ pub struct Physicist<'a> {
 }
 
 impl<'a> Physicist<'a> {
-    pub(crate) fn new(rlbot: &RLBot) -> Physicist {
+    pub(crate) fn new(rlbot: &RLBot) -> Physicist<'_> {
         // Physics ticks happen at 120Hz. The goal is never to miss any. But if we poll
         // too often, the game crashes, so space out the checks.
         let ratelimiter = ratelimit::Builder::new()
@@ -35,7 +35,7 @@ impl<'a> Physicist<'a> {
     /// This function returns an error if ten seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
-    pub fn next(&mut self) -> Result<ffi::RigidBodyTick, Box<Error>> {
+    pub fn next(&mut self) -> Result<ffi::RigidBodyTick, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next()?))
     }
 
@@ -43,7 +43,7 @@ impl<'a> Physicist<'a> {
     ///
     /// If there is a tick that is newer than the previous tick, it is
     /// returned. Otherwise, `None` is returned.
-    pub fn try_next(&mut self) -> Result<Option<ffi::RigidBodyTick>, Box<Error>> {
+    pub fn try_next(&mut self) -> Result<Option<ffi::RigidBodyTick>, Box<dyn Error>> {
         let mut result = unsafe { mem::uninitialized() };
         self.rlbot.update_rigid_body_tick(&mut result)?;
         if result.Ball.State.Frame != self.prev_ball_frame {
@@ -61,7 +61,7 @@ impl<'a> Physicist<'a> {
     /// This function returns an error if ten seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
-    pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<Error>> {
+    pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next_flat()))
     }
 
@@ -86,8 +86,8 @@ impl<'a> Physicist<'a> {
     /// Keep trying `f` until the timeout elapses.
     fn spin<R>(
         &mut self,
-        f: impl Fn(&mut Self) -> Result<Option<R>, Box<Error>>,
-    ) -> Result<R, Box<Error>> {
+        f: impl Fn(&mut Self) -> Result<Option<R>, Box<dyn Error>>,
+    ) -> Result<R, Box<dyn Error>> {
         let start = Instant::now();
 
         loop {

@@ -1,12 +1,13 @@
 //! The ball is a neutron star. The cars are planets.
 
+#![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
 
 use na::{Point3, Vector3};
 use rlbot::{ffi::MatchSettings, state};
 use std::error::Error;
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
     rlbot.start_match(MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;

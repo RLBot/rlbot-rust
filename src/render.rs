@@ -64,7 +64,7 @@ pub struct Color<'a>(WIPOffset<flat::Color<'a>>);
 
 impl<'a> RenderGroup<'a> {
     /// Send the collected drawings to RLBot to be rendered to screen.
-    pub fn render(mut self) -> Result<(), Box<Error>> {
+    pub fn render(mut self) -> Result<(), Box<dyn Error>> {
         let messages = self.builder.create_vector(&self.messages);
 
         let render_group = {
@@ -127,7 +127,7 @@ impl<'a> RenderGroup<'a> {
         &mut self,
         (x1, y1): (f32, f32),
         (x2, y2): (f32, f32),
-        Color(color): Color,
+        Color(color): Color<'_>,
     ) {
         let start = flat::Vector3::new(x1, y1, 0.0);
         let end = flat::Vector3::new(x2, y2, 0.0);
@@ -154,7 +154,7 @@ impl<'a> RenderGroup<'a> {
         &mut self,
         (x1, y1, z1): (f32, f32, f32),
         (x2, y2, z2): (f32, f32, f32),
-        Color(color): Color,
+        Color(color): Color<'_>,
     ) {
         let start = flat::Vector3::new(x1, y1, z1);
         let end = flat::Vector3::new(x2, y2, z2);
@@ -182,7 +182,7 @@ impl<'a> RenderGroup<'a> {
         &mut self,
         (x1, y1): (f32, f32),
         (x2, y2, z2): (f32, f32, f32),
-        Color(color): Color,
+        Color(color): Color<'_>,
     ) {
         let start = flat::Vector3::new(x1, y1, 0.0);
         let end = flat::Vector3::new(x2, y2, z2);
@@ -210,7 +210,7 @@ impl<'a> RenderGroup<'a> {
         (x, y): (f32, f32),
         (scale_x, scale_y): (i32, i32),
         text: impl AsRef<str>,
-        Color(color): Color,
+        Color(color): Color<'_>,
     ) {
         let start = flat::Vector3::new(x, y, 0.0);
         let text = self.builder.create_string(text.as_ref());
@@ -241,7 +241,7 @@ impl<'a> RenderGroup<'a> {
         (x, y, z): (f32, f32, f32),
         (scale_x, scale_y): (i32, i32),
         text: impl AsRef<str>,
-        Color(color): Color,
+        Color(color): Color<'_>,
     ) {
         let start = flat::Vector3::new(x, y, z);
         let text = self.builder.create_string(text.as_ref());

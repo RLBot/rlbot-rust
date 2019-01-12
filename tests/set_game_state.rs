@@ -1,5 +1,6 @@
 #![cfg(windows)]
 #![cfg(feature = "use-nalgebra")]
+#![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
 
 use na::Point3;
@@ -9,7 +10,7 @@ use std::{error::Error, thread, time::Duration};
 mod common;
 
 #[test]
-fn integration_set_game_state() -> Result<(), Box<Error>> {
+fn integration_set_game_state() -> Result<(), Box<dyn Error>> {
     common::with_rocket_league(|| {
         let rlbot = rlbot::init()?;
 

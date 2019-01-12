@@ -1,9 +1,10 @@
+#![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
 
 use rand::prelude::*;
 use std::{error::Error, thread::sleep, time::Duration};
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
     rlbot.start_match(rlbot::ffi::MatchSettings::allstar_vs_allstar(

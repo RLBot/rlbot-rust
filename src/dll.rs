@@ -115,7 +115,7 @@ impl RLBotCoreInterface {
         }
     }
 
-    pub fn wait_for_initialized(&self) -> Result<(), Box<Error>> {
+    pub fn wait_for_initialized(&self) -> Result<(), Box<dyn Error>> {
         for _ in 0..100 {
             if (self.is_initialized)() {
                 return Ok(());

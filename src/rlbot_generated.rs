@@ -2,7 +2,6 @@
 
 #![allow(dead_code)]
 #![allow(unused_imports)]
-extern crate flatbuffers;
 
 pub mod rlbot {
     #![allow(dead_code)]
@@ -10,16 +9,16 @@ pub mod rlbot {
 
     use std::{cmp::Ordering, mem};
 
-    extern crate flatbuffers;
     use self::flatbuffers::EndianScalar;
+    use flatbuffers;
     pub mod flat {
         #![allow(dead_code)]
         #![allow(unused_imports)]
 
         use std::{cmp::Ordering, mem};
 
-        extern crate flatbuffers;
         use self::flatbuffers::EndianScalar;
+        use flatbuffers;
 
         #[allow(non_camel_case_types)]
         #[repr(i8)]
@@ -995,7 +994,7 @@ pub mod rlbot {
                 controllerState: flatbuffers::WIPOffset<ControllerState<'b>>,
             ) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<ControllerState>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<ControllerState<'_>>>(
                         PlayerInput::VT_CONTROLLERSTATE,
                         controllerState,
                     );
@@ -1598,7 +1597,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_physics(&mut self, physics: flatbuffers::WIPOffset<Physics<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<Physics>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<Physics<'_>>>(
                         PlayerInfo::VT_PHYSICS,
                         physics,
                     );
@@ -1606,7 +1605,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_scoreInfo(&mut self, scoreInfo: flatbuffers::WIPOffset<ScoreInfo<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<ScoreInfo>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<ScoreInfo<'_>>>(
                         PlayerInfo::VT_SCOREINFO,
                         scoreInfo,
                     );
@@ -1871,17 +1870,18 @@ pub mod rlbot {
             #[inline]
             pub fn add_physics(&mut self, physics: flatbuffers::WIPOffset<Physics<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<Physics>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<Physics<'_>>>(
                         BallInfo::VT_PHYSICS,
                         physics,
                     );
             }
             #[inline]
             pub fn add_latestTouch(&mut self, latestTouch: flatbuffers::WIPOffset<Touch<'b>>) {
-                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Touch>>(
-                    BallInfo::VT_LATESTTOUCH,
-                    latestTouch,
-                );
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<Touch<'_>>>(
+                        BallInfo::VT_LATESTTOUCH,
+                        latestTouch,
+                    );
             }
             #[inline]
             pub fn add_dropShotInfo(
@@ -1889,7 +1889,7 @@ pub mod rlbot {
                 dropShotInfo: flatbuffers::WIPOffset<DropShotBallInfo<'b>>,
             ) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<DropShotBallInfo>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<DropShotBallInfo<'_>>>(
                         BallInfo::VT_DROPSHOTINFO,
                         dropShotInfo,
                     );
@@ -2328,19 +2328,19 @@ pub mod rlbot {
             #[inline]
             pub fn players(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerInfo<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PlayerInfo<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerInfo<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PlayerInfo<'a>>>,
                 >>(GameTickPacket::VT_PLAYERS, None)
             }
             #[inline]
             pub fn boostPadStates(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<BoostPadState<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<BoostPadState<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<BoostPadState<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<BoostPadState<'a>>>,
                 >>(GameTickPacket::VT_BOOSTPADSTATES, None)
             }
             #[inline]
@@ -2360,10 +2360,10 @@ pub mod rlbot {
             #[inline]
             pub fn tileInformation(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<DropshotTile<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DropshotTile<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<DropshotTile<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DropshotTile<'a>>>,
                 >>(GameTickPacket::VT_TILEINFORMATION, None)
             }
         }
@@ -2431,7 +2431,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_ball(&mut self, ball: flatbuffers::WIPOffset<BallInfo<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<BallInfo>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<BallInfo<'_>>>(
                         GameTickPacket::VT_BALL,
                         ball,
                     );
@@ -2439,7 +2439,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_gameInfo(&mut self, gameInfo: flatbuffers::WIPOffset<GameInfo<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<GameInfo>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<GameInfo<'_>>>(
                         GameTickPacket::VT_GAMEINFO,
                         gameInfo,
                     );
@@ -2703,7 +2703,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_state(&mut self, state: flatbuffers::WIPOffset<RigidBodyState<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<RigidBodyState>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<RigidBodyState<'_>>>(
                         PlayerRigidBodyState::VT_STATE,
                         state,
                     );
@@ -2711,7 +2711,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_input(&mut self, input: flatbuffers::WIPOffset<ControllerState<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<ControllerState>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<ControllerState<'_>>>(
                         PlayerRigidBodyState::VT_INPUT,
                         input,
                     );
@@ -2797,7 +2797,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_state(&mut self, state: flatbuffers::WIPOffset<RigidBodyState<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<RigidBodyState>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<RigidBodyState<'_>>>(
                         BallRigidBodyState::VT_STATE,
                         state,
                     );
@@ -2871,10 +2871,11 @@ pub mod rlbot {
             #[inline]
             pub fn players(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>>
-            {
+            ) -> Option<
+                flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>,
+            > {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PlayerRigidBodyState<'a>>>,
                 >>(RigidBodyTick::VT_PLAYERS, None)
             }
         }
@@ -2904,7 +2905,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_ball(&mut self, ball: flatbuffers::WIPOffset<BallRigidBodyState<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<BallRigidBodyState>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<BallRigidBodyState<'_>>>(
                         RigidBodyTick::VT_BALL,
                         ball,
                     );
@@ -3183,19 +3184,19 @@ pub mod rlbot {
             #[inline]
             pub fn boostPads(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<BoostPad<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<BoostPad<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<BoostPad<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<BoostPad<'a>>>,
                 >>(FieldInfo::VT_BOOSTPADS, None)
             }
             #[inline]
             pub fn goals(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<GoalInfo<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<GoalInfo<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<GoalInfo<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<GoalInfo<'a>>>,
                 >>(FieldInfo::VT_GOALS, None)
             }
         }
@@ -3592,7 +3593,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_location(&mut self, location: flatbuffers::WIPOffset<Vector3Partial<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<Vector3Partial>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<Vector3Partial<'_>>>(
                         DesiredPhysics::VT_LOCATION,
                         location,
                     );
@@ -3600,7 +3601,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_rotation(&mut self, rotation: flatbuffers::WIPOffset<RotatorPartial<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<RotatorPartial>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<RotatorPartial<'_>>>(
                         DesiredPhysics::VT_ROTATION,
                         rotation,
                     );
@@ -3608,7 +3609,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_velocity(&mut self, velocity: flatbuffers::WIPOffset<Vector3Partial<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<Vector3Partial>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<Vector3Partial<'_>>>(
                         DesiredPhysics::VT_VELOCITY,
                         velocity,
                     );
@@ -3619,7 +3620,7 @@ pub mod rlbot {
                 angularVelocity: flatbuffers::WIPOffset<Vector3Partial<'b>>,
             ) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<Vector3Partial>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<Vector3Partial<'_>>>(
                         DesiredPhysics::VT_ANGULARVELOCITY,
                         angularVelocity,
                     );
@@ -3704,7 +3705,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_physics(&mut self, physics: flatbuffers::WIPOffset<DesiredPhysics<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<DesiredPhysics>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<DesiredPhysics<'_>>>(
                         DesiredBallState::VT_PHYSICS,
                         physics,
                     );
@@ -3823,7 +3824,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_physics(&mut self, physics: flatbuffers::WIPOffset<DesiredPhysics<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<DesiredPhysics>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<DesiredPhysics<'_>>>(
                         DesiredCarState::VT_PHYSICS,
                         physics,
                     );
@@ -3994,19 +3995,19 @@ pub mod rlbot {
             #[inline]
             pub fn carStates(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<DesiredCarState<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DesiredCarState<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<DesiredCarState<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DesiredCarState<'a>>>,
                 >>(DesiredGameState::VT_CARSTATES, None)
             }
             #[inline]
             pub fn boostStates(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<DesiredBoostState<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DesiredBoostState<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<DesiredBoostState<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DesiredBoostState<'a>>>,
                 >>(DesiredGameState::VT_BOOSTSTATES, None)
             }
         }
@@ -4045,7 +4046,7 @@ pub mod rlbot {
                 ballState: flatbuffers::WIPOffset<DesiredBallState<'b>>,
             ) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<DesiredBallState>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<DesiredBallState<'_>>>(
                         DesiredGameState::VT_BALLSTATE,
                         ballState,
                     );
@@ -4349,10 +4350,11 @@ pub mod rlbot {
             }
             #[inline]
             pub fn add_color(&mut self, color: flatbuffers::WIPOffset<Color<'b>>) {
-                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<Color>>(
-                    RenderMessage::VT_COLOR,
-                    color,
-                );
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<Color<'_>>>(
+                        RenderMessage::VT_COLOR,
+                        color,
+                    );
             }
             #[inline]
             pub fn add_start(&mut self, start: &'b Vector3) {
@@ -4442,10 +4444,10 @@ pub mod rlbot {
             #[inline]
             pub fn renderMessages(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<RenderMessage<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<RenderMessage<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<RenderMessage<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<RenderMessage<'a>>>,
                 >>(RenderGroup::VT_RENDERMESSAGES, None)
             }
             /// The id of the render group
@@ -4936,10 +4938,10 @@ pub mod rlbot {
             #[inline]
             pub fn players(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<TinyPlayer<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<TinyPlayer<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<TinyPlayer<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<TinyPlayer<'a>>>,
                 >>(TinyPacket::VT_PLAYERS, None)
             }
             #[inline]
@@ -4984,7 +4986,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_ball(&mut self, ball: flatbuffers::WIPOffset<TinyBall<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<TinyBall>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<TinyBall<'_>>>(
                         TinyPacket::VT_BALL,
                         ball,
                     );
@@ -5088,7 +5090,7 @@ pub mod rlbot {
             #[inline]
             pub fn add_physics(&mut self, physics: flatbuffers::WIPOffset<Physics<'b>>) {
                 self.fbb_
-                    .push_slot_always::<flatbuffers::WIPOffset<Physics>>(
+                    .push_slot_always::<flatbuffers::WIPOffset<Physics<'_>>>(
                         PredictionSlice::VT_PHYSICS,
                         physics,
                     );
@@ -5153,10 +5155,10 @@ pub mod rlbot {
             #[inline]
             pub fn slices(
                 &self,
-            ) -> Option<flatbuffers::Vector<flatbuffers::ForwardsUOffset<PredictionSlice<'a>>>>
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PredictionSlice<'a>>>>
             {
                 self._tab.get::<flatbuffers::ForwardsUOffset<
-                    flatbuffers::Vector<flatbuffers::ForwardsUOffset<PredictionSlice<'a>>>,
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PredictionSlice<'a>>>,
                 >>(BallPrediction::VT_SLICES, None)
             }
         }

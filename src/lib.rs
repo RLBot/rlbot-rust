@@ -113,6 +113,7 @@
 //! [`examples/gravity_flatbuffer`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/gravity_flatbuffer.rs
 //! [RLBotPythonExample]: https://github.com/RLBot/RLBotPythonExample
 
+#![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings, missing_docs))]
 
 pub mod ffi;

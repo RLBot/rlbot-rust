@@ -13,7 +13,7 @@ pub struct Packeteer<'a> {
 }
 
 impl<'a> Packeteer<'a> {
-    pub(crate) fn new(rlbot: &RLBot) -> Packeteer {
+    pub(crate) fn new(rlbot: &RLBot) -> Packeteer<'_> {
         // The goal is never to miss any packets. But if we poll too often, the
         // game crashes, so it's a fine line. With an interval of 3ms we can
         // catch 333 updates per second. That should be plenty.
@@ -36,7 +36,7 @@ impl<'a> Packeteer<'a> {
     /// This function returns an error if ten seconds pass without a new
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
-    pub fn next(&mut self) -> Result<LiveDataPacket, Box<Error>> {
+    pub fn next(&mut self) -> Result<LiveDataPacket, Box<dyn Error>> {
         self.spin(Self::try_next)
     }
 
@@ -44,7 +44,7 @@ impl<'a> Packeteer<'a> {
     ///
     /// If there is a packet that is newer than the previous packet, it is
     /// returned. Otherwise, `None` is returned.
-    pub fn try_next(&mut self) -> Result<Option<LiveDataPacket>, Box<Error>> {
+    pub fn try_next(&mut self) -> Result<Option<LiveDataPacket>, Box<dyn Error>> {
         let mut packet = unsafe { mem::uninitialized() };
         self.rlbot.update_live_data_packet(&mut packet)?;
 
@@ -65,7 +65,7 @@ impl<'a> Packeteer<'a> {
     /// This function returns an error if ten seconds pass without a new
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
-    pub fn next_flatbuffer<'fb>(&mut self) -> Result<GameTickPacket<'fb>, Box<Error>> {
+    pub fn next_flatbuffer<'fb>(&mut self) -> Result<GameTickPacket<'fb>, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next_flat()))
     }
 
@@ -89,8 +89,8 @@ impl<'a> Packeteer<'a> {
     /// Keep trying `f` until the timeout elapses.
     fn spin<R>(
         &mut self,
-        f: impl Fn(&mut Self) -> Result<Option<R>, Box<Error>>,
-    ) -> Result<R, Box<Error>> {
+        f: impl Fn(&mut Self) -> Result<Option<R>, Box<dyn Error>>,
+    ) -> Result<R, Box<dyn Error>> {
         let start = Instant::now();
 
         loop {

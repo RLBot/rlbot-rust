@@ -5,7 +5,7 @@
 use crate::utils::maybe_join;
 use std::{error::Error, fmt, mem, path::Path, process::Command, thread::sleep, time::Duration};
 
-pub fn inject_dll(rlbot_dll_directory: Option<&Path>) -> Result<InjectorCode, Box<Error>> {
+pub fn inject_dll(rlbot_dll_directory: Option<&Path>) -> Result<InjectorCode, Box<dyn Error>> {
     let program = maybe_join(rlbot_dll_directory, "RLBot_Injector");
     let code = Command::new(program)
         .arg("hidden")
@@ -40,7 +40,7 @@ pub enum InjectorCode {
 impl Error for InjectorCode {}
 
 impl fmt::Display for InjectorCode {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         fmt::Debug::fmt(self, f)
     }
 }
