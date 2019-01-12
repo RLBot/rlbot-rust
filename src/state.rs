@@ -292,6 +292,48 @@ impl DesiredBoostState {
     }
 }
 
+/// State which can be set for a boost pickup.
+#[derive(Clone, Default)]
+pub struct DesiredGameInfoState {
+    /// The gravity acceleration.
+    pub world_gravity_z: Option<f32>,
+    /// The game speed multiplier (`1.0` is normal speed).
+    pub game_speed: Option<f32>,
+    non_exhaustive: (),
+}
+
+impl DesiredGameInfoState {
+    /// Constructs a new `DesiredGameInfoState`.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Sets the gravity acceleration.
+    pub fn world_gravity_z(mut self, world_gravity_z: f32) -> Self {
+        self.world_gravity_z = Some(world_gravity_z);
+        self
+    }
+
+    /// Sets the game speed multiplier (`1.0` is normal speed).
+    pub fn game_speed(mut self, game_speed: f32) -> Self {
+        self.game_speed = Some(game_speed);
+        self
+    }
+
+    fn serialize<'a>(
+        &self,
+        builder: &mut flatbuffers::FlatBufferBuilder<'a>,
+    ) -> flatbuffers::WIPOffset<flat::DesiredGameInfoState<'a>> {
+        let world_gravity_z = self.world_gravity_z.map(flat::Float::new);
+        let game_speed = self.game_speed.map(flat::Float::new);
+        let args = flat::DesiredGameInfoStateArgs {
+            worldGravityZ: world_gravity_z.as_ref(),
+            gameSpeed: game_speed.as_ref(),
+        };
+        flat::DesiredGameInfoState::create(builder, &args)
+    }
+}
+
 /// The top-level struct containing all settable game state.
 ///
 /// Pass an instance of this to
@@ -305,6 +347,8 @@ pub struct DesiredGameState {
     pub car_states: Vec<Option<DesiredCarState>>,
     /// The state of each boost pickup.
     pub boost_states: Vec<Option<DesiredBoostState>>,
+    /// The state of the game environment.
+    pub game_info_state: Option<DesiredGameInfoState>,
     non_exhaustive: (),
 }
 
@@ -338,6 +382,12 @@ impl DesiredGameState {
         self
     }
 
+    /// Sets the state of the game environment.
+    pub fn game_info_state(mut self, game_info_state: DesiredGameInfoState) -> Self {
+        self.game_info_state = Some(game_info_state);
+        self
+    }
+
     pub(crate) fn serialize<'a>(&self) -> flatbuffers::FlatBufferBuilder<'a> {
         let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(1024);
 
@@ -363,6 +413,10 @@ impl DesiredGameState {
             ballState: self.ball_state.as_ref().map(|x| x.serialize(&mut builder)),
             carStates: Some(builder.create_vector(&car_states)),
             boostStates: Some(builder.create_vector(&boost_states)),
+            gameInfoState: self
+                .game_info_state
+                .as_ref()
+                .map(|x| x.serialize(&mut builder)),
         };
         let root = flat::DesiredGameState::create(&mut builder, &args);
 

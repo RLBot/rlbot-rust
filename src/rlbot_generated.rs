@@ -2121,6 +2121,8 @@ pub mod rlbot {
                 args: &'args GameInfoArgs,
             ) -> flatbuffers::WIPOffset<GameInfo<'bldr>> {
                 let mut builder = GameInfoBuilder::new(_fbb);
+                builder.add_gameSpeed(args.gameSpeed);
+                builder.add_worldGravityZ(args.worldGravityZ);
                 builder.add_gameTimeRemaining(args.gameTimeRemaining);
                 builder.add_secondsElapsed(args.secondsElapsed);
                 builder.add_isMatchEnded(args.isMatchEnded);
@@ -2138,6 +2140,8 @@ pub mod rlbot {
             pub const VT_ISROUNDACTIVE: flatbuffers::VOffsetT = 12;
             pub const VT_ISKICKOFFPAUSE: flatbuffers::VOffsetT = 14;
             pub const VT_ISMATCHENDED: flatbuffers::VOffsetT = 16;
+            pub const VT_WORLDGRAVITYZ: flatbuffers::VOffsetT = 18;
+            pub const VT_GAMESPEED: flatbuffers::VOffsetT = 20;
 
             #[inline]
             pub fn secondsElapsed(&self) -> f32 {
@@ -2191,6 +2195,19 @@ pub mod rlbot {
                     .get::<bool>(GameInfo::VT_ISMATCHENDED, Some(false))
                     .unwrap()
             }
+            #[inline]
+            pub fn worldGravityZ(&self) -> f32 {
+                self._tab
+                    .get::<f32>(GameInfo::VT_WORLDGRAVITYZ, Some(0.0))
+                    .unwrap()
+            }
+            /// game speed multiplier. 1.0 is regular game speed.
+            #[inline]
+            pub fn gameSpeed(&self) -> f32 {
+                self._tab
+                    .get::<f32>(GameInfo::VT_GAMESPEED, Some(0.0))
+                    .unwrap()
+            }
         }
 
         pub struct GameInfoArgs {
@@ -2201,6 +2218,8 @@ pub mod rlbot {
             pub isRoundActive: bool,
             pub isKickoffPause: bool,
             pub isMatchEnded: bool,
+            pub worldGravityZ: f32,
+            pub gameSpeed: f32,
         }
         impl<'a> Default for GameInfoArgs {
             #[inline]
@@ -2213,6 +2232,8 @@ pub mod rlbot {
                     isRoundActive: false,
                     isKickoffPause: false,
                     isMatchEnded: false,
+                    worldGravityZ: 0.0,
+                    gameSpeed: 0.0,
                 }
             }
         }
@@ -2255,6 +2276,16 @@ pub mod rlbot {
             pub fn add_isMatchEnded(&mut self, isMatchEnded: bool) {
                 self.fbb_
                     .push_slot::<bool>(GameInfo::VT_ISMATCHENDED, isMatchEnded, false);
+            }
+            #[inline]
+            pub fn add_worldGravityZ(&mut self, worldGravityZ: f32) {
+                self.fbb_
+                    .push_slot::<f32>(GameInfo::VT_WORLDGRAVITYZ, worldGravityZ, 0.0);
+            }
+            #[inline]
+            pub fn add_gameSpeed(&mut self, gameSpeed: f32) {
+                self.fbb_
+                    .push_slot::<f32>(GameInfo::VT_GAMESPEED, gameSpeed, 0.0);
             }
             #[inline]
             pub fn new(
@@ -3940,6 +3971,105 @@ pub mod rlbot {
             }
         }
 
+        pub enum DesiredGameInfoStateOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct DesiredGameInfoState<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for DesiredGameInfoState<'a> {
+            type Inner = DesiredGameInfoState<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> DesiredGameInfoState<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                DesiredGameInfoState { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args DesiredGameInfoStateArgs<'args>,
+            ) -> flatbuffers::WIPOffset<DesiredGameInfoState<'bldr>> {
+                let mut builder = DesiredGameInfoStateBuilder::new(_fbb);
+                if let Some(x) = args.gameSpeed {
+                    builder.add_gameSpeed(x);
+                }
+                if let Some(x) = args.worldGravityZ {
+                    builder.add_worldGravityZ(x);
+                }
+                builder.finish()
+            }
+
+            pub const VT_WORLDGRAVITYZ: flatbuffers::VOffsetT = 4;
+            pub const VT_GAMESPEED: flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub fn worldGravityZ(&self) -> Option<&'a Float> {
+                self._tab
+                    .get::<Float>(DesiredGameInfoState::VT_WORLDGRAVITYZ, None)
+            }
+            #[inline]
+            pub fn gameSpeed(&self) -> Option<&'a Float> {
+                self._tab
+                    .get::<Float>(DesiredGameInfoState::VT_GAMESPEED, None)
+            }
+        }
+
+        pub struct DesiredGameInfoStateArgs<'a> {
+            pub worldGravityZ: Option<&'a Float>,
+            pub gameSpeed: Option<&'a Float>,
+        }
+        impl<'a> Default for DesiredGameInfoStateArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                DesiredGameInfoStateArgs {
+                    worldGravityZ: None,
+                    gameSpeed: None,
+                }
+            }
+        }
+        pub struct DesiredGameInfoStateBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> DesiredGameInfoStateBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_worldGravityZ(&mut self, worldGravityZ: &'b Float) {
+                self.fbb_.push_slot_always::<&Float>(
+                    DesiredGameInfoState::VT_WORLDGRAVITYZ,
+                    worldGravityZ,
+                );
+            }
+            #[inline]
+            pub fn add_gameSpeed(&mut self, gameSpeed: &'b Float) {
+                self.fbb_
+                    .push_slot_always::<&Float>(DesiredGameInfoState::VT_GAMESPEED, gameSpeed);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> DesiredGameInfoStateBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                DesiredGameInfoStateBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<DesiredGameInfoState<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
         pub enum DesiredGameStateOffset {}
         #[derive(Copy, Clone, Debug, PartialEq)]
 
@@ -3968,6 +4098,9 @@ pub mod rlbot {
                 args: &'args DesiredGameStateArgs<'args>,
             ) -> flatbuffers::WIPOffset<DesiredGameState<'bldr>> {
                 let mut builder = DesiredGameStateBuilder::new(_fbb);
+                if let Some(x) = args.gameInfoState {
+                    builder.add_gameInfoState(x);
+                }
                 if let Some(x) = args.boostStates {
                     builder.add_boostStates(x);
                 }
@@ -3983,6 +4116,7 @@ pub mod rlbot {
             pub const VT_BALLSTATE: flatbuffers::VOffsetT = 4;
             pub const VT_CARSTATES: flatbuffers::VOffsetT = 6;
             pub const VT_BOOSTSTATES: flatbuffers::VOffsetT = 8;
+            pub const VT_GAMEINFOSTATE: flatbuffers::VOffsetT = 10;
 
             #[inline]
             pub fn ballState(&self) -> Option<DesiredBallState<'a>> {
@@ -4010,6 +4144,14 @@ pub mod rlbot {
                     flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DesiredBoostState<'a>>>,
                 >>(DesiredGameState::VT_BOOSTSTATES, None)
             }
+            #[inline]
+            pub fn gameInfoState(&self) -> Option<DesiredGameInfoState<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<DesiredGameInfoState<'a>>>(
+                        DesiredGameState::VT_GAMEINFOSTATE,
+                        None,
+                    )
+            }
         }
 
         pub struct DesiredGameStateArgs<'a> {
@@ -4024,6 +4166,7 @@ pub mod rlbot {
                     flatbuffers::Vector<'a, flatbuffers::ForwardsUOffset<DesiredBoostState<'a>>>,
                 >,
             >,
+            pub gameInfoState: Option<flatbuffers::WIPOffset<DesiredGameInfoState<'a>>>,
         }
         impl<'a> Default for DesiredGameStateArgs<'a> {
             #[inline]
@@ -4032,6 +4175,7 @@ pub mod rlbot {
                     ballState: None,
                     carStates: None,
                     boostStates: None,
+                    gameInfoState: None,
                 }
             }
         }
@@ -4074,6 +4218,17 @@ pub mod rlbot {
                     DesiredGameState::VT_BOOSTSTATES,
                     boostStates,
                 );
+            }
+            #[inline]
+            pub fn add_gameInfoState(
+                &mut self,
+                gameInfoState: flatbuffers::WIPOffset<DesiredGameInfoState<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<DesiredGameInfoState<'_>>>(
+                        DesiredGameState::VT_GAMEINFOSTATE,
+                        gameInfoState,
+                    );
             }
             #[inline]
             pub fn new(
