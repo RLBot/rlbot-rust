@@ -14,14 +14,14 @@ pub struct Physicist<'a> {
 }
 
 impl<'a> Physicist<'a> {
-    pub(crate) fn new(rlbot: &RLBot) -> Physicist<'_> {
+    pub(crate) fn new(rlbot: &'a RLBot) -> Self {
         // Physics ticks happen at 120Hz. The goal is never to miss any. But if we poll
         // too often, the game crashes, so space out the checks.
         let ratelimiter = ratelimit::Builder::new()
             .interval(Duration::from_millis(1))
             .build();
 
-        Physicist {
+        Self {
             rlbot,
             ratelimiter,
             prev_ball_frame: 0,

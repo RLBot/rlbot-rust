@@ -48,8 +48,8 @@ pub struct RenderGroup<'a> {
 }
 
 impl<'a> RenderGroup<'a> {
-    pub(crate) fn new(rlbot: &'a RLBot, id: i32) -> RenderGroup<'a> {
-        RenderGroup {
+    pub(crate) fn new(rlbot: &'a RLBot, id: i32) -> Self {
+        Self {
             rlbot,
             id,
             builder: FlatBufferBuilder::new_with_capacity(1024),

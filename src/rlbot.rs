@@ -107,8 +107,8 @@ pub struct RLBot {
 }
 
 impl RLBot {
-    pub(crate) fn new(interface: RLBotCoreInterface) -> RLBot {
-        RLBot {
+    pub(crate) fn new(interface: RLBotCoreInterface) -> Self {
+        Self {
             interface,
             not_sync: PhantomData,
         }

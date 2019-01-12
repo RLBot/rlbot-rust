@@ -15,7 +15,7 @@ pub struct Packeteer<'a> {
 }
 
 impl<'a> Packeteer<'a> {
-    pub(crate) fn new(rlbot: &RLBot) -> Packeteer<'_> {
+    pub(crate) fn new(rlbot: &'a RLBot) -> Self {
         // The goal is never to miss any packets. But if we poll too often, the
         // game crashes, so it's a fine line. With an interval of 3ms we can
         // catch 333 updates per second. That should be plenty.
@@ -23,7 +23,7 @@ impl<'a> Packeteer<'a> {
             .interval(Duration::from_millis(3))
             .build();
 
-        Packeteer {
+        Self {
             rlbot,
             ratelimiter,
             prev_game_time: 0.0,
