@@ -4,6 +4,7 @@
 
 #![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
+#![warn(clippy::all)]
 
 use na::Vector2;
 use rlbot::ffi;

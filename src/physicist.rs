@@ -35,6 +35,7 @@ impl<'a> Physicist<'a> {
     /// This function returns an error if ten seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
+    #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> Result<ffi::RigidBodyTick, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next()?))
     }

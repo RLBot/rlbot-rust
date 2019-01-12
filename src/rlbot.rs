@@ -58,6 +58,7 @@ pub fn init() -> Result<RLBot, Box<dyn Error>> {
 /// See [`examples/simple`] for a complete example.
 ///
 /// [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
+#[allow(clippy::needless_pass_by_value)]
 pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<dyn Error>> {
     let rlbot_dll_directory = options.rlbot_dll_directory.as_ref().map(|p| p.as_path());
 
@@ -202,6 +203,7 @@ impl RLBot {
     }
 
     /// Sets the game state.
+    #[allow(clippy::needless_pass_by_value)]
     pub fn set_game_state_struct(
         &self,
         desired_game_state: state::DesiredGameState,

@@ -2,6 +2,7 @@
 
 #![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
+#![warn(clippy::all)]
 
 use rlbot::ffi;
 use std::{error::Error, f32::consts::PI};

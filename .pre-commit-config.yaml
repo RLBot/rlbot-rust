@@ -13,7 +13,7 @@ repos:
         name: check
         language: system
         files: '[.]rs$'
-        entry: cargo check --all-targets --features strict
+        entry: cargo clippy --all-targets --features strict
         pass_filenames: false
 
       - id: test

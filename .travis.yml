@@ -11,7 +11,7 @@ env:
   - FEATURES='--features strict'
 
 script:
-  - cargo check --all-targets $FEATURES
+  - cargo clippy --all-targets $FEATURES
   - cargo test $FEATURES
 
 matrix:

@@ -4,6 +4,7 @@
 
 #![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
+#![warn(clippy::all)]
 
 use na::Vector2;
 use rlbot::{ffi::MatchSettings, flat};
@@ -52,12 +53,12 @@ fn get_input<'a>(packet: &flat::GameTickPacket<'_>) -> flatbuffers::FlatBufferBu
         ..Default::default()
     };
 
-    build_player_input(player_index, controller_state_args)
+    build_player_input(player_index, &controller_state_args)
 }
 
 fn build_player_input<'a>(
     player_index: i32,
-    controller_state_args: flat::ControllerStateArgs,
+    controller_state_args: &flat::ControllerStateArgs,
 ) -> flatbuffers::FlatBufferBuilder<'a> {
     let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(1024);
     let controller_state = Some(flat::ControllerState::create(

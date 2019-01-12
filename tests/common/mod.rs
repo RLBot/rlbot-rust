@@ -34,13 +34,12 @@ pub fn with_rocket_league<R>(f: impl FnOnce() -> R + panic::UnwindSafe) -> R {
 // Contributors: if the path on your system is not in this list, go ahead and
 // add it.
 fn find_rocket_league_exe() -> Result<&'static str, &'static str> {
-    let choices = [
+    let choices = vec![
         r"C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win32\RocketLeague.exe",
     ];
 
     choices
-        .iter()
-        .map(|&p| p)
+        .into_iter()
         .find(|p| Path::new(p).exists())
         .ok_or("RocketLeague.exe not found")
 }
@@ -57,9 +56,8 @@ trait TerminateProcess {
 
 impl TerminateProcess for Process {
     fn terminate(&self, exit_code: u32) -> Result<(), io::Error> {
-        match unsafe { TerminateProcess(**self.handle(), exit_code) } {
-            0 => return Err(io::Error::last_os_error()),
-            _ => {}
+        if unsafe { TerminateProcess(**self.handle(), exit_code) } == 0 {
+            return Err(io::Error::last_os_error());
         }
 
         match unsafe { WaitForSingleObject(**self.handle(), 15_000) } {

@@ -2,6 +2,7 @@
 
 #![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
+#![warn(clippy::all)]
 
 use na::{Unit, Vector3};
 use rlbot::{ffi::MatchSettings, flat};
@@ -83,7 +84,7 @@ fn gravitate_towards_ball(ball_loc: &Vector3<f32>, car: &flat::PlayerInfo<'_>) -
     let car_loc = Vector3::new(flat_car_loc.x(), flat_car_loc.y(), flat_car_loc.z());
     let ball_delta = ball_loc - car_loc;
     let distance = ball_delta.norm();
-    let k = 1000_000.0;
+    let k = 1_000_000.0;
     let a = k / (distance / 5.0).powf(2.0);
     a * Unit::new_normalize(ball_delta).unwrap()
 }

@@ -114,7 +114,8 @@
 //! [RLBotPythonExample]: https://github.com/RLBot/RLBotPythonExample
 
 #![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
-#![cfg_attr(feature = "strict", deny(warnings, missing_docs))]
+#![cfg_attr(feature = "strict", deny(warnings))]
+#![warn(missing_docs, clippy::all)]
 
 pub mod ffi;
 pub use crate::{
@@ -135,7 +136,7 @@ mod packeteer;
 mod physicist;
 mod render;
 mod rlbot;
-#[allow(non_camel_case_types, non_snake_case, missing_docs)]
+#[allow(non_camel_case_types, non_snake_case, missing_docs, clippy::all)]
 mod rlbot_generated;
 pub mod state;
 mod state_convert;

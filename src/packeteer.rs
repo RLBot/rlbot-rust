@@ -1,3 +1,5 @@
+#![allow(clippy::float_cmp)]
+
 use crate::{ffi::LiveDataPacket, rlbot::RLBot, rlbot_generated::rlbot::flat::GameTickPacket};
 use std::{
     error::Error,
@@ -36,6 +38,7 @@ impl<'a> Packeteer<'a> {
     /// This function returns an error if ten seconds pass without a new
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
+    #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> Result<LiveDataPacket, Box<dyn Error>> {
         self.spin(Self::try_next)
     }

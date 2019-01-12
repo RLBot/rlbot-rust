@@ -1,5 +1,6 @@
 #![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
+#![warn(clippy::all)]
 
 use rand::prelude::*;
 use std::{error::Error, thread::sleep, time::Duration};

@@ -2,6 +2,7 @@
 
 #![warn(future_incompatible, rust_2018_compatibility, rust_2018_idioms, unused)]
 #![cfg_attr(feature = "strict", deny(warnings))]
+#![warn(clippy::all)]
 
 use na::{Point3, Vector3};
 use rlbot::{ffi::MatchSettings, state};
@@ -62,7 +63,7 @@ fn gravitate_towards_ball(ball_loc: &Point3<f32>, car: &rlbot::ffi::PlayerInfo) 
     let car_loc = Point3::new(car_loc.X, car_loc.Y, car_loc.Z);
     let ball_delta = ball_loc - car_loc;
     let distance = ball_delta.norm();
-    let k = 1000_000.0;
+    let k = 1_000_000.0;
     let a = k / (distance / 5.0).powf(2.0);
     a * ball_delta.normalize()
 }
