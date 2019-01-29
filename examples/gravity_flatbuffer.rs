@@ -86,5 +86,5 @@ fn gravitate_towards_ball(ball_loc: &Vector3<f32>, car: &flat::PlayerInfo<'_>) -
     let distance = ball_delta.norm();
     let k = 1_000_000.0;
     let a = k / (distance / 5.0).powf(2.0);
-    a * Unit::new_normalize(ball_delta).unwrap()
+    a * Unit::new_normalize(ball_delta).into_inner()
 }
