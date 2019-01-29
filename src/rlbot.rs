@@ -247,7 +247,12 @@ impl RLBot {
         // Sometimes we get a few stray ticks from a previous game while the next game
         // is loading. Wait for RoundActive to stabilize before trusting it.
         while count < 5 {
-            if packets.next()?.GameInfo.RoundActive {
+            let packet = packets.next_flatbuffer()?;
+            let is_round_active = packet
+                .gameInfo()
+                .map(|gi| gi.isRoundActive())
+                .unwrap_or_default();
+            if is_round_active {
                 count += 1;
             } else {
                 count = 0;
