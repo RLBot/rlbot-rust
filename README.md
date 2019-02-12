@@ -107,7 +107,9 @@ Get the most recent [flatbuffer schema]. Then compile the schema like so from
 this project's root:
 
 ```sh
-flatc -o src --rust rlbot.fbs && cargo +nightly fmt
+flatc -o src --rust rlbot.fbs
+cargo fix --allow-dirty
+cargo +nightly fmt
 ```
 
 This will update the `src/rlbot_generated.rs` file.

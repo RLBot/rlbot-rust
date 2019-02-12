@@ -402,6 +402,1307 @@ pub mod rlbot {
             ENUM_NAMES_QUICK_CHAT_SELECTION[index]
         }
 
+        #[allow(non_camel_case_types)]
+        #[repr(u8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum PlayerClass {
+            NONE = 0,
+            RLBotPlayer = 1,
+            HumanPlayer = 2,
+            PsyonixBotPlayer = 3,
+            PartyMemberBotPlayer = 4,
+        }
+
+        const ENUM_MIN_PLAYER_CLASS: u8 = 0;
+        const ENUM_MAX_PLAYER_CLASS: u8 = 4;
+
+        impl<'a> flatbuffers::Follow<'a> for PlayerClass {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for PlayerClass {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = u8::to_le(self as u8);
+                let p = &n as *const u8 as *const PlayerClass;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = u8::from_le(self as u8);
+                let p = &n as *const u8 as *const PlayerClass;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for PlayerClass {
+            type Output = PlayerClass;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<PlayerClass>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_PLAYER_CLASS: [PlayerClass; 5] = [
+            PlayerClass::NONE,
+            PlayerClass::RLBotPlayer,
+            PlayerClass::HumanPlayer,
+            PlayerClass::PsyonixBotPlayer,
+            PlayerClass::PartyMemberBotPlayer,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_PLAYER_CLASS: [&'static str; 5] = [
+            "NONE",
+            "RLBotPlayer",
+            "HumanPlayer",
+            "PsyonixBotPlayer",
+            "PartyMemberBotPlayer",
+        ];
+
+        pub fn enum_name_player_class(e: PlayerClass) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_PLAYER_CLASS[index]
+        }
+
+        pub struct PlayerClassUnionTableOffset {}
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum GameMode {
+            Soccer = 0,
+            Hoops = 1,
+            Dropshot = 2,
+            Hockey = 3,
+            Rumble = 4,
+        }
+
+        const ENUM_MIN_GAME_MODE: i8 = 0;
+        const ENUM_MAX_GAME_MODE: i8 = 4;
+
+        impl<'a> flatbuffers::Follow<'a> for GameMode {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for GameMode {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const GameMode;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const GameMode;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for GameMode {
+            type Output = GameMode;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<GameMode>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_GAME_MODE: [GameMode; 5] = [
+            GameMode::Soccer,
+            GameMode::Hoops,
+            GameMode::Dropshot,
+            GameMode::Hockey,
+            GameMode::Rumble,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_GAME_MODE: [&'static str; 5] =
+            ["Soccer", "Hoops", "Dropshot", "Hockey", "Rumble"];
+
+        pub fn enum_name_game_mode(e: GameMode) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_GAME_MODE[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum GameMap {
+            DFHStadium = 0,
+            Mannfield = 1,
+            ChampionsField = 2,
+            UrbanCentral = 3,
+            BeckwithPark = 4,
+            UtopiaColiseum = 5,
+            Wasteland = 6,
+            NeoTokyo = 7,
+            AquaDome = 8,
+            StarbaseArc = 9,
+            Farmstead = 10,
+            SaltyShores = 11,
+            DFHStadium_Stormy = 12,
+            DFHStadium_Day = 13,
+            Mannfield_Stormy = 14,
+            Mannfield_Night = 15,
+            ChampionsField_Day = 16,
+            BeckwithPark_Stormy = 17,
+            BeckwithPark_Midnight = 18,
+            UrbanCentral_Night = 19,
+            UrbanCentral_Dawn = 20,
+            UtopiaColiseum_Dusk = 21,
+            DFHStadium_Snowy = 22,
+            Mannfield_Snowy = 23,
+            UtopiaColiseum_Snowy = 24,
+            Badlands = 25,
+            Badlands_Night = 26,
+            TokyoUnderpass = 27,
+            Arctagon = 28,
+            Pillars = 29,
+            Cosmic = 30,
+            DoubleGoal = 31,
+            Octagon = 32,
+            Underpass = 33,
+            UtopiaRetro = 34,
+            Hoops_DunkHouse = 35,
+            DropShot_Core707 = 36,
+            ThrowbackStadium = 37,
+        }
+
+        const ENUM_MIN_GAME_MAP: i8 = 0;
+        const ENUM_MAX_GAME_MAP: i8 = 37;
+
+        impl<'a> flatbuffers::Follow<'a> for GameMap {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for GameMap {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const GameMap;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const GameMap;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for GameMap {
+            type Output = GameMap;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<GameMap>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_GAME_MAP: [GameMap; 38] = [
+            GameMap::DFHStadium,
+            GameMap::Mannfield,
+            GameMap::ChampionsField,
+            GameMap::UrbanCentral,
+            GameMap::BeckwithPark,
+            GameMap::UtopiaColiseum,
+            GameMap::Wasteland,
+            GameMap::NeoTokyo,
+            GameMap::AquaDome,
+            GameMap::StarbaseArc,
+            GameMap::Farmstead,
+            GameMap::SaltyShores,
+            GameMap::DFHStadium_Stormy,
+            GameMap::DFHStadium_Day,
+            GameMap::Mannfield_Stormy,
+            GameMap::Mannfield_Night,
+            GameMap::ChampionsField_Day,
+            GameMap::BeckwithPark_Stormy,
+            GameMap::BeckwithPark_Midnight,
+            GameMap::UrbanCentral_Night,
+            GameMap::UrbanCentral_Dawn,
+            GameMap::UtopiaColiseum_Dusk,
+            GameMap::DFHStadium_Snowy,
+            GameMap::Mannfield_Snowy,
+            GameMap::UtopiaColiseum_Snowy,
+            GameMap::Badlands,
+            GameMap::Badlands_Night,
+            GameMap::TokyoUnderpass,
+            GameMap::Arctagon,
+            GameMap::Pillars,
+            GameMap::Cosmic,
+            GameMap::DoubleGoal,
+            GameMap::Octagon,
+            GameMap::Underpass,
+            GameMap::UtopiaRetro,
+            GameMap::Hoops_DunkHouse,
+            GameMap::DropShot_Core707,
+            GameMap::ThrowbackStadium,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_GAME_MAP: [&'static str; 38] = [
+            "DFHStadium",
+            "Mannfield",
+            "ChampionsField",
+            "UrbanCentral",
+            "BeckwithPark",
+            "UtopiaColiseum",
+            "Wasteland",
+            "NeoTokyo",
+            "AquaDome",
+            "StarbaseArc",
+            "Farmstead",
+            "SaltyShores",
+            "DFHStadium_Stormy",
+            "DFHStadium_Day",
+            "Mannfield_Stormy",
+            "Mannfield_Night",
+            "ChampionsField_Day",
+            "BeckwithPark_Stormy",
+            "BeckwithPark_Midnight",
+            "UrbanCentral_Night",
+            "UrbanCentral_Dawn",
+            "UtopiaColiseum_Dusk",
+            "DFHStadium_Snowy",
+            "Mannfield_Snowy",
+            "UtopiaColiseum_Snowy",
+            "Badlands",
+            "Badlands_Night",
+            "TokyoUnderpass",
+            "Arctagon",
+            "Pillars",
+            "Cosmic",
+            "DoubleGoal",
+            "Octagon",
+            "Underpass",
+            "UtopiaRetro",
+            "Hoops_DunkHouse",
+            "DropShot_Core707",
+            "ThrowbackStadium",
+        ];
+
+        pub fn enum_name_game_map(e: GameMap) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_GAME_MAP[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum MatchLength {
+            Five_Minutes = 0,
+            Ten_Minutes = 1,
+            Twenty_Minutes = 2,
+            Unlimited = 3,
+        }
+
+        const ENUM_MIN_MATCH_LENGTH: i8 = 0;
+        const ENUM_MAX_MATCH_LENGTH: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for MatchLength {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for MatchLength {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const MatchLength;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const MatchLength;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for MatchLength {
+            type Output = MatchLength;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<MatchLength>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_MATCH_LENGTH: [MatchLength; 4] = [
+            MatchLength::Five_Minutes,
+            MatchLength::Ten_Minutes,
+            MatchLength::Twenty_Minutes,
+            MatchLength::Unlimited,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_MATCH_LENGTH: [&'static str; 4] =
+            ["Five_Minutes", "Ten_Minutes", "Twenty_Minutes", "Unlimited"];
+
+        pub fn enum_name_match_length(e: MatchLength) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_MATCH_LENGTH[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum MaxScore {
+            Unlimited = 0,
+            One_Goal = 1,
+            Three_Goals = 2,
+            Five_Goals = 3,
+        }
+
+        const ENUM_MIN_MAX_SCORE: i8 = 0;
+        const ENUM_MAX_MAX_SCORE: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for MaxScore {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for MaxScore {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const MaxScore;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const MaxScore;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for MaxScore {
+            type Output = MaxScore;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<MaxScore>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_MAX_SCORE: [MaxScore; 4] = [
+            MaxScore::Unlimited,
+            MaxScore::One_Goal,
+            MaxScore::Three_Goals,
+            MaxScore::Five_Goals,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_MAX_SCORE: [&'static str; 4] =
+            ["Unlimited", "One_Goal", "Three_Goals", "Five_Goals"];
+
+        pub fn enum_name_max_score(e: MaxScore) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_MAX_SCORE[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum OvertimeOption {
+            Unlimited = 0,
+            Five_Max_First_Score = 1,
+            Five_Max_Random_Team = 2,
+        }
+
+        const ENUM_MIN_OVERTIME_OPTION: i8 = 0;
+        const ENUM_MAX_OVERTIME_OPTION: i8 = 2;
+
+        impl<'a> flatbuffers::Follow<'a> for OvertimeOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for OvertimeOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const OvertimeOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const OvertimeOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for OvertimeOption {
+            type Output = OvertimeOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<OvertimeOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_OVERTIME_OPTION: [OvertimeOption; 3] = [
+            OvertimeOption::Unlimited,
+            OvertimeOption::Five_Max_First_Score,
+            OvertimeOption::Five_Max_Random_Team,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_OVERTIME_OPTION: [&'static str; 3] =
+            ["Unlimited", "Five_Max_First_Score", "Five_Max_Random_Team"];
+
+        pub fn enum_name_overtime_option(e: OvertimeOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_OVERTIME_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum SeriesLengthOption {
+            Unlimited = 0,
+            Three_Games = 1,
+            Five_Games = 2,
+            Seven_Games = 3,
+        }
+
+        const ENUM_MIN_SERIES_LENGTH_OPTION: i8 = 0;
+        const ENUM_MAX_SERIES_LENGTH_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for SeriesLengthOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for SeriesLengthOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const SeriesLengthOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const SeriesLengthOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for SeriesLengthOption {
+            type Output = SeriesLengthOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<SeriesLengthOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_SERIES_LENGTH_OPTION: [SeriesLengthOption; 4] = [
+            SeriesLengthOption::Unlimited,
+            SeriesLengthOption::Three_Games,
+            SeriesLengthOption::Five_Games,
+            SeriesLengthOption::Seven_Games,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_SERIES_LENGTH_OPTION: [&'static str; 4] =
+            ["Unlimited", "Three_Games", "Five_Games", "Seven_Games"];
+
+        pub fn enum_name_series_length_option(e: SeriesLengthOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_SERIES_LENGTH_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum GameSpeedOption {
+            Default = 0,
+            Slo_Mo = 1,
+            Time_Warp = 2,
+        }
+
+        const ENUM_MIN_GAME_SPEED_OPTION: i8 = 0;
+        const ENUM_MAX_GAME_SPEED_OPTION: i8 = 2;
+
+        impl<'a> flatbuffers::Follow<'a> for GameSpeedOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for GameSpeedOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const GameSpeedOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const GameSpeedOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for GameSpeedOption {
+            type Output = GameSpeedOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<GameSpeedOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_GAME_SPEED_OPTION: [GameSpeedOption; 3] = [
+            GameSpeedOption::Default,
+            GameSpeedOption::Slo_Mo,
+            GameSpeedOption::Time_Warp,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_GAME_SPEED_OPTION: [&'static str; 3] = ["Default", "Slo_Mo", "Time_Warp"];
+
+        pub fn enum_name_game_speed_option(e: GameSpeedOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_GAME_SPEED_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum BallMaxSpeedOption {
+            Default = 0,
+            Slow = 1,
+            Fast = 2,
+            Super_Fast = 3,
+        }
+
+        const ENUM_MIN_BALL_MAX_SPEED_OPTION: i8 = 0;
+        const ENUM_MAX_BALL_MAX_SPEED_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for BallMaxSpeedOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for BallMaxSpeedOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const BallMaxSpeedOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const BallMaxSpeedOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for BallMaxSpeedOption {
+            type Output = BallMaxSpeedOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<BallMaxSpeedOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_BALL_MAX_SPEED_OPTION: [BallMaxSpeedOption; 4] = [
+            BallMaxSpeedOption::Default,
+            BallMaxSpeedOption::Slow,
+            BallMaxSpeedOption::Fast,
+            BallMaxSpeedOption::Super_Fast,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_BALL_MAX_SPEED_OPTION: [&'static str; 4] =
+            ["Default", "Slow", "Fast", "Super_Fast"];
+
+        pub fn enum_name_ball_max_speed_option(e: BallMaxSpeedOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_BALL_MAX_SPEED_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum BallTypeOption {
+            Default = 0,
+            Cube = 1,
+            Puck = 2,
+            Basketball = 3,
+        }
+
+        const ENUM_MIN_BALL_TYPE_OPTION: i8 = 0;
+        const ENUM_MAX_BALL_TYPE_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for BallTypeOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for BallTypeOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const BallTypeOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const BallTypeOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for BallTypeOption {
+            type Output = BallTypeOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<BallTypeOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_BALL_TYPE_OPTION: [BallTypeOption; 4] = [
+            BallTypeOption::Default,
+            BallTypeOption::Cube,
+            BallTypeOption::Puck,
+            BallTypeOption::Basketball,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_BALL_TYPE_OPTION: [&'static str; 4] =
+            ["Default", "Cube", "Puck", "Basketball"];
+
+        pub fn enum_name_ball_type_option(e: BallTypeOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_BALL_TYPE_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum BallWeightOption {
+            Default = 0,
+            Light = 1,
+            Heavy = 2,
+            Super_Light = 3,
+        }
+
+        const ENUM_MIN_BALL_WEIGHT_OPTION: i8 = 0;
+        const ENUM_MAX_BALL_WEIGHT_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for BallWeightOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for BallWeightOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const BallWeightOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const BallWeightOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for BallWeightOption {
+            type Output = BallWeightOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<BallWeightOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_BALL_WEIGHT_OPTION: [BallWeightOption; 4] = [
+            BallWeightOption::Default,
+            BallWeightOption::Light,
+            BallWeightOption::Heavy,
+            BallWeightOption::Super_Light,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_BALL_WEIGHT_OPTION: [&'static str; 4] =
+            ["Default", "Light", "Heavy", "Super_Light"];
+
+        pub fn enum_name_ball_weight_option(e: BallWeightOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_BALL_WEIGHT_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum BallSizeOption {
+            Default = 0,
+            Small = 1,
+            Large = 2,
+            Gigantic = 3,
+        }
+
+        const ENUM_MIN_BALL_SIZE_OPTION: i8 = 0;
+        const ENUM_MAX_BALL_SIZE_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for BallSizeOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for BallSizeOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const BallSizeOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const BallSizeOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for BallSizeOption {
+            type Output = BallSizeOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<BallSizeOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_BALL_SIZE_OPTION: [BallSizeOption; 4] = [
+            BallSizeOption::Default,
+            BallSizeOption::Small,
+            BallSizeOption::Large,
+            BallSizeOption::Gigantic,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_BALL_SIZE_OPTION: [&'static str; 4] =
+            ["Default", "Small", "Large", "Gigantic"];
+
+        pub fn enum_name_ball_size_option(e: BallSizeOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_BALL_SIZE_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum BallBouncinessOption {
+            Default = 0,
+            Low = 1,
+            High = 2,
+            Super_High = 3,
+        }
+
+        const ENUM_MIN_BALL_BOUNCINESS_OPTION: i8 = 0;
+        const ENUM_MAX_BALL_BOUNCINESS_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for BallBouncinessOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for BallBouncinessOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const BallBouncinessOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const BallBouncinessOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for BallBouncinessOption {
+            type Output = BallBouncinessOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<BallBouncinessOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_BALL_BOUNCINESS_OPTION: [BallBouncinessOption; 4] = [
+            BallBouncinessOption::Default,
+            BallBouncinessOption::Low,
+            BallBouncinessOption::High,
+            BallBouncinessOption::Super_High,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_BALL_BOUNCINESS_OPTION: [&'static str; 4] =
+            ["Default", "Low", "High", "Super_High"];
+
+        pub fn enum_name_ball_bounciness_option(e: BallBouncinessOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_BALL_BOUNCINESS_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum BoostOption {
+            Normal_Boost = 0,
+            Unlimited_Boost = 1,
+            Slow_Recharge = 2,
+            Rapid_Recharge = 3,
+            No_Boost = 4,
+        }
+
+        const ENUM_MIN_BOOST_OPTION: i8 = 0;
+        const ENUM_MAX_BOOST_OPTION: i8 = 4;
+
+        impl<'a> flatbuffers::Follow<'a> for BoostOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for BoostOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const BoostOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const BoostOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for BoostOption {
+            type Output = BoostOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<BoostOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_BOOST_OPTION: [BoostOption; 5] = [
+            BoostOption::Normal_Boost,
+            BoostOption::Unlimited_Boost,
+            BoostOption::Slow_Recharge,
+            BoostOption::Rapid_Recharge,
+            BoostOption::No_Boost,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_BOOST_OPTION: [&'static str; 5] = [
+            "Normal_Boost",
+            "Unlimited_Boost",
+            "Slow_Recharge",
+            "Rapid_Recharge",
+            "No_Boost",
+        ];
+
+        pub fn enum_name_boost_option(e: BoostOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_BOOST_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum RumbleOption {
+            None = 0,
+            Default = 1,
+            Slow = 2,
+            Civilized = 3,
+            Destruction_Derby = 4,
+            Spring_Loaded = 5,
+            Spikes_Only = 6,
+        }
+
+        const ENUM_MIN_RUMBLE_OPTION: i8 = 0;
+        const ENUM_MAX_RUMBLE_OPTION: i8 = 6;
+
+        impl<'a> flatbuffers::Follow<'a> for RumbleOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for RumbleOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const RumbleOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const RumbleOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for RumbleOption {
+            type Output = RumbleOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<RumbleOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_RUMBLE_OPTION: [RumbleOption; 7] = [
+            RumbleOption::None,
+            RumbleOption::Default,
+            RumbleOption::Slow,
+            RumbleOption::Civilized,
+            RumbleOption::Destruction_Derby,
+            RumbleOption::Spring_Loaded,
+            RumbleOption::Spikes_Only,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_RUMBLE_OPTION: [&'static str; 7] = [
+            "None",
+            "Default",
+            "Slow",
+            "Civilized",
+            "Destruction_Derby",
+            "Spring_Loaded",
+            "Spikes_Only",
+        ];
+
+        pub fn enum_name_rumble_option(e: RumbleOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_RUMBLE_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum BoostStrengthOption {
+            One = 0,
+            OneAndAHalf = 1,
+            Two = 2,
+            Ten = 3,
+        }
+
+        const ENUM_MIN_BOOST_STRENGTH_OPTION: i8 = 0;
+        const ENUM_MAX_BOOST_STRENGTH_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for BoostStrengthOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for BoostStrengthOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const BoostStrengthOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const BoostStrengthOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for BoostStrengthOption {
+            type Output = BoostStrengthOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<BoostStrengthOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_BOOST_STRENGTH_OPTION: [BoostStrengthOption; 4] = [
+            BoostStrengthOption::One,
+            BoostStrengthOption::OneAndAHalf,
+            BoostStrengthOption::Two,
+            BoostStrengthOption::Ten,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_BOOST_STRENGTH_OPTION: [&'static str; 4] =
+            ["One", "OneAndAHalf", "Two", "Ten"];
+
+        pub fn enum_name_boost_strength_option(e: BoostStrengthOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_BOOST_STRENGTH_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum GravityOption {
+            Default = 0,
+            Low = 1,
+            High = 2,
+            Super_High = 3,
+        }
+
+        const ENUM_MIN_GRAVITY_OPTION: i8 = 0;
+        const ENUM_MAX_GRAVITY_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for GravityOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for GravityOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const GravityOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const GravityOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for GravityOption {
+            type Output = GravityOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<GravityOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_GRAVITY_OPTION: [GravityOption; 4] = [
+            GravityOption::Default,
+            GravityOption::Low,
+            GravityOption::High,
+            GravityOption::Super_High,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_GRAVITY_OPTION: [&'static str; 4] =
+            ["Default", "Low", "High", "Super_High"];
+
+        pub fn enum_name_gravity_option(e: GravityOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_GRAVITY_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum DemolishOption {
+            Default = 0,
+            Disabled = 1,
+            Friendly_Fire = 2,
+            On_Contact = 3,
+            On_Contact_FF = 4,
+        }
+
+        const ENUM_MIN_DEMOLISH_OPTION: i8 = 0;
+        const ENUM_MAX_DEMOLISH_OPTION: i8 = 4;
+
+        impl<'a> flatbuffers::Follow<'a> for DemolishOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for DemolishOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const DemolishOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const DemolishOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for DemolishOption {
+            type Output = DemolishOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<DemolishOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_DEMOLISH_OPTION: [DemolishOption; 5] = [
+            DemolishOption::Default,
+            DemolishOption::Disabled,
+            DemolishOption::Friendly_Fire,
+            DemolishOption::On_Contact,
+            DemolishOption::On_Contact_FF,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_DEMOLISH_OPTION: [&'static str; 5] = [
+            "Default",
+            "Disabled",
+            "Friendly_Fire",
+            "On_Contact",
+            "On_Contact_FF",
+        ];
+
+        pub fn enum_name_demolish_option(e: DemolishOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_DEMOLISH_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum RespawnTimeOption {
+            Three_Seconds = 0,
+            Two_Seconds = 1,
+            One_Seconds = 2,
+            Disable_Goal_Reset = 3,
+        }
+
+        const ENUM_MIN_RESPAWN_TIME_OPTION: i8 = 0;
+        const ENUM_MAX_RESPAWN_TIME_OPTION: i8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for RespawnTimeOption {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for RespawnTimeOption {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const RespawnTimeOption;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const RespawnTimeOption;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for RespawnTimeOption {
+            type Output = RespawnTimeOption;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<RespawnTimeOption>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_RESPAWN_TIME_OPTION: [RespawnTimeOption; 4] = [
+            RespawnTimeOption::Three_Seconds,
+            RespawnTimeOption::Two_Seconds,
+            RespawnTimeOption::One_Seconds,
+            RespawnTimeOption::Disable_Goal_Reset,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_RESPAWN_TIME_OPTION: [&'static str; 4] = [
+            "Three_Seconds",
+            "Two_Seconds",
+            "One_Seconds",
+            "Disable_Goal_Reset",
+        ];
+
+        pub fn enum_name_respawn_time_option(e: RespawnTimeOption) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_RESPAWN_TIME_OPTION[index]
+        }
+
         // struct Vector3, aligned to 4
         #[repr(C, align(4))]
         #[derive(Clone, Copy, Debug, PartialEq)]
@@ -1044,6 +2345,7 @@ pub mod rlbot {
                 args: &'args TouchArgs<'args>,
             ) -> flatbuffers::WIPOffset<Touch<'bldr>> {
                 let mut builder = TouchBuilder::new(_fbb);
+                builder.add_team(args.team);
                 if let Some(x) = args.normal {
                     builder.add_normal(x);
                 }
@@ -1061,6 +2363,7 @@ pub mod rlbot {
             pub const VT_GAMESECONDS: flatbuffers::VOffsetT = 6;
             pub const VT_LOCATION: flatbuffers::VOffsetT = 8;
             pub const VT_NORMAL: flatbuffers::VOffsetT = 10;
+            pub const VT_TEAM: flatbuffers::VOffsetT = 12;
 
             /// The name of the player involved with the touch.
             #[inline]
@@ -1085,6 +2388,11 @@ pub mod rlbot {
             pub fn normal(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(Touch::VT_NORMAL, None)
             }
+            /// The Team which the touch belongs to, 0 for blue 1 for orange.
+            #[inline]
+            pub fn team(&self) -> i32 {
+                self._tab.get::<i32>(Touch::VT_TEAM, Some(0)).unwrap()
+            }
         }
 
         pub struct TouchArgs<'a> {
@@ -1092,6 +2400,7 @@ pub mod rlbot {
             pub gameSeconds: f32,
             pub location: Option<&'a Vector3>,
             pub normal: Option<&'a Vector3>,
+            pub team: i32,
         }
         impl<'a> Default for TouchArgs<'a> {
             #[inline]
@@ -1101,6 +2410,7 @@ pub mod rlbot {
                     gameSeconds: 0.0,
                     location: None,
                     normal: None,
+                    team: 0,
                 }
             }
         }
@@ -1130,6 +2440,10 @@ pub mod rlbot {
             pub fn add_normal(&mut self, normal: &'b Vector3) {
                 self.fbb_
                     .push_slot_always::<&Vector3>(Touch::VT_NORMAL, normal);
+            }
+            #[inline]
+            pub fn add_team(&mut self, team: i32) {
+                self.fbb_.push_slot::<i32>(Touch::VT_TEAM, team, 0);
             }
             #[inline]
             pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> TouchBuilder<'a, 'b> {
@@ -2175,10 +3489,10 @@ pub mod rlbot {
                     .get::<bool>(GameInfo::VT_ISROUNDACTIVE, Some(false))
                     .unwrap()
             }
-            /// Only true during a kickoff, when the car is allowed to move, and
-            /// the ball has not been hit, and the game clock has
-            /// not started yet. If both players sit still, game clock will
-            /// eventually start and this will become false.
+            /// True when the clock is paused due to kickoff, but false during
+            /// kickoff countdown. In other words, it is true
+            /// while cars can move during kickoff. Note that if both players
+            /// sit still, game clock start and this will become false.
             #[inline]
             pub fn isKickoffPause(&self) -> bool {
                 self._tab
@@ -2201,7 +3515,7 @@ pub mod rlbot {
                     .get::<f32>(GameInfo::VT_WORLDGRAVITYZ, Some(0.0))
                     .unwrap()
             }
-            /// game speed multiplier. 1.0 is regular game speed.
+            /// Game speed multiplier, 1.0 is regular game speed.
             #[inline]
             pub fn gameSpeed(&self) -> f32 {
                 self._tab
@@ -2304,6 +3618,99 @@ pub mod rlbot {
             }
         }
 
+        pub enum TeamInfoOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct TeamInfo<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for TeamInfo<'a> {
+            type Inner = TeamInfo<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> TeamInfo<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                TeamInfo { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args TeamInfoArgs,
+            ) -> flatbuffers::WIPOffset<TeamInfo<'bldr>> {
+                let mut builder = TeamInfoBuilder::new(_fbb);
+                builder.add_score(args.score);
+                builder.add_teamIndex(args.teamIndex);
+                builder.finish()
+            }
+
+            pub const VT_TEAMINDEX: flatbuffers::VOffsetT = 4;
+            pub const VT_SCORE: flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub fn teamIndex(&self) -> i32 {
+                self._tab
+                    .get::<i32>(TeamInfo::VT_TEAMINDEX, Some(0))
+                    .unwrap()
+            }
+            /// number of goals scored.
+            #[inline]
+            pub fn score(&self) -> i32 {
+                self._tab.get::<i32>(TeamInfo::VT_SCORE, Some(0)).unwrap()
+            }
+        }
+
+        pub struct TeamInfoArgs {
+            pub teamIndex: i32,
+            pub score: i32,
+        }
+        impl<'a> Default for TeamInfoArgs {
+            #[inline]
+            fn default() -> Self {
+                TeamInfoArgs {
+                    teamIndex: 0,
+                    score: 0,
+                }
+            }
+        }
+        pub struct TeamInfoBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> TeamInfoBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_teamIndex(&mut self, teamIndex: i32) {
+                self.fbb_
+                    .push_slot::<i32>(TeamInfo::VT_TEAMINDEX, teamIndex, 0);
+            }
+            #[inline]
+            pub fn add_score(&mut self, score: i32) {
+                self.fbb_.push_slot::<i32>(TeamInfo::VT_SCORE, score, 0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> TeamInfoBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                TeamInfoBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<TeamInfo<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
         pub enum GameTickPacketOffset {}
         #[derive(Copy, Clone, Debug, PartialEq)]
 
@@ -2332,6 +3739,9 @@ pub mod rlbot {
                 args: &'args GameTickPacketArgs<'args>,
             ) -> flatbuffers::WIPOffset<GameTickPacket<'bldr>> {
                 let mut builder = GameTickPacketBuilder::new(_fbb);
+                if let Some(x) = args.teams {
+                    builder.add_teams(x);
+                }
                 if let Some(x) = args.tileInformation {
                     builder.add_tileInformation(x);
                 }
@@ -2355,6 +3765,7 @@ pub mod rlbot {
             pub const VT_BALL: flatbuffers::VOffsetT = 8;
             pub const VT_GAMEINFO: flatbuffers::VOffsetT = 10;
             pub const VT_TILEINFORMATION: flatbuffers::VOffsetT = 12;
+            pub const VT_TEAMS: flatbuffers::VOffsetT = 14;
 
             #[inline]
             pub fn players(
@@ -2397,6 +3808,15 @@ pub mod rlbot {
                     flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<DropshotTile<'a>>>,
                 >>(GameTickPacket::VT_TILEINFORMATION, None)
             }
+            #[inline]
+            pub fn teams(
+                &self,
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<TeamInfo<'a>>>>
+            {
+                self._tab.get::<flatbuffers::ForwardsUOffset<
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<TeamInfo<'a>>>,
+                >>(GameTickPacket::VT_TEAMS, None)
+            }
         }
 
         pub struct GameTickPacketArgs<'a> {
@@ -2417,6 +3837,11 @@ pub mod rlbot {
                     flatbuffers::Vector<'a, flatbuffers::ForwardsUOffset<DropshotTile<'a>>>,
                 >,
             >,
+            pub teams: Option<
+                flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'a, flatbuffers::ForwardsUOffset<TeamInfo<'a>>>,
+                >,
+            >,
         }
         impl<'a> Default for GameTickPacketArgs<'a> {
             #[inline]
@@ -2427,6 +3852,7 @@ pub mod rlbot {
                     ball: None,
                     gameInfo: None,
                     tileInformation: None,
+                    teams: None,
                 }
             }
         }
@@ -2486,6 +3912,16 @@ pub mod rlbot {
                     GameTickPacket::VT_TILEINFORMATION,
                     tileInformation,
                 );
+            }
+            #[inline]
+            pub fn add_teams(
+                &mut self,
+                teams: flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'b, flatbuffers::ForwardsUOffset<TeamInfo<'b>>>,
+                >,
+            ) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<_>>(GameTickPacket::VT_TEAMS, teams);
             }
             #[inline]
             pub fn new(
@@ -5360,6 +6796,1540 @@ pub mod rlbot {
             }
             #[inline]
             pub fn finish(self) -> flatbuffers::WIPOffset<BallPrediction<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// A bot controlled by the RLBot framework
+        pub enum RLBotPlayerOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct RLBotPlayer<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for RLBotPlayer<'a> {
+            type Inner = RLBotPlayer<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> RLBotPlayer<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                RLBotPlayer { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                _args: &'args RLBotPlayerArgs,
+            ) -> flatbuffers::WIPOffset<RLBotPlayer<'bldr>> {
+                let mut builder = RLBotPlayerBuilder::new(_fbb);
+                builder.finish()
+            }
+        }
+
+        pub struct RLBotPlayerArgs {}
+        impl<'a> Default for RLBotPlayerArgs {
+            #[inline]
+            fn default() -> Self {
+                RLBotPlayerArgs {}
+            }
+        }
+        pub struct RLBotPlayerBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> RLBotPlayerBuilder<'a, 'b> {
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> RLBotPlayerBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                RLBotPlayerBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<RLBotPlayer<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// A normal human player
+        pub enum HumanPlayerOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct HumanPlayer<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for HumanPlayer<'a> {
+            type Inner = HumanPlayer<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> HumanPlayer<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                HumanPlayer { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                _args: &'args HumanPlayerArgs,
+            ) -> flatbuffers::WIPOffset<HumanPlayer<'bldr>> {
+                let mut builder = HumanPlayerBuilder::new(_fbb);
+                builder.finish()
+            }
+        }
+
+        pub struct HumanPlayerArgs {}
+        impl<'a> Default for HumanPlayerArgs {
+            #[inline]
+            fn default() -> Self {
+                HumanPlayerArgs {}
+            }
+        }
+        pub struct HumanPlayerBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> HumanPlayerBuilder<'a, 'b> {
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> HumanPlayerBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                HumanPlayerBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<HumanPlayer<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// A psyonix bot, e.g. All Star bot
+        pub enum PsyonixBotPlayerOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct PsyonixBotPlayer<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for PsyonixBotPlayer<'a> {
+            type Inner = PsyonixBotPlayer<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> PsyonixBotPlayer<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                PsyonixBotPlayer { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args PsyonixBotPlayerArgs,
+            ) -> flatbuffers::WIPOffset<PsyonixBotPlayer<'bldr>> {
+                let mut builder = PsyonixBotPlayerBuilder::new(_fbb);
+                builder.add_botSkill(args.botSkill);
+                builder.finish()
+            }
+
+            pub const VT_BOTSKILL: flatbuffers::VOffsetT = 4;
+
+            #[inline]
+            pub fn botSkill(&self) -> f32 {
+                self._tab
+                    .get::<f32>(PsyonixBotPlayer::VT_BOTSKILL, Some(0.0))
+                    .unwrap()
+            }
+        }
+
+        pub struct PsyonixBotPlayerArgs {
+            pub botSkill: f32,
+        }
+        impl<'a> Default for PsyonixBotPlayerArgs {
+            #[inline]
+            fn default() -> Self {
+                PsyonixBotPlayerArgs { botSkill: 0.0 }
+            }
+        }
+        pub struct PsyonixBotPlayerBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> PsyonixBotPlayerBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_botSkill(&mut self, botSkill: f32) {
+                self.fbb_
+                    .push_slot::<f32>(PsyonixBotPlayer::VT_BOTSKILL, botSkill, 0.0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> PsyonixBotPlayerBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                PsyonixBotPlayerBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<PsyonixBotPlayer<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// A player that Rocket League treats as human, e.g. has a dedicated
+        /// camera and can do training mode, but is actually controlled
+        /// by a bot.
+        pub enum PartyMemberBotPlayerOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct PartyMemberBotPlayer<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for PartyMemberBotPlayer<'a> {
+            type Inner = PartyMemberBotPlayer<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> PartyMemberBotPlayer<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                PartyMemberBotPlayer { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                _args: &'args PartyMemberBotPlayerArgs,
+            ) -> flatbuffers::WIPOffset<PartyMemberBotPlayer<'bldr>> {
+                let mut builder = PartyMemberBotPlayerBuilder::new(_fbb);
+                builder.finish()
+            }
+        }
+
+        pub struct PartyMemberBotPlayerArgs {}
+        impl<'a> Default for PartyMemberBotPlayerArgs {
+            #[inline]
+            fn default() -> Self {
+                PartyMemberBotPlayerArgs {}
+            }
+        }
+        pub struct PartyMemberBotPlayerBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> PartyMemberBotPlayerBuilder<'a, 'b> {
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> PartyMemberBotPlayerBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                PartyMemberBotPlayerBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<PartyMemberBotPlayer<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// The car type, color, and other aspects of the player's appearance.
+        /// See https://github.com/RLBot/RLBot/wiki/Bot-Customization
+        pub enum PlayerLoadoutOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct PlayerLoadout<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for PlayerLoadout<'a> {
+            type Inner = PlayerLoadout<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> PlayerLoadout<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                PlayerLoadout { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args PlayerLoadoutArgs<'args>,
+            ) -> flatbuffers::WIPOffset<PlayerLoadout<'bldr>> {
+                let mut builder = PlayerLoadoutBuilder::new(_fbb);
+                if let Some(x) = args.loadoutPaint {
+                    builder.add_loadoutPaint(x);
+                }
+                builder.add_goalExplosionId(args.goalExplosionId);
+                builder.add_trailsId(args.trailsId);
+                builder.add_engineAudioId(args.engineAudioId);
+                builder.add_customFinishId(args.customFinishId);
+                builder.add_paintFinishId(args.paintFinishId);
+                builder.add_hatId(args.hatId);
+                builder.add_antennaId(args.antennaId);
+                builder.add_boostId(args.boostId);
+                builder.add_wheelsId(args.wheelsId);
+                builder.add_decalId(args.decalId);
+                builder.add_carId(args.carId);
+                builder.add_customColorId(args.customColorId);
+                builder.add_teamColorId(args.teamColorId);
+                builder.finish()
+            }
+
+            pub const VT_TEAMCOLORID: flatbuffers::VOffsetT = 4;
+            pub const VT_CUSTOMCOLORID: flatbuffers::VOffsetT = 6;
+            pub const VT_CARID: flatbuffers::VOffsetT = 8;
+            pub const VT_DECALID: flatbuffers::VOffsetT = 10;
+            pub const VT_WHEELSID: flatbuffers::VOffsetT = 12;
+            pub const VT_BOOSTID: flatbuffers::VOffsetT = 14;
+            pub const VT_ANTENNAID: flatbuffers::VOffsetT = 16;
+            pub const VT_HATID: flatbuffers::VOffsetT = 18;
+            pub const VT_PAINTFINISHID: flatbuffers::VOffsetT = 20;
+            pub const VT_CUSTOMFINISHID: flatbuffers::VOffsetT = 22;
+            pub const VT_ENGINEAUDIOID: flatbuffers::VOffsetT = 24;
+            pub const VT_TRAILSID: flatbuffers::VOffsetT = 26;
+            pub const VT_GOALEXPLOSIONID: flatbuffers::VOffsetT = 28;
+            pub const VT_LOADOUTPAINT: flatbuffers::VOffsetT = 30;
+
+            #[inline]
+            pub fn teamColorId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_TEAMCOLORID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn customColorId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_CUSTOMCOLORID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn carId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_CARID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn decalId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_DECALID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn wheelsId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_WHEELSID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn boostId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_BOOSTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn antennaId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_ANTENNAID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn hatId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_HATID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn paintFinishId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_PAINTFINISHID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn customFinishId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_CUSTOMFINISHID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn engineAudioId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_ENGINEAUDIOID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn trailsId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_TRAILSID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn goalExplosionId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerLoadout::VT_GOALEXPLOSIONID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn loadoutPaint(&self) -> Option<LoadoutPaint<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<LoadoutPaint<'a>>>(
+                        PlayerLoadout::VT_LOADOUTPAINT,
+                        None,
+                    )
+            }
+        }
+
+        pub struct PlayerLoadoutArgs<'a> {
+            pub teamColorId: i32,
+            pub customColorId: i32,
+            pub carId: i32,
+            pub decalId: i32,
+            pub wheelsId: i32,
+            pub boostId: i32,
+            pub antennaId: i32,
+            pub hatId: i32,
+            pub paintFinishId: i32,
+            pub customFinishId: i32,
+            pub engineAudioId: i32,
+            pub trailsId: i32,
+            pub goalExplosionId: i32,
+            pub loadoutPaint: Option<flatbuffers::WIPOffset<LoadoutPaint<'a>>>,
+        }
+        impl<'a> Default for PlayerLoadoutArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                PlayerLoadoutArgs {
+                    teamColorId: 0,
+                    customColorId: 0,
+                    carId: 0,
+                    decalId: 0,
+                    wheelsId: 0,
+                    boostId: 0,
+                    antennaId: 0,
+                    hatId: 0,
+                    paintFinishId: 0,
+                    customFinishId: 0,
+                    engineAudioId: 0,
+                    trailsId: 0,
+                    goalExplosionId: 0,
+                    loadoutPaint: None,
+                }
+            }
+        }
+        pub struct PlayerLoadoutBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> PlayerLoadoutBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_teamColorId(&mut self, teamColorId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_TEAMCOLORID, teamColorId, 0);
+            }
+            #[inline]
+            pub fn add_customColorId(&mut self, customColorId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_CUSTOMCOLORID, customColorId, 0);
+            }
+            #[inline]
+            pub fn add_carId(&mut self, carId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_CARID, carId, 0);
+            }
+            #[inline]
+            pub fn add_decalId(&mut self, decalId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_DECALID, decalId, 0);
+            }
+            #[inline]
+            pub fn add_wheelsId(&mut self, wheelsId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_WHEELSID, wheelsId, 0);
+            }
+            #[inline]
+            pub fn add_boostId(&mut self, boostId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_BOOSTID, boostId, 0);
+            }
+            #[inline]
+            pub fn add_antennaId(&mut self, antennaId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_ANTENNAID, antennaId, 0);
+            }
+            #[inline]
+            pub fn add_hatId(&mut self, hatId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_HATID, hatId, 0);
+            }
+            #[inline]
+            pub fn add_paintFinishId(&mut self, paintFinishId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_PAINTFINISHID, paintFinishId, 0);
+            }
+            #[inline]
+            pub fn add_customFinishId(&mut self, customFinishId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_CUSTOMFINISHID, customFinishId, 0);
+            }
+            #[inline]
+            pub fn add_engineAudioId(&mut self, engineAudioId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_ENGINEAUDIOID, engineAudioId, 0);
+            }
+            #[inline]
+            pub fn add_trailsId(&mut self, trailsId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_TRAILSID, trailsId, 0);
+            }
+            #[inline]
+            pub fn add_goalExplosionId(&mut self, goalExplosionId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerLoadout::VT_GOALEXPLOSIONID, goalExplosionId, 0);
+            }
+            #[inline]
+            pub fn add_loadoutPaint(
+                &mut self,
+                loadoutPaint: flatbuffers::WIPOffset<LoadoutPaint<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<LoadoutPaint<'_>>>(
+                        PlayerLoadout::VT_LOADOUTPAINT,
+                        loadoutPaint,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> PlayerLoadoutBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                PlayerLoadoutBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<PlayerLoadout<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        /// Specification for 'painted' items. See https://github.com/RLBot/RLBot/wiki/Bot-Customization
+        pub enum LoadoutPaintOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct LoadoutPaint<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for LoadoutPaint<'a> {
+            type Inner = LoadoutPaint<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> LoadoutPaint<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                LoadoutPaint { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args LoadoutPaintArgs,
+            ) -> flatbuffers::WIPOffset<LoadoutPaint<'bldr>> {
+                let mut builder = LoadoutPaintBuilder::new(_fbb);
+                builder.add_goalExplosionPaintId(args.goalExplosionPaintId);
+                builder.add_trailsPaintId(args.trailsPaintId);
+                builder.add_hatPaintId(args.hatPaintId);
+                builder.add_antennaPaintId(args.antennaPaintId);
+                builder.add_boostPaintId(args.boostPaintId);
+                builder.add_wheelsPaintId(args.wheelsPaintId);
+                builder.add_decalPaintId(args.decalPaintId);
+                builder.add_carPaintId(args.carPaintId);
+                builder.finish()
+            }
+
+            pub const VT_CARPAINTID: flatbuffers::VOffsetT = 4;
+            pub const VT_DECALPAINTID: flatbuffers::VOffsetT = 6;
+            pub const VT_WHEELSPAINTID: flatbuffers::VOffsetT = 8;
+            pub const VT_BOOSTPAINTID: flatbuffers::VOffsetT = 10;
+            pub const VT_ANTENNAPAINTID: flatbuffers::VOffsetT = 12;
+            pub const VT_HATPAINTID: flatbuffers::VOffsetT = 14;
+            pub const VT_TRAILSPAINTID: flatbuffers::VOffsetT = 16;
+            pub const VT_GOALEXPLOSIONPAINTID: flatbuffers::VOffsetT = 18;
+
+            #[inline]
+            pub fn carPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_CARPAINTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn decalPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_DECALPAINTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn wheelsPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_WHEELSPAINTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn boostPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_BOOSTPAINTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn antennaPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_ANTENNAPAINTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn hatPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_HATPAINTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn trailsPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_TRAILSPAINTID, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn goalExplosionPaintId(&self) -> i32 {
+                self._tab
+                    .get::<i32>(LoadoutPaint::VT_GOALEXPLOSIONPAINTID, Some(0))
+                    .unwrap()
+            }
+        }
+
+        pub struct LoadoutPaintArgs {
+            pub carPaintId: i32,
+            pub decalPaintId: i32,
+            pub wheelsPaintId: i32,
+            pub boostPaintId: i32,
+            pub antennaPaintId: i32,
+            pub hatPaintId: i32,
+            pub trailsPaintId: i32,
+            pub goalExplosionPaintId: i32,
+        }
+        impl<'a> Default for LoadoutPaintArgs {
+            #[inline]
+            fn default() -> Self {
+                LoadoutPaintArgs {
+                    carPaintId: 0,
+                    decalPaintId: 0,
+                    wheelsPaintId: 0,
+                    boostPaintId: 0,
+                    antennaPaintId: 0,
+                    hatPaintId: 0,
+                    trailsPaintId: 0,
+                    goalExplosionPaintId: 0,
+                }
+            }
+        }
+        pub struct LoadoutPaintBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> LoadoutPaintBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_carPaintId(&mut self, carPaintId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(LoadoutPaint::VT_CARPAINTID, carPaintId, 0);
+            }
+            #[inline]
+            pub fn add_decalPaintId(&mut self, decalPaintId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(LoadoutPaint::VT_DECALPAINTID, decalPaintId, 0);
+            }
+            #[inline]
+            pub fn add_wheelsPaintId(&mut self, wheelsPaintId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(LoadoutPaint::VT_WHEELSPAINTID, wheelsPaintId, 0);
+            }
+            #[inline]
+            pub fn add_boostPaintId(&mut self, boostPaintId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(LoadoutPaint::VT_BOOSTPAINTID, boostPaintId, 0);
+            }
+            #[inline]
+            pub fn add_antennaPaintId(&mut self, antennaPaintId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(LoadoutPaint::VT_ANTENNAPAINTID, antennaPaintId, 0);
+            }
+            #[inline]
+            pub fn add_hatPaintId(&mut self, hatPaintId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(LoadoutPaint::VT_HATPAINTID, hatPaintId, 0);
+            }
+            #[inline]
+            pub fn add_trailsPaintId(&mut self, trailsPaintId: i32) {
+                self.fbb_
+                    .push_slot::<i32>(LoadoutPaint::VT_TRAILSPAINTID, trailsPaintId, 0);
+            }
+            #[inline]
+            pub fn add_goalExplosionPaintId(&mut self, goalExplosionPaintId: i32) {
+                self.fbb_.push_slot::<i32>(
+                    LoadoutPaint::VT_GOALEXPLOSIONPAINTID,
+                    goalExplosionPaintId,
+                    0,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> LoadoutPaintBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                LoadoutPaintBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<LoadoutPaint<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        pub enum PlayerConfigurationOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct PlayerConfiguration<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for PlayerConfiguration<'a> {
+            type Inner = PlayerConfiguration<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> PlayerConfiguration<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                PlayerConfiguration { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args PlayerConfigurationArgs<'args>,
+            ) -> flatbuffers::WIPOffset<PlayerConfiguration<'bldr>> {
+                let mut builder = PlayerConfigurationBuilder::new(_fbb);
+                if let Some(x) = args.loadout {
+                    builder.add_loadout(x);
+                }
+                builder.add_team(args.team);
+                if let Some(x) = args.name {
+                    builder.add_name(x);
+                }
+                if let Some(x) = args.playerClass {
+                    builder.add_playerClass(x);
+                }
+                builder.add_playerClass_type(args.playerClass_type);
+                builder.finish()
+            }
+
+            pub const VT_PLAYERCLASS_TYPE: flatbuffers::VOffsetT = 4;
+            pub const VT_PLAYERCLASS: flatbuffers::VOffsetT = 6;
+            pub const VT_NAME: flatbuffers::VOffsetT = 8;
+            pub const VT_TEAM: flatbuffers::VOffsetT = 10;
+            pub const VT_LOADOUT: flatbuffers::VOffsetT = 12;
+
+            #[inline]
+            pub fn playerClass_type(&self) -> PlayerClass {
+                self._tab
+                    .get::<PlayerClass>(
+                        PlayerConfiguration::VT_PLAYERCLASS_TYPE,
+                        Some(PlayerClass::NONE),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn playerClass(&self) -> Option<flatbuffers::Table<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<flatbuffers::Table<'a>>>(
+                        PlayerConfiguration::VT_PLAYERCLASS,
+                        None,
+                    )
+            }
+            #[inline]
+            pub fn name(&self) -> Option<&'a str> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<&str>>(PlayerConfiguration::VT_NAME, None)
+            }
+            #[inline]
+            pub fn team(&self) -> i32 {
+                self._tab
+                    .get::<i32>(PlayerConfiguration::VT_TEAM, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn loadout(&self) -> Option<PlayerLoadout<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<PlayerLoadout<'a>>>(
+                        PlayerConfiguration::VT_LOADOUT,
+                        None,
+                    )
+            }
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn playerClass_as_rlbot_player(&'a self) -> Option<RLBotPlayer<'_>> {
+                if self.playerClass_type() == PlayerClass::RLBotPlayer {
+                    self.playerClass().map(|u| RLBotPlayer::init_from_table(u))
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn playerClass_as_human_player(&'a self) -> Option<HumanPlayer<'_>> {
+                if self.playerClass_type() == PlayerClass::HumanPlayer {
+                    self.playerClass().map(|u| HumanPlayer::init_from_table(u))
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn playerClass_as_psyonix_bot_player(&'a self) -> Option<PsyonixBotPlayer<'_>> {
+                if self.playerClass_type() == PlayerClass::PsyonixBotPlayer {
+                    self.playerClass()
+                        .map(|u| PsyonixBotPlayer::init_from_table(u))
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn playerClass_as_party_member_bot_player(
+                &'a self,
+            ) -> Option<PartyMemberBotPlayer<'_>> {
+                if self.playerClass_type() == PlayerClass::PartyMemberBotPlayer {
+                    self.playerClass()
+                        .map(|u| PartyMemberBotPlayer::init_from_table(u))
+                } else {
+                    None
+                }
+            }
+        }
+
+        pub struct PlayerConfigurationArgs<'a> {
+            pub playerClass_type: PlayerClass,
+            pub playerClass: Option<flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>>,
+            pub name: Option<flatbuffers::WIPOffset<&'a str>>,
+            pub team: i32,
+            pub loadout: Option<flatbuffers::WIPOffset<PlayerLoadout<'a>>>,
+        }
+        impl<'a> Default for PlayerConfigurationArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                PlayerConfigurationArgs {
+                    playerClass_type: PlayerClass::NONE,
+                    playerClass: None,
+                    name: None,
+                    team: 0,
+                    loadout: None,
+                }
+            }
+        }
+        pub struct PlayerConfigurationBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> PlayerConfigurationBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_playerClass_type(&mut self, playerClass_type: PlayerClass) {
+                self.fbb_.push_slot::<PlayerClass>(
+                    PlayerConfiguration::VT_PLAYERCLASS_TYPE,
+                    playerClass_type,
+                    PlayerClass::NONE,
+                );
+            }
+            #[inline]
+            pub fn add_playerClass(
+                &mut self,
+                playerClass: flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>,
+            ) {
+                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
+                    PlayerConfiguration::VT_PLAYERCLASS,
+                    playerClass,
+                );
+            }
+            #[inline]
+            pub fn add_name(&mut self, name: flatbuffers::WIPOffset<&'b str>) {
+                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
+                    PlayerConfiguration::VT_NAME,
+                    name,
+                );
+            }
+            #[inline]
+            pub fn add_team(&mut self, team: i32) {
+                self.fbb_
+                    .push_slot::<i32>(PlayerConfiguration::VT_TEAM, team, 0);
+            }
+            #[inline]
+            pub fn add_loadout(&mut self, loadout: flatbuffers::WIPOffset<PlayerLoadout<'b>>) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<PlayerLoadout<'_>>>(
+                        PlayerConfiguration::VT_LOADOUT,
+                        loadout,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> PlayerConfigurationBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                PlayerConfigurationBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<PlayerConfiguration<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        pub enum MutatorSettingsOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct MutatorSettings<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for MutatorSettings<'a> {
+            type Inner = MutatorSettings<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> MutatorSettings<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                MutatorSettings { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args MutatorSettingsArgs,
+            ) -> flatbuffers::WIPOffset<MutatorSettings<'bldr>> {
+                let mut builder = MutatorSettingsBuilder::new(_fbb);
+                builder.add_respawnTimeOption(args.respawnTimeOption);
+                builder.add_demolishOption(args.demolishOption);
+                builder.add_gravityOption(args.gravityOption);
+                builder.add_boostStrengthOption(args.boostStrengthOption);
+                builder.add_rumbleOption(args.rumbleOption);
+                builder.add_boostOption(args.boostOption);
+                builder.add_ballBouncinessOption(args.ballBouncinessOption);
+                builder.add_ballSizeOption(args.ballSizeOption);
+                builder.add_ballWeightOption(args.ballWeightOption);
+                builder.add_ballTypeOption(args.ballTypeOption);
+                builder.add_ballMaxSpeedOption(args.ballMaxSpeedOption);
+                builder.add_gameSpeedOption(args.gameSpeedOption);
+                builder.add_seriesLengthOption(args.seriesLengthOption);
+                builder.add_overtimeOption(args.overtimeOption);
+                builder.add_maxScore(args.maxScore);
+                builder.add_matchLength(args.matchLength);
+                builder.finish()
+            }
+
+            pub const VT_MATCHLENGTH: flatbuffers::VOffsetT = 4;
+            pub const VT_MAXSCORE: flatbuffers::VOffsetT = 6;
+            pub const VT_OVERTIMEOPTION: flatbuffers::VOffsetT = 8;
+            pub const VT_SERIESLENGTHOPTION: flatbuffers::VOffsetT = 10;
+            pub const VT_GAMESPEEDOPTION: flatbuffers::VOffsetT = 12;
+            pub const VT_BALLMAXSPEEDOPTION: flatbuffers::VOffsetT = 14;
+            pub const VT_BALLTYPEOPTION: flatbuffers::VOffsetT = 16;
+            pub const VT_BALLWEIGHTOPTION: flatbuffers::VOffsetT = 18;
+            pub const VT_BALLSIZEOPTION: flatbuffers::VOffsetT = 20;
+            pub const VT_BALLBOUNCINESSOPTION: flatbuffers::VOffsetT = 22;
+            pub const VT_BOOSTOPTION: flatbuffers::VOffsetT = 24;
+            pub const VT_RUMBLEOPTION: flatbuffers::VOffsetT = 26;
+            pub const VT_BOOSTSTRENGTHOPTION: flatbuffers::VOffsetT = 28;
+            pub const VT_GRAVITYOPTION: flatbuffers::VOffsetT = 30;
+            pub const VT_DEMOLISHOPTION: flatbuffers::VOffsetT = 32;
+            pub const VT_RESPAWNTIMEOPTION: flatbuffers::VOffsetT = 34;
+
+            #[inline]
+            pub fn matchLength(&self) -> MatchLength {
+                self._tab
+                    .get::<MatchLength>(
+                        MutatorSettings::VT_MATCHLENGTH,
+                        Some(MatchLength::Five_Minutes),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn maxScore(&self) -> MaxScore {
+                self._tab
+                    .get::<MaxScore>(MutatorSettings::VT_MAXSCORE, Some(MaxScore::Unlimited))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn overtimeOption(&self) -> OvertimeOption {
+                self._tab
+                    .get::<OvertimeOption>(
+                        MutatorSettings::VT_OVERTIMEOPTION,
+                        Some(OvertimeOption::Unlimited),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn seriesLengthOption(&self) -> SeriesLengthOption {
+                self._tab
+                    .get::<SeriesLengthOption>(
+                        MutatorSettings::VT_SERIESLENGTHOPTION,
+                        Some(SeriesLengthOption::Unlimited),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn gameSpeedOption(&self) -> GameSpeedOption {
+                self._tab
+                    .get::<GameSpeedOption>(
+                        MutatorSettings::VT_GAMESPEEDOPTION,
+                        Some(GameSpeedOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn ballMaxSpeedOption(&self) -> BallMaxSpeedOption {
+                self._tab
+                    .get::<BallMaxSpeedOption>(
+                        MutatorSettings::VT_BALLMAXSPEEDOPTION,
+                        Some(BallMaxSpeedOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn ballTypeOption(&self) -> BallTypeOption {
+                self._tab
+                    .get::<BallTypeOption>(
+                        MutatorSettings::VT_BALLTYPEOPTION,
+                        Some(BallTypeOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn ballWeightOption(&self) -> BallWeightOption {
+                self._tab
+                    .get::<BallWeightOption>(
+                        MutatorSettings::VT_BALLWEIGHTOPTION,
+                        Some(BallWeightOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn ballSizeOption(&self) -> BallSizeOption {
+                self._tab
+                    .get::<BallSizeOption>(
+                        MutatorSettings::VT_BALLSIZEOPTION,
+                        Some(BallSizeOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn ballBouncinessOption(&self) -> BallBouncinessOption {
+                self._tab
+                    .get::<BallBouncinessOption>(
+                        MutatorSettings::VT_BALLBOUNCINESSOPTION,
+                        Some(BallBouncinessOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn boostOption(&self) -> BoostOption {
+                self._tab
+                    .get::<BoostOption>(
+                        MutatorSettings::VT_BOOSTOPTION,
+                        Some(BoostOption::Normal_Boost),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn rumbleOption(&self) -> RumbleOption {
+                self._tab
+                    .get::<RumbleOption>(MutatorSettings::VT_RUMBLEOPTION, Some(RumbleOption::None))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn boostStrengthOption(&self) -> BoostStrengthOption {
+                self._tab
+                    .get::<BoostStrengthOption>(
+                        MutatorSettings::VT_BOOSTSTRENGTHOPTION,
+                        Some(BoostStrengthOption::One),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn gravityOption(&self) -> GravityOption {
+                self._tab
+                    .get::<GravityOption>(
+                        MutatorSettings::VT_GRAVITYOPTION,
+                        Some(GravityOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn demolishOption(&self) -> DemolishOption {
+                self._tab
+                    .get::<DemolishOption>(
+                        MutatorSettings::VT_DEMOLISHOPTION,
+                        Some(DemolishOption::Default),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn respawnTimeOption(&self) -> RespawnTimeOption {
+                self._tab
+                    .get::<RespawnTimeOption>(
+                        MutatorSettings::VT_RESPAWNTIMEOPTION,
+                        Some(RespawnTimeOption::Three_Seconds),
+                    )
+                    .unwrap()
+            }
+        }
+
+        pub struct MutatorSettingsArgs {
+            pub matchLength: MatchLength,
+            pub maxScore: MaxScore,
+            pub overtimeOption: OvertimeOption,
+            pub seriesLengthOption: SeriesLengthOption,
+            pub gameSpeedOption: GameSpeedOption,
+            pub ballMaxSpeedOption: BallMaxSpeedOption,
+            pub ballTypeOption: BallTypeOption,
+            pub ballWeightOption: BallWeightOption,
+            pub ballSizeOption: BallSizeOption,
+            pub ballBouncinessOption: BallBouncinessOption,
+            pub boostOption: BoostOption,
+            pub rumbleOption: RumbleOption,
+            pub boostStrengthOption: BoostStrengthOption,
+            pub gravityOption: GravityOption,
+            pub demolishOption: DemolishOption,
+            pub respawnTimeOption: RespawnTimeOption,
+        }
+        impl<'a> Default for MutatorSettingsArgs {
+            #[inline]
+            fn default() -> Self {
+                MutatorSettingsArgs {
+                    matchLength: MatchLength::Five_Minutes,
+                    maxScore: MaxScore::Unlimited,
+                    overtimeOption: OvertimeOption::Unlimited,
+                    seriesLengthOption: SeriesLengthOption::Unlimited,
+                    gameSpeedOption: GameSpeedOption::Default,
+                    ballMaxSpeedOption: BallMaxSpeedOption::Default,
+                    ballTypeOption: BallTypeOption::Default,
+                    ballWeightOption: BallWeightOption::Default,
+                    ballSizeOption: BallSizeOption::Default,
+                    ballBouncinessOption: BallBouncinessOption::Default,
+                    boostOption: BoostOption::Normal_Boost,
+                    rumbleOption: RumbleOption::None,
+                    boostStrengthOption: BoostStrengthOption::One,
+                    gravityOption: GravityOption::Default,
+                    demolishOption: DemolishOption::Default,
+                    respawnTimeOption: RespawnTimeOption::Three_Seconds,
+                }
+            }
+        }
+        pub struct MutatorSettingsBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> MutatorSettingsBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_matchLength(&mut self, matchLength: MatchLength) {
+                self.fbb_.push_slot::<MatchLength>(
+                    MutatorSettings::VT_MATCHLENGTH,
+                    matchLength,
+                    MatchLength::Five_Minutes,
+                );
+            }
+            #[inline]
+            pub fn add_maxScore(&mut self, maxScore: MaxScore) {
+                self.fbb_.push_slot::<MaxScore>(
+                    MutatorSettings::VT_MAXSCORE,
+                    maxScore,
+                    MaxScore::Unlimited,
+                );
+            }
+            #[inline]
+            pub fn add_overtimeOption(&mut self, overtimeOption: OvertimeOption) {
+                self.fbb_.push_slot::<OvertimeOption>(
+                    MutatorSettings::VT_OVERTIMEOPTION,
+                    overtimeOption,
+                    OvertimeOption::Unlimited,
+                );
+            }
+            #[inline]
+            pub fn add_seriesLengthOption(&mut self, seriesLengthOption: SeriesLengthOption) {
+                self.fbb_.push_slot::<SeriesLengthOption>(
+                    MutatorSettings::VT_SERIESLENGTHOPTION,
+                    seriesLengthOption,
+                    SeriesLengthOption::Unlimited,
+                );
+            }
+            #[inline]
+            pub fn add_gameSpeedOption(&mut self, gameSpeedOption: GameSpeedOption) {
+                self.fbb_.push_slot::<GameSpeedOption>(
+                    MutatorSettings::VT_GAMESPEEDOPTION,
+                    gameSpeedOption,
+                    GameSpeedOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_ballMaxSpeedOption(&mut self, ballMaxSpeedOption: BallMaxSpeedOption) {
+                self.fbb_.push_slot::<BallMaxSpeedOption>(
+                    MutatorSettings::VT_BALLMAXSPEEDOPTION,
+                    ballMaxSpeedOption,
+                    BallMaxSpeedOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_ballTypeOption(&mut self, ballTypeOption: BallTypeOption) {
+                self.fbb_.push_slot::<BallTypeOption>(
+                    MutatorSettings::VT_BALLTYPEOPTION,
+                    ballTypeOption,
+                    BallTypeOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_ballWeightOption(&mut self, ballWeightOption: BallWeightOption) {
+                self.fbb_.push_slot::<BallWeightOption>(
+                    MutatorSettings::VT_BALLWEIGHTOPTION,
+                    ballWeightOption,
+                    BallWeightOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_ballSizeOption(&mut self, ballSizeOption: BallSizeOption) {
+                self.fbb_.push_slot::<BallSizeOption>(
+                    MutatorSettings::VT_BALLSIZEOPTION,
+                    ballSizeOption,
+                    BallSizeOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_ballBouncinessOption(&mut self, ballBouncinessOption: BallBouncinessOption) {
+                self.fbb_.push_slot::<BallBouncinessOption>(
+                    MutatorSettings::VT_BALLBOUNCINESSOPTION,
+                    ballBouncinessOption,
+                    BallBouncinessOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_boostOption(&mut self, boostOption: BoostOption) {
+                self.fbb_.push_slot::<BoostOption>(
+                    MutatorSettings::VT_BOOSTOPTION,
+                    boostOption,
+                    BoostOption::Normal_Boost,
+                );
+            }
+            #[inline]
+            pub fn add_rumbleOption(&mut self, rumbleOption: RumbleOption) {
+                self.fbb_.push_slot::<RumbleOption>(
+                    MutatorSettings::VT_RUMBLEOPTION,
+                    rumbleOption,
+                    RumbleOption::None,
+                );
+            }
+            #[inline]
+            pub fn add_boostStrengthOption(&mut self, boostStrengthOption: BoostStrengthOption) {
+                self.fbb_.push_slot::<BoostStrengthOption>(
+                    MutatorSettings::VT_BOOSTSTRENGTHOPTION,
+                    boostStrengthOption,
+                    BoostStrengthOption::One,
+                );
+            }
+            #[inline]
+            pub fn add_gravityOption(&mut self, gravityOption: GravityOption) {
+                self.fbb_.push_slot::<GravityOption>(
+                    MutatorSettings::VT_GRAVITYOPTION,
+                    gravityOption,
+                    GravityOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_demolishOption(&mut self, demolishOption: DemolishOption) {
+                self.fbb_.push_slot::<DemolishOption>(
+                    MutatorSettings::VT_DEMOLISHOPTION,
+                    demolishOption,
+                    DemolishOption::Default,
+                );
+            }
+            #[inline]
+            pub fn add_respawnTimeOption(&mut self, respawnTimeOption: RespawnTimeOption) {
+                self.fbb_.push_slot::<RespawnTimeOption>(
+                    MutatorSettings::VT_RESPAWNTIMEOPTION,
+                    respawnTimeOption,
+                    RespawnTimeOption::Three_Seconds,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> MutatorSettingsBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                MutatorSettingsBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<MutatorSettings<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        pub enum MatchSettingsOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct MatchSettings<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for MatchSettings<'a> {
+            type Inner = MatchSettings<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> MatchSettings<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                MatchSettings { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args MatchSettingsArgs<'args>,
+            ) -> flatbuffers::WIPOffset<MatchSettings<'bldr>> {
+                let mut builder = MatchSettingsBuilder::new(_fbb);
+                if let Some(x) = args.mutatorSettings {
+                    builder.add_mutatorSettings(x);
+                }
+                if let Some(x) = args.playerConfigurations {
+                    builder.add_playerConfigurations(x);
+                }
+                builder.add_instantStart(args.instantStart);
+                builder.add_skipReplays(args.skipReplays);
+                builder.add_gameMap(args.gameMap);
+                builder.add_gameMode(args.gameMode);
+                builder.finish()
+            }
+
+            pub const VT_PLAYERCONFIGURATIONS: flatbuffers::VOffsetT = 4;
+            pub const VT_GAMEMODE: flatbuffers::VOffsetT = 6;
+            pub const VT_GAMEMAP: flatbuffers::VOffsetT = 8;
+            pub const VT_SKIPREPLAYS: flatbuffers::VOffsetT = 10;
+            pub const VT_INSTANTSTART: flatbuffers::VOffsetT = 12;
+            pub const VT_MUTATORSETTINGS: flatbuffers::VOffsetT = 14;
+
+            #[inline]
+            pub fn playerConfigurations(
+                &self,
+            ) -> Option<
+                flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PlayerConfiguration<'a>>>,
+            > {
+                self._tab.get::<flatbuffers::ForwardsUOffset<
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<PlayerConfiguration<'a>>>,
+                >>(MatchSettings::VT_PLAYERCONFIGURATIONS, None)
+            }
+            #[inline]
+            pub fn gameMode(&self) -> GameMode {
+                self._tab
+                    .get::<GameMode>(MatchSettings::VT_GAMEMODE, Some(GameMode::Soccer))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn gameMap(&self) -> GameMap {
+                self._tab
+                    .get::<GameMap>(MatchSettings::VT_GAMEMAP, Some(GameMap::DFHStadium))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn skipReplays(&self) -> bool {
+                self._tab
+                    .get::<bool>(MatchSettings::VT_SKIPREPLAYS, Some(false))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn instantStart(&self) -> bool {
+                self._tab
+                    .get::<bool>(MatchSettings::VT_INSTANTSTART, Some(false))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn mutatorSettings(&self) -> Option<MutatorSettings<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<MutatorSettings<'a>>>(
+                        MatchSettings::VT_MUTATORSETTINGS,
+                        None,
+                    )
+            }
+        }
+
+        pub struct MatchSettingsArgs<'a> {
+            pub playerConfigurations: Option<
+                flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'a, flatbuffers::ForwardsUOffset<PlayerConfiguration<'a>>>,
+                >,
+            >,
+            pub gameMode: GameMode,
+            pub gameMap: GameMap,
+            pub skipReplays: bool,
+            pub instantStart: bool,
+            pub mutatorSettings: Option<flatbuffers::WIPOffset<MutatorSettings<'a>>>,
+        }
+        impl<'a> Default for MatchSettingsArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                MatchSettingsArgs {
+                    playerConfigurations: None,
+                    gameMode: GameMode::Soccer,
+                    gameMap: GameMap::DFHStadium,
+                    skipReplays: false,
+                    instantStart: false,
+                    mutatorSettings: None,
+                }
+            }
+        }
+        pub struct MatchSettingsBuilder<'a: 'b, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> MatchSettingsBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_playerConfigurations(
+                &mut self,
+                playerConfigurations: flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'b, flatbuffers::ForwardsUOffset<PlayerConfiguration<'b>>>,
+                >,
+            ) {
+                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
+                    MatchSettings::VT_PLAYERCONFIGURATIONS,
+                    playerConfigurations,
+                );
+            }
+            #[inline]
+            pub fn add_gameMode(&mut self, gameMode: GameMode) {
+                self.fbb_.push_slot::<GameMode>(
+                    MatchSettings::VT_GAMEMODE,
+                    gameMode,
+                    GameMode::Soccer,
+                );
+            }
+            #[inline]
+            pub fn add_gameMap(&mut self, gameMap: GameMap) {
+                self.fbb_.push_slot::<GameMap>(
+                    MatchSettings::VT_GAMEMAP,
+                    gameMap,
+                    GameMap::DFHStadium,
+                );
+            }
+            #[inline]
+            pub fn add_skipReplays(&mut self, skipReplays: bool) {
+                self.fbb_
+                    .push_slot::<bool>(MatchSettings::VT_SKIPREPLAYS, skipReplays, false);
+            }
+            #[inline]
+            pub fn add_instantStart(&mut self, instantStart: bool) {
+                self.fbb_
+                    .push_slot::<bool>(MatchSettings::VT_INSTANTSTART, instantStart, false);
+            }
+            #[inline]
+            pub fn add_mutatorSettings(
+                &mut self,
+                mutatorSettings: flatbuffers::WIPOffset<MutatorSettings<'b>>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<MutatorSettings<'_>>>(
+                        MatchSettings::VT_MUTATORSETTINGS,
+                        mutatorSettings,
+                    );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> MatchSettingsBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                MatchSettingsBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<MatchSettings<'a>> {
                 let o = self.fbb_.end_table(self.start_);
                 flatbuffers::WIPOffset::new(o.value())
             }

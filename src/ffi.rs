@@ -25,6 +25,7 @@ pub enum RLBotCoreStatus {
     InvalidQuickChatPreset = 17,
     InvalidRenderType = 18,
     QuickChatRateExceeded = 19,
+    NotInitialized = 20,
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
@@ -87,11 +88,18 @@ pub struct TileInfo {
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
+pub struct TeamInfo {
+    pub TeamIndex: ::std::os::raw::c_int,
+    pub Score: ::std::os::raw::c_int,
+}
+#[repr(C)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct Touch {
     pub PlayerName: [u16; 32usize],
     pub TimeSeconds: f32,
     pub HitLocation: Vector3,
     pub HitNormal: Vector3,
+    pub Team: ::std::os::raw::c_int,
 }
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
@@ -109,7 +117,7 @@ pub struct Slice {
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct BallPredictionPacket {
-    pub Slice: [Slice; 3600usize],
+    pub Slice: [Slice; 360usize],
     pub NumSlices: ::std::os::raw::c_int,
 }
 impl Default for BallPredictionPacket {
@@ -135,6 +143,7 @@ pub struct GameInfo {
     pub KickoffPause: bool,
     pub MatchEnded: bool,
     pub WorldGravityZ: f32,
+    pub GameSpeed: f32,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -147,6 +156,8 @@ pub struct LiveDataPacket {
     pub GameInfo: GameInfo,
     pub GameTiles: [TileInfo; 200usize],
     pub NumTiles: ::std::os::raw::c_int,
+    pub Teams: [TeamInfo; 2usize],
+    pub NumTeams: ::std::os::raw::c_int,
 }
 impl Default for LiveDataPacket {
     fn default() -> Self {
