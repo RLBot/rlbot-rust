@@ -36,6 +36,10 @@ impl<'a> Physicist<'a> {
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
     #[allow(clippy::should_implement_trait)]
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
+    #[allow(deprecated)]
     pub fn next(&mut self) -> Result<ffi::RigidBodyTick, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next()?))
     }
@@ -44,6 +48,10 @@ impl<'a> Physicist<'a> {
     ///
     /// If there is a tick that is newer than the previous tick, it is
     /// returned. Otherwise, `None` is returned.
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
+    #[allow(deprecated)]
     pub fn try_next(&mut self) -> Result<Option<ffi::RigidBodyTick>, Box<dyn Error>> {
         let mut result = unsafe { mem::uninitialized() };
         self.rlbot.update_rigid_body_tick(&mut result)?;

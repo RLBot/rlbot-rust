@@ -8,6 +8,7 @@ use std::{error::Error, thread, time::Duration};
 mod common;
 
 #[test]
+#[allow(deprecated)]
 fn integration_player_input() -> Result<(), Box<dyn Error>> {
     common::with_rocket_league(|| {
         let rlbot = rlbot::init()?;

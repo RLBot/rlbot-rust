@@ -12,16 +12,15 @@ fn integration_packeteer_happy() -> Result<(), Box<dyn Error>> {
     common::with_rocket_league(|| {
         let rlbot = rlbot::init()?;
 
-        rlbot.start_match(rlbot::ffi::MatchSettings::rlbot_vs_allstar(
-            "Hero", "Villain",
-        ))?;
+        #[allow(deprecated)]
+        {
+            rlbot.start_match(rlbot::ffi::MatchSettings::rlbot_vs_allstar(
+                "Hero", "Villain",
+            ))?;
+        }
         rlbot.wait_for_match_start()?;
 
         let mut packeteer = rlbot.packeteer();
-        let first = packeteer.next()?.GameInfo.TimeSeconds;
-        let second = packeteer.next()?.GameInfo.TimeSeconds;
-        assert!(second > first);
-
         let first = packeteer
             .next_flatbuffer()?
             .gameInfo()

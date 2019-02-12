@@ -39,6 +39,10 @@ impl<'a> Packeteer<'a> {
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
     #[allow(clippy::should_implement_trait)]
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
+    #[allow(deprecated)]
     pub fn next(&mut self) -> Result<LiveDataPacket, Box<dyn Error>> {
         self.spin(Self::try_next)
     }
@@ -47,6 +51,10 @@ impl<'a> Packeteer<'a> {
     ///
     /// If there is a packet that is newer than the previous packet, it is
     /// returned. Otherwise, `None` is returned.
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
+    #[allow(deprecated)]
     pub fn try_next(&mut self) -> Result<Option<LiveDataPacket>, Box<dyn Error>> {
         let mut packet = unsafe { mem::uninitialized() };
         self.rlbot.update_live_data_packet(&mut packet)?;

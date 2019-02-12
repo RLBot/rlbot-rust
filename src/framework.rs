@@ -54,6 +54,7 @@ pub trait Bot {
 /// See [`examples/bot`] for a complete example.
 ///
 /// [`examples/bot`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/bot/main.rs
+#[allow(deprecated)]
 pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<dyn Error>> {
     let args = parse_framework_args()
         .map_err(|_| Box::<dyn Error>::from("could not parse framework arguments"))?

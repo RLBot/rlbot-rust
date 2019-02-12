@@ -19,13 +19,16 @@ fn main() -> Result<(), Box<dyn Error>> {
         match_settings.PlayerConfiguration[i].set_name(a);
         match_settings.PlayerConfiguration[i].Team = (i % 2) as u8;
     }
-    rlbot.start_match(match_settings)?;
+    #[allow(deprecated)]
+    {
+        rlbot.start_match(match_settings)?;
+    }
     rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();
     loop {
-        let packet = packets.next()?;
-        let mut total_ms = (packet.GameInfo.TimeSeconds * 1000.0) as i32;
+        let packet = packets.next_flatbuffer()?;
+        let mut total_ms = (packet.gameInfo().unwrap().secondsElapsed() * 1000.0) as i32;
         let ms = total_ms % 1000;
         total_ms -= ms;
         let sec = total_ms / 1000 % 60;

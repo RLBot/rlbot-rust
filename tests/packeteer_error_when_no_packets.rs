@@ -15,7 +15,6 @@ fn integration_packeteer_error_when_no_packets() -> Result<(), Box<dyn Error>> {
         // We never started a match, so no gameplay packets should ever come. We should
         // get *maybe* one initial empty packet, but after that, only errors.
         let mut packeteer = rlbot.packeteer();
-        assert!(packeteer.next().is_err() || packeteer.next().is_err());
         assert!(packeteer.next_flatbuffer().is_err() || packeteer.next_flatbuffer().is_err());
         Ok(())
     })
