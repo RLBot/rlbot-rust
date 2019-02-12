@@ -138,20 +138,21 @@ bindgen \
     --raw-line '#![allow(non_camel_case_types, non_snake_case, missing_docs)]' \
     --whitelist-function BallPrediction::GetBallPrediction \
     --whitelist-function BallPrediction::GetBallPredictionStruct \
-    --whitelist-function Interface::IsInitialized \
     --whitelist-function GameFunctions::Free \
     --whitelist-function GameFunctions::SetGameState \
     --whitelist-function GameFunctions::StartMatch \
-    --whitelist-function GameFunctions::UpdateFieldInfo \
+    --whitelist-function GameFunctions::StartMatchFlatbuffer \
     --whitelist-function GameFunctions::UpdateFieldInfoFlatbuffer \
-    --whitelist-function GameFunctions::UpdateLiveDataPacket \
+    --whitelist-function GameFunctions::UpdateFieldInfo \
     --whitelist-function GameFunctions::UpdateLiveDataPacketFlatbuffer \
-    --whitelist-function GameFunctions::UpdateRigidBodyTick \
+    --whitelist-function GameFunctions::UpdateLiveDataPacket \
     --whitelist-function GameFunctions::UpdateRigidBodyTickFlatbuffer \
+    --whitelist-function GameFunctions::UpdateRigidBodyTick \
     --whitelist-function GameFunctions::SendQuickChat \
     --whitelist-function GameFunctions::SendChat \
     --whitelist-function GameFunctions::UpdatePlayerInput \
     --whitelist-function GameFunctions::UpdatePlayerInputFlatbuffer \
+    --whitelist-function Interface::IsInitialized \
     --whitelist-function RenderFunctions::RenderGroup \
     -- \
     -fdeclspec \

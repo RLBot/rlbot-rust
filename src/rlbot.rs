@@ -252,6 +252,16 @@ impl RLBot {
         core_result(status)
     }
 
+    /// Tell RLBot to start a match. The buffer must be built from a
+    /// [`flat::QuickChat`].
+    pub fn start_match_flatbuffer(&self, match_settings_buffer: &[u8]) -> Result<(), RLBotError> {
+        let status = (self.interface.start_match_flatbuffer)(
+            match_settings_buffer.as_ptr() as *mut c_void,
+            match_settings_buffer.len() as c_int,
+        );
+        core_result(status)
+    }
+
     /// Spin-waits until a match is active.
     ///
     /// Call `start_match` before calling this method.
