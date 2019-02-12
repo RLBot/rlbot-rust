@@ -10,11 +10,16 @@ env:
   - FEATURES='--no-default-features --features strict'
   - FEATURES='--features strict'
 
+before_script:
+  - rustup component add clippy
+
 script:
   - cargo clippy --all-targets $FEATURES
   - cargo test $FEATURES
 
 matrix:
+  allow_failures:
+    - rust: nightly
   include:
     - rust: nightly
       env: {}
