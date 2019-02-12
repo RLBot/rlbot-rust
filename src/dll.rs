@@ -26,6 +26,10 @@ type StartMatch = extern "C" fn(
     callback: CallbackFunction,
     pID: *mut ::std::os::raw::c_uint,
 ) -> RLBotCoreStatus;
+type StartMatchFlatbuffer = extern "C" fn(
+    startMatchSettings: *mut ::std::os::raw::c_void,
+    size: ::std::os::raw::c_int,
+) -> RLBotCoreStatus;
 type SendQuickChat = extern "C" fn(
     quickChatMessage: *mut ::std::os::raw::c_void,
     protoSize: ::std::os::raw::c_int,
@@ -65,6 +69,7 @@ pub struct RLBotCoreInterface {
     pub free: Free,
     pub set_game_state: SetGameState,
     pub start_match: StartMatch,
+    pub start_match_flatbuffer: StartMatchFlatbuffer,
     /// FlatBuffer version of send_chat
     pub send_quick_chat: SendQuickChat,
     pub send_chat: SendChat,
@@ -103,6 +108,7 @@ impl RLBotCoreInterface {
                 free: *library.get(b"Free")?,
                 set_game_state: *library.get(b"SetGameState")?,
                 start_match: *library.get(b"StartMatch")?,
+                start_match_flatbuffer: *library.get(b"StartMatchFlatbuffer")?,
                 send_quick_chat: *library.get(b"SendQuickChat")?,
                 send_chat: *library.get(b"SendChat")?,
                 update_player_input: *library.get(b"UpdatePlayerInput")?,
