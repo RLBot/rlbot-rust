@@ -8,9 +8,12 @@ use std::{error::Error, thread::sleep, time::Duration};
 fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
-    rlbot.start_match(rlbot::ffi::MatchSettings::allstar_vs_allstar(
-        "Noisy", "Silent",
-    ))?;
+    #[allow(deprecated)]
+    {
+        rlbot.start_match(rlbot::ffi::MatchSettings::allstar_vs_allstar(
+            "Noisy", "Silent",
+        ))?;
+    }
     rlbot.wait_for_match_start()?;
 
     loop {

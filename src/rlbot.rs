@@ -127,6 +127,9 @@ impl RLBot {
     }
 
     /// Sends player input to RLBot.
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
     pub fn update_player_input(
         &self,
         player_input: ffi::PlayerInput,
@@ -152,6 +155,9 @@ impl RLBot {
     /// Grabs the current [`LiveDataPacket`](ffi::LiveDataPacket) from RLBot.
     /// Consider using [`packeteer`](RLBot::packeteer) instead for a more
     /// convenient interface.
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
     pub fn update_live_data_packet(
         &self,
         packet: &mut ffi::LiveDataPacket,
@@ -175,12 +181,18 @@ impl RLBot {
     }
 
     /// Grabs the current physics tick as a struct.
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
     pub fn update_rigid_body_tick(&self, tick: &mut ffi::RigidBodyTick) -> Result<(), RLBotError> {
         let status = (self.interface.update_rigid_body_tick)(tick);
         core_result(status)
     }
 
     /// Grabs the current [`ffi::FieldInfo`] from RLBot
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
     pub fn update_field_info(&self, field_info: &mut ffi::FieldInfo) -> Result<(), RLBotError> {
         let status = (self.interface.update_field_info)(field_info);
         core_result(status)
@@ -232,6 +244,9 @@ impl RLBot {
     }
 
     /// Tell RLBot to start a match.
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
     pub fn start_match(&self, match_settings: ffi::MatchSettings) -> Result<(), RLBotError> {
         let status = (self.interface.start_match)(match_settings, None, null_mut());
         core_result(status)
@@ -288,6 +303,9 @@ impl RLBot {
     ///
     /// Note that this method requires the framework's `BallPrediction.exe` to
     /// be running in the background.
+    #[deprecated(
+        note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
+    )]
     pub fn get_ball_prediction_struct(
         &self,
         result: &mut ffi::BallPredictionPacket,
@@ -334,6 +352,7 @@ mod tests {
 
         let rlbot: RLBot = unsafe { mem::uninitialized() };
         assert_send(rlbot.physicist().next_flat()?);
+        #[allow(deprecated)]
         assert_send(rlbot.packeteer().next()?);
         assert_send(rlbot.packeteer().next_flatbuffer()?);
         assert_send(rlbot.update_live_data_packet_flatbuffer());
