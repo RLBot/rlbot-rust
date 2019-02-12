@@ -23,10 +23,3 @@ repos:
         # Skip the slow tests that launch the game
         entry: cargo test -- --skip integration
         pass_filenames: false
-
-      - id: doc
-        name: doc
-        language: system
-        files: '[.]rs$'
-        entry: cargo +nightly rustdoc -- --deny warnings
-        pass_filenames: false
