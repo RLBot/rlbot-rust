@@ -7579,33 +7579,33 @@ pub mod rlbot {
                 if let Some(x) = args.name {
                     builder.add_name(x);
                 }
-                if let Some(x) = args.playerClass {
-                    builder.add_playerClass(x);
+                if let Some(x) = args.variety {
+                    builder.add_variety(x);
                 }
-                builder.add_playerClass_type(args.playerClass_type);
+                builder.add_variety_type(args.variety_type);
                 builder.finish()
             }
 
-            pub const VT_PLAYERCLASS_TYPE: flatbuffers::VOffsetT = 4;
-            pub const VT_PLAYERCLASS: flatbuffers::VOffsetT = 6;
+            pub const VT_VARIETY_TYPE: flatbuffers::VOffsetT = 4;
+            pub const VT_VARIETY: flatbuffers::VOffsetT = 6;
             pub const VT_NAME: flatbuffers::VOffsetT = 8;
             pub const VT_TEAM: flatbuffers::VOffsetT = 10;
             pub const VT_LOADOUT: flatbuffers::VOffsetT = 12;
 
             #[inline]
-            pub fn playerClass_type(&self) -> PlayerClass {
+            pub fn variety_type(&self) -> PlayerClass {
                 self._tab
                     .get::<PlayerClass>(
-                        PlayerConfiguration::VT_PLAYERCLASS_TYPE,
+                        PlayerConfiguration::VT_VARIETY_TYPE,
                         Some(PlayerClass::NONE),
                     )
                     .unwrap()
             }
             #[inline]
-            pub fn playerClass(&self) -> Option<flatbuffers::Table<'a>> {
+            pub fn variety(&self) -> Option<flatbuffers::Table<'a>> {
                 self._tab
                     .get::<flatbuffers::ForwardsUOffset<flatbuffers::Table<'a>>>(
-                        PlayerConfiguration::VT_PLAYERCLASS,
+                        PlayerConfiguration::VT_VARIETY,
                         None,
                     )
             }
@@ -7630,9 +7630,9 @@ pub mod rlbot {
             }
             #[inline]
             #[allow(non_snake_case)]
-            pub fn playerClass_as_rlbot_player(&'a self) -> Option<RLBotPlayer<'_>> {
-                if self.playerClass_type() == PlayerClass::RLBotPlayer {
-                    self.playerClass().map(|u| RLBotPlayer::init_from_table(u))
+            pub fn variety_as_rlbot_player(&'a self) -> Option<RLBotPlayer<'_>> {
+                if self.variety_type() == PlayerClass::RLBotPlayer {
+                    self.variety().map(|u| RLBotPlayer::init_from_table(u))
                 } else {
                     None
                 }
@@ -7640,9 +7640,9 @@ pub mod rlbot {
 
             #[inline]
             #[allow(non_snake_case)]
-            pub fn playerClass_as_human_player(&'a self) -> Option<HumanPlayer<'_>> {
-                if self.playerClass_type() == PlayerClass::HumanPlayer {
-                    self.playerClass().map(|u| HumanPlayer::init_from_table(u))
+            pub fn variety_as_human_player(&'a self) -> Option<HumanPlayer<'_>> {
+                if self.variety_type() == PlayerClass::HumanPlayer {
+                    self.variety().map(|u| HumanPlayer::init_from_table(u))
                 } else {
                     None
                 }
@@ -7650,10 +7650,9 @@ pub mod rlbot {
 
             #[inline]
             #[allow(non_snake_case)]
-            pub fn playerClass_as_psyonix_bot_player(&'a self) -> Option<PsyonixBotPlayer<'_>> {
-                if self.playerClass_type() == PlayerClass::PsyonixBotPlayer {
-                    self.playerClass()
-                        .map(|u| PsyonixBotPlayer::init_from_table(u))
+            pub fn variety_as_psyonix_bot_player(&'a self) -> Option<PsyonixBotPlayer<'_>> {
+                if self.variety_type() == PlayerClass::PsyonixBotPlayer {
+                    self.variety().map(|u| PsyonixBotPlayer::init_from_table(u))
                 } else {
                     None
                 }
@@ -7661,11 +7660,11 @@ pub mod rlbot {
 
             #[inline]
             #[allow(non_snake_case)]
-            pub fn playerClass_as_party_member_bot_player(
+            pub fn variety_as_party_member_bot_player(
                 &'a self,
             ) -> Option<PartyMemberBotPlayer<'_>> {
-                if self.playerClass_type() == PlayerClass::PartyMemberBotPlayer {
-                    self.playerClass()
+                if self.variety_type() == PlayerClass::PartyMemberBotPlayer {
+                    self.variety()
                         .map(|u| PartyMemberBotPlayer::init_from_table(u))
                 } else {
                     None
@@ -7674,8 +7673,8 @@ pub mod rlbot {
         }
 
         pub struct PlayerConfigurationArgs<'a> {
-            pub playerClass_type: PlayerClass,
-            pub playerClass: Option<flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>>,
+            pub variety_type: PlayerClass,
+            pub variety: Option<flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>>,
             pub name: Option<flatbuffers::WIPOffset<&'a str>>,
             pub team: i32,
             pub loadout: Option<flatbuffers::WIPOffset<PlayerLoadout<'a>>>,
@@ -7684,8 +7683,8 @@ pub mod rlbot {
             #[inline]
             fn default() -> Self {
                 PlayerConfigurationArgs {
-                    playerClass_type: PlayerClass::NONE,
-                    playerClass: None,
+                    variety_type: PlayerClass::NONE,
+                    variety: None,
                     name: None,
                     team: 0,
                     loadout: None,
@@ -7698,21 +7697,21 @@ pub mod rlbot {
         }
         impl<'a: 'b, 'b> PlayerConfigurationBuilder<'a, 'b> {
             #[inline]
-            pub fn add_playerClass_type(&mut self, playerClass_type: PlayerClass) {
+            pub fn add_variety_type(&mut self, variety_type: PlayerClass) {
                 self.fbb_.push_slot::<PlayerClass>(
-                    PlayerConfiguration::VT_PLAYERCLASS_TYPE,
-                    playerClass_type,
+                    PlayerConfiguration::VT_VARIETY_TYPE,
+                    variety_type,
                     PlayerClass::NONE,
                 );
             }
             #[inline]
-            pub fn add_playerClass(
+            pub fn add_variety(
                 &mut self,
-                playerClass: flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>,
+                variety: flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>,
             ) {
                 self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
-                    PlayerConfiguration::VT_PLAYERCLASS,
-                    playerClass,
+                    PlayerConfiguration::VT_VARIETY,
+                    variety,
                 );
             }
             #[inline]
