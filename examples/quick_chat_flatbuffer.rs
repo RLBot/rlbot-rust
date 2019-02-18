@@ -8,7 +8,7 @@ use std::{error::Error, thread::sleep, time::Duration};
 fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
-    rlbot.start_match(rlbot::MatchSettings::allstar_vs_allstar(
+    rlbot.start_match(&rlbot::MatchSettings::allstar_vs_allstar(
         "Blabbermouth",
         "Strong, silent type",
     ))?;

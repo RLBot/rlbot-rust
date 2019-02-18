@@ -9,7 +9,7 @@ use std::{error::Error, f32::consts::PI};
 fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
-    rlbot.start_match(rlbot::MatchSettings::allstar_vs_allstar(
+    rlbot.start_match(&rlbot::MatchSettings::allstar_vs_allstar(
         "Leonardo",
         "Michelangelo",
     ))?;

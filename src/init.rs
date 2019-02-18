@@ -27,7 +27,7 @@ pub fn init() -> Result<RLBot, Box<dyn Error>> {
 /// # fn main() -> Result<(), Box<::std::error::Error>> {
 /// let rlbot = rlbot::init()?;
 ///
-/// rlbot.start_match(rlbot::MatchSettings::rlbot_vs_allstar("Hero", "Villain"))?;
+/// rlbot.start_match(&rlbot::MatchSettings::rlbot_vs_allstar("Hero", "Villain"))?;
 /// rlbot.wait_for_match_start()?;
 ///
 /// let mut packets = rlbot.packeteer();
@@ -35,7 +35,7 @@ pub fn init() -> Result<RLBot, Box<dyn Error>> {
 ///     let packet = packets.next()?;
 ///     let player_index = 0;
 ///     let input: rlbot::ControllerState = Default::default();
-///     rlbot.update_player_input(player_index, input)?;
+///     rlbot.update_player_input(player_index, &input)?;
 /// }
 /// # }
 /// ```
