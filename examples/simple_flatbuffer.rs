@@ -15,7 +15,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     #[allow(deprecated)]
     {
-        rlbot.start_match(MatchSettings::rlbot_vs_allstar("ATBA", "All-Star"))?;
+        rlbot
+            .interface
+            .start_match(MatchSettings::rlbot_vs_allstar("ATBA", "All-Star"))?;
     }
     rlbot.wait_for_match_start()?;
 
@@ -28,7 +30,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         // available, so this loop will not roast your CPU :)
         if packet.gameInfo().unwrap().isRoundActive() {
             let input = get_input(&packet);
-            rlbot.update_player_input_flatbuffer(input.finished_data())?;
+            rlbot
+                .interface
+                .update_player_input_flatbuffer(input.finished_data())?;
         }
     }
 }

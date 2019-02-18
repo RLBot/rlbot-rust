@@ -76,7 +76,7 @@ impl<'a> RenderGroup<'a> {
 
         self.builder.finish(render_group, None);
         let data = self.builder.finished_data();
-        self.rlbot.render_group(data)?;
+        self.rlbot.interface.render_group(data)?;
         Ok(())
     }
 

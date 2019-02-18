@@ -118,21 +118,24 @@
 #![warn(missing_docs, clippy::all)]
 #![allow(intra_doc_link_resolution_failure)]
 
-pub mod ffi;
 pub use crate::{
     framework::{parse_framework_args, run_bot, Bot, FrameworkArgs},
+    init::{init, init_with_options, InitOptions},
     packeteer::Packeteer,
     physicist::Physicist,
     render::{Color, RenderGroup},
-    rlbot::{init, init_with_options, InitOptions, RLBot},
+    rlbot::RLBot,
     rlbot_generated::rlbot::flat,
 };
 
 mod dll;
 mod error;
+pub mod ffi;
 mod ffi_impls;
 mod framework;
+mod init;
 mod inject;
+mod interface;
 mod packeteer;
 mod physicist;
 mod render;

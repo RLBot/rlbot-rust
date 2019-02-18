@@ -14,9 +14,11 @@ fn integration_physicist_flat_happy() -> Result<(), Box<dyn Error>> {
 
         #[allow(deprecated)]
         {
-            rlbot.start_match(rlbot::ffi::MatchSettings::rlbot_vs_allstar(
-                "Hero", "Villain",
-            ))?;
+            rlbot
+                .interface
+                .start_match(rlbot::ffi::MatchSettings::rlbot_vs_allstar(
+                    "Hero", "Villain",
+                ))?;
         }
         rlbot.wait_for_match_start()?;
 

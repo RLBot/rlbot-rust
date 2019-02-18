@@ -1,12 +1,9 @@
 use crate::{ffi::*, utils::maybe_join};
 use libloading::Library;
 use std::{
-    error::Error,
     io,
     path::Path,
     sync::atomic::{AtomicBool, Ordering},
-    thread::sleep,
-    time::Duration,
 };
 
 // These type signatures came from bindgen.
@@ -119,16 +116,5 @@ impl RLBotCoreInterface {
                 get_ball_prediction_struct: *library.get(b"GetBallPredictionStruct")?,
             })
         }
-    }
-
-    pub fn wait_for_initialized(&self) -> Result<(), Box<dyn Error>> {
-        for _ in 0..100 {
-            if (self.is_initialized)() {
-                return Ok(());
-            }
-            sleep(Duration::from_millis(10));
-        }
-
-        Err(From::from("RLBot did not become initialized"))
     }
 }
