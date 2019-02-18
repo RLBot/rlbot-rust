@@ -19,17 +19,18 @@ fn integration_player_input() -> Result<(), Box<dyn Error>> {
         let mut packeteer = rlbot.packeteer();
         let start = packeteer.next()?;
 
-        let input = rlbot::ffi::PlayerInput {
-            Throttle: 1.0,
+        let input = rlbot::ControllerState {
+            throttle: 1.0,
             ..Default::default()
         };
-        rlbot.interface.update_player_input(input, 0)?;
+        rlbot.update_player_input(0, input)?;
 
         thread::sleep(Duration::from_secs(1));
         let end = packeteer.next()?;
 
-        // The car should be accelerating forward.
-        assert!(end.GameCars[0].Physics.Location.Y > start.GameCars[0].Physics.Location.Y);
+        // The car is facing the Y direction. It should be moving forward.
+        assert!(end.GameCars[0].Physics.Location.Y > start.GameCars[0].Physics.Location.Y + 500.0);
+        assert!(end.GameCars[0].Physics.Velocity.Y > 500.0);
         Ok(())
     })
 }
