@@ -127,6 +127,7 @@ pub use crate::{
     render::{Color, RenderGroup},
     rlbot::RLBot,
     rlbot_generated::rlbot::flat,
+    state::*,
 };
 
 mod dll;
@@ -144,7 +145,7 @@ mod render;
 mod rlbot;
 #[allow(non_camel_case_types, non_snake_case, missing_docs, clippy::all)]
 mod rlbot_generated;
-pub mod state;
+mod state;
 mod state_convert;
 #[cfg(feature = "use-nalgebra")]
 mod state_nalgebra;
