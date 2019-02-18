@@ -1,9 +1,9 @@
 //! This module handles injecting the core DLL, using RLBot's provided
 //! injector. It is basically a reimplementation of
-//! https://github.com/RLBot/RLBot/blob/928d0b1660618ef2c88b8aaf218189e8fb6b744b/src/main/python/rlbot/utils/structures/game_interface.py#L175
+//! https://github.com/RLBot/RLBot/blob/2e4124f0d8f1196ad4eeb73c74d07469a16de9a2/src/main/python/rlbot/utils/structures/game_interface.py#L189
 
 use crate::utils::maybe_join;
-use std::{error::Error, fmt, mem, path::Path, process::Command, thread::sleep, time::Duration};
+use std::{error::Error, fmt, mem, path::Path, process::Command};
 
 pub fn inject_dll(rlbot_dll_directory: Option<&Path>) -> Result<InjectorCode, Box<dyn Error>> {
     let program = maybe_join(rlbot_dll_directory, "RLBot_Injector");
@@ -15,12 +15,7 @@ pub fn inject_dll(rlbot_dll_directory: Option<&Path>) -> Result<InjectorCode, Bo
 
     let code: InjectorCode = unsafe { mem::transmute(code) };
     match code {
-        InjectorCode::InjectionSuccessful => {
-            // If rlbot is freshly injected, give it some time to sink its hooks in.
-            sleep(Duration::from_secs(20));
-            Ok(code)
-        }
-        InjectorCode::RLBotDLLAlreadyInjected => Ok(code),
+        InjectorCode::InjectionSuccessful | InjectorCode::RLBotDLLAlreadyInjected => Ok(code),
         _ => Err(From::from(code)),
     }
 }
