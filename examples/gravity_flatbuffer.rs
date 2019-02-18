@@ -11,7 +11,7 @@ use std::error::Error;
 fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
-    rlbot.start_match(rlbot::MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;
+    rlbot.start_match(&rlbot::MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;
     rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();

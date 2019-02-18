@@ -13,7 +13,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
     let player_index = 0;
-    rlbot.start_match(rlbot::MatchSettings::rlbot_vs_allstar("ATBA", "All-Star"))?;
+    rlbot.start_match(&rlbot::MatchSettings::rlbot_vs_allstar("ATBA", "All-Star"))?;
     rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();
@@ -25,7 +25,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         // available, so this loop will not roast your CPU :)
         if packet.ball.is_some() {
             let input = get_input(&packet);
-            rlbot.update_player_input(player_index, input)?;
+            rlbot.update_player_input(player_index, &input)?;
         }
     }
 }

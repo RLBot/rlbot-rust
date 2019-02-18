@@ -186,7 +186,7 @@ pub struct GameTickPacket {
 
 pub(crate) fn build_update_player_input(
     player_index: i32,
-    controller_state: ControllerState,
+    controller_state: &ControllerState,
 ) -> flatbuffers::FlatBufferBuilder<'static> {
     let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(64);
 

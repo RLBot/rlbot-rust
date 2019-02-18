@@ -50,7 +50,7 @@ impl RLBot {
     pub fn update_player_input(
         &self,
         player_index: i32,
-        controller_state: ControllerState,
+        controller_state: &ControllerState,
     ) -> Result<(), RLBotError> {
         let built = build_update_player_input(player_index, controller_state);
         self.interface
@@ -60,14 +60,14 @@ impl RLBot {
     /// Sets the game state.
     pub fn set_game_state(
         &self,
-        desired_game_state: state::DesiredGameState,
+        desired_game_state: &state::DesiredGameState,
     ) -> Result<(), RLBotError> {
         let buffer = desired_game_state.serialize();
         self.interface.set_game_state(buffer.finished_data())
     }
 
     /// Tells RLBot to start a match.
-    pub fn start_match(&self, match_settings: MatchSettings<'_>) -> Result<(), Box<dyn Error>> {
+    pub fn start_match(&self, match_settings: &MatchSettings<'_>) -> Result<(), Box<dyn Error>> {
         let buffer = match_settings.build();
         self.interface
             .start_match_flatbuffer(buffer.finished_data())?;
