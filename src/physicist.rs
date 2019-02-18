@@ -54,7 +54,7 @@ impl<'a> Physicist<'a> {
     #[allow(deprecated)]
     pub fn try_next(&mut self) -> Result<Option<ffi::RigidBodyTick>, Box<dyn Error>> {
         let mut result = unsafe { mem::uninitialized() };
-        self.rlbot.interface.update_rigid_body_tick(&mut result)?;
+        self.rlbot.interface().update_rigid_body_tick(&mut result)?;
         if result.Ball.State.Frame != self.prev_ball_frame {
             self.prev_ball_frame = result.Ball.State.Frame;
             Ok(Some(result))
@@ -79,7 +79,7 @@ impl<'a> Physicist<'a> {
     /// If there is a tick that is newer than the previous tick, it is
     /// returned. Otherwise, `None` is returned.
     pub fn try_next_flat<'fb>(&mut self) -> Option<flat::RigidBodyTick<'fb>> {
-        if let Some(tick) = self.rlbot.interface.update_rigid_body_tick_flatbuffer() {
+        if let Some(tick) = self.rlbot.interface().update_rigid_body_tick_flatbuffer() {
             let ball = tick.ball();
             match ball.as_ref().and_then(|b| b.state()).map(|s| s.frame()) {
                 Some(ball_frame) if ball_frame != self.prev_ball_frame => {

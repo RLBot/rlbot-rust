@@ -13,8 +13,7 @@ use std::{cell::Cell, error::Error, marker::PhantomData};
 /// The low-level interface to RLBot. All RLBot calls that are available can be
 /// made through this struct.
 pub struct RLBot {
-    /// Gives direct access to the FFI methods in `RLBotInterface.dll`.
-    pub interface: RLBotInterface,
+    interface: RLBotInterface,
     /// I strongly doubt the RLBot DLL is thread-safe, so let's enforce that
     /// restriction.
     ///
@@ -28,6 +27,11 @@ impl RLBot {
             interface,
             not_sync: PhantomData,
         }
+    }
+
+    /// Gives direct access to the FFI methods in `RLBotInterface.dll`.
+    pub fn interface(&self) -> &RLBotInterface {
+        &self.interface
     }
 
     /// Returns a [`Packeteer`] object, for conveniently accessing game state
