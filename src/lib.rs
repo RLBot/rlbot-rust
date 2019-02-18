@@ -121,6 +121,7 @@
 pub use crate::{
     framework::{parse_framework_args, run_bot, Bot, FrameworkArgs},
     init::{init, init_with_options, InitOptions},
+    match_settings::*,
     packeteer::Packeteer,
     physicist::Physicist,
     render::{Color, RenderGroup},
@@ -136,6 +137,7 @@ mod framework;
 mod init;
 mod inject;
 mod interface;
+mod match_settings;
 mod packeteer;
 mod physicist;
 mod render;

@@ -1,6 +1,6 @@
 use crate::{
-    error::RLBotError, interface::RLBotInterface, packeteer::Packeteer, physicist::Physicist,
-    render::RenderGroup, state,
+    error::RLBotError, interface::RLBotInterface, match_settings::MatchSettings,
+    packeteer::Packeteer, physicist::Physicist, render::RenderGroup, state,
 };
 use std::{cell::Cell, error::Error, marker::PhantomData};
 
@@ -43,6 +43,14 @@ impl RLBot {
     ) -> Result<(), RLBotError> {
         let buffer = desired_game_state.serialize();
         self.interface.set_game_state(buffer.finished_data())
+    }
+
+    /// Tells RLBot to start a match.
+    pub fn start_match(&self, match_settings: MatchSettings<'_>) -> Result<(), Box<dyn Error>> {
+        let buffer = match_settings.build();
+        self.interface
+            .start_match_flatbuffer(buffer.finished_data())?;
+        Ok(())
     }
 
     /// Spin-waits until a match is active.
