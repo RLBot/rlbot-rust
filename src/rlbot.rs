@@ -120,7 +120,6 @@ mod tests {
 
         let rlbot: RLBot = unsafe { mem::uninitialized() };
         assert_send(rlbot.physicist().next_flat()?);
-        #[allow(deprecated)]
         assert_send(rlbot.packeteer().next()?);
         assert_send(rlbot.packeteer().next_flatbuffer()?);
         Ok(())

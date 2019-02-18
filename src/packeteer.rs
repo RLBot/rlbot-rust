@@ -1,6 +1,8 @@
 #![allow(clippy::float_cmp)]
 
-use crate::{ffi::LiveDataPacket, rlbot::RLBot, rlbot_generated::rlbot::flat::GameTickPacket};
+use crate::{
+    ffi, flat, game::GameTickPacket, game_deserialize::deserialize_game_tick_packet, rlbot::RLBot,
+};
 use std::{
     error::Error,
     mem,
@@ -30,8 +32,8 @@ impl<'a> Packeteer<'a> {
         }
     }
 
-    /// Block until we receive the next unique [`LiveDataPacket`], and then
-    /// return it.
+    /// Blocks until we receive the next unique [`GameTickPacket`], and then
+    /// returns it.
     ///
     /// # Errors
     ///
@@ -39,15 +41,35 @@ impl<'a> Packeteer<'a> {
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
     #[allow(clippy::should_implement_trait)]
+    pub fn next(&mut self) -> Result<GameTickPacket, Box<dyn Error>> {
+        self.next_flatbuffer().map(deserialize_game_tick_packet)
+    }
+
+    /// Polls for the next unique [`GameTickPacket`].
+    ///
+    /// If there is a packet that is newer than the previous packet, it is
+    /// returned. Otherwise, `None` is returned.
+    pub fn try_next(&mut self) -> Option<GameTickPacket> {
+        self.try_next_flat().map(deserialize_game_tick_packet)
+    }
+
+    /// Blocks until we receive the next unique [`ffi::LiveDataPacket`], and
+    /// then returns it.
+    ///
+    /// # Errors
+    ///
+    /// This function returns an error if ten seconds pass without a new
+    /// packet being received. The assumption is that the game froze or
+    /// crashed, and waiting longer will not help.
     #[deprecated(
         note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
     )]
     #[allow(deprecated)]
-    pub fn next(&mut self) -> Result<LiveDataPacket, Box<dyn Error>> {
-        self.spin(Self::try_next)
+    pub fn next_ffi(&mut self) -> Result<ffi::LiveDataPacket, Box<dyn Error>> {
+        self.spin(Self::try_next_ffi)
     }
 
-    /// Polls for the next [`LiveDataPacket`].
+    /// Polls for the next unique [`ffi::LiveDataPacket`].
     ///
     /// If there is a packet that is newer than the previous packet, it is
     /// returned. Otherwise, `None` is returned.
@@ -55,7 +77,7 @@ impl<'a> Packeteer<'a> {
         note = "the struct-based methods are deprecated; use the flatbuffer equivalents instead"
     )]
     #[allow(deprecated)]
-    pub fn try_next(&mut self) -> Result<Option<LiveDataPacket>, Box<dyn Error>> {
+    pub fn try_next_ffi(&mut self) -> Result<Option<ffi::LiveDataPacket>, Box<dyn Error>> {
         let mut packet = unsafe { mem::uninitialized() };
         self.rlbot.interface.update_live_data_packet(&mut packet)?;
 
@@ -68,23 +90,23 @@ impl<'a> Packeteer<'a> {
         }
     }
 
-    /// Block until we receive the next unique [`GameTickPacket`], and then
-    /// return it.
+    /// Blocks until we receive the next unique [`flat::GameTickPacket`], and
+    /// then returns it.
     ///
     /// # Errors
     ///
     /// This function returns an error if ten seconds pass without a new
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
-    pub fn next_flatbuffer<'fb>(&mut self) -> Result<GameTickPacket<'fb>, Box<dyn Error>> {
+    pub fn next_flatbuffer<'fb>(&mut self) -> Result<flat::GameTickPacket<'fb>, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next_flat()))
     }
 
-    /// Polls for the next [`GameTickPacket`].
+    /// Polls for the next unique [`flat::GameTickPacket`].
     ///
     /// If there is a packet that is newer than the previous packet, it is
     /// returned. Otherwise, `None` is returned.
-    pub fn try_next_flat<'fb>(&mut self) -> Option<GameTickPacket<'fb>> {
+    pub fn try_next_flat<'fb>(&mut self) -> Option<flat::GameTickPacket<'fb>> {
         if let Some(packet) = self.rlbot.interface.update_live_data_packet_flatbuffer() {
             let game_time = packet.gameInfo().map(|gi| gi.secondsElapsed());
             if let Some(game_time) = game_time {
