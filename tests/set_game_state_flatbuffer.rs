@@ -12,10 +12,7 @@ fn integration_set_game_state() -> Result<(), Box<dyn Error>> {
     common::with_rocket_league(|| {
         let rlbot = rlbot::init()?;
 
-        #[allow(deprecated)]
-        {
-            rlbot.interface.start_match(common::one_player_match())?;
-        }
+        rlbot.start_match(common::one_player_match())?;
         rlbot.wait_for_match_start()?;
 
         let desired_state = teleport_to_sky();
