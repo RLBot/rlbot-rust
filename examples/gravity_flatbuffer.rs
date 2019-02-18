@@ -24,7 +24,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         if packet.gameInfo().unwrap().isRoundActive() && i % 8 == 0 {
             let desired_state = get_desired_state(&packet);
             rlbot
-                .interface
+                .interface()
                 .set_game_state(desired_state.finished_data())?;
         }
         i += 1;

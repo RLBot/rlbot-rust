@@ -26,7 +26,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         if packet.gameInfo().unwrap().isRoundActive() {
             let input = get_input(&packet);
             rlbot
-                .interface
+                .interface()
                 .update_player_input_flatbuffer(input.finished_data())?;
         }
     }

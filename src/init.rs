@@ -24,22 +24,18 @@ pub fn init() -> Result<RLBot, Box<dyn Error>> {
 /// # Example
 ///
 /// ```no_run
-/// # use rlbot::ffi::MatchSettings;
-/// # use rlbot::flat;
-/// #
 /// # fn main() -> Result<(), Box<::std::error::Error>> {
 /// let rlbot = rlbot::init()?;
-/// rlbot.interface.start_match(MatchSettings::rlbot_vs_allstar("Hero", "Villain"))?;
+///
+/// rlbot.start_match(rlbot::MatchSettings::rlbot_vs_allstar("Hero", "Villain"))?;
 /// rlbot.wait_for_match_start()?;
 ///
 /// let mut packets = rlbot.packeteer();
 /// loop {
-///     let packet = packets.next_flatbuffer()?;
-///     let input_args: flat::PlayerInputArgs = Default::default();
-///     let mut builder = flatbuffers::FlatBufferBuilder::new_with_capacity(1024);
-///     let player_input = flat::PlayerInput::create(&mut builder, &input_args);
-///     builder.finish(player_input, None);
-///     rlbot.interface.update_player_input_flatbuffer(builder.finished_data())?;
+///     let packet = packets.next()?;
+///     let player_index = 0;
+///     let input: rlbot::ControllerState = Default::default();
+///     rlbot.update_player_input(player_index, input)?;
 /// }
 /// # }
 /// ```

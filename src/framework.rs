@@ -70,7 +70,7 @@ pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<dyn Error>> {
     loop {
         let packet = packets.next_ffi()?;
         let input = bot.tick(&packet);
-        rlbot.interface.update_player_input(input, player_index)?;
+        rlbot.interface().update_player_input(input, player_index)?;
     }
 }
 

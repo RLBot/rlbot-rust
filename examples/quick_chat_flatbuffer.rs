@@ -17,7 +17,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     loop {
         sleep(Duration::from_secs(1));
         let result = rlbot
-            .interface
+            .interface()
             .send_quick_chat(build_chat().finished_data());
         if let Err(error) = result {
             println!("{:?}", error);
