@@ -524,6 +524,14 @@ impl<'a> MatchSettings<'a> {
         Self::default()
     }
 
+    /// Create a `MatchSettings` for a 1v1 game with two RLBot-controlled bots.
+    pub fn rlbot_vs_rlbot(blue_name: &'a str, orange_name: &'a str) -> Self {
+        Self::new().player_configurations(vec![
+            PlayerConfiguration::new(PlayerClass::RLBotPlayer, blue_name, 0),
+            PlayerConfiguration::new(PlayerClass::RLBotPlayer, orange_name, 1),
+        ])
+    }
+
     /// Create a `MatchSettings` for a 1v1 game with Team Blue as an
     /// RLBot-controlled bot, and Team Orange as a Psyonix all-star bot.
     pub fn rlbot_vs_allstar(rlbot_name: &'a str, allstar_name: &'a str) -> Self {
