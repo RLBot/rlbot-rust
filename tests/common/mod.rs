@@ -67,12 +67,11 @@ impl TerminateProcess for Process {
     }
 }
 
-pub fn one_player_match() -> rlbot::ffi::MatchSettings {
-    let mut result = rlbot::ffi::MatchSettings::default();
-    // One is the loneliest number
-    result.NumPlayers = 1;
-    result.PlayerConfiguration[0].Bot = true;
-    result.PlayerConfiguration[0].RLBotControlled = true;
-    result.PlayerConfiguration[0].set_name("Chell");
-    result
+// One is the loneliest number
+pub fn one_player_match() -> rlbot::MatchSettings<'static> {
+    rlbot::MatchSettings::new().player_configurations(vec![rlbot::PlayerConfiguration::new(
+        rlbot::PlayerClass::RLBotPlayer,
+        "Chell",
+        0,
+    )])
 }

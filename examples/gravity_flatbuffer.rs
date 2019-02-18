@@ -5,18 +5,13 @@
 #![warn(clippy::all)]
 
 use na::{Unit, Vector3};
-use rlbot::{ffi::MatchSettings, flat};
+use rlbot::flat;
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
-    #[allow(deprecated)]
-    {
-        rlbot
-            .interface
-            .start_match(MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;
-    }
+    rlbot.start_match(rlbot::MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;
     rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();

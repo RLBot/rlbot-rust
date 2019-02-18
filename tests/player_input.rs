@@ -13,7 +13,7 @@ fn integration_player_input() -> Result<(), Box<dyn Error>> {
     common::with_rocket_league(|| {
         let rlbot = rlbot::init()?;
 
-        rlbot.interface.start_match(common::one_player_match())?;
+        rlbot.start_match(common::one_player_match())?;
         rlbot.wait_for_match_start()?;
 
         let mut packeteer = rlbot.packeteer();

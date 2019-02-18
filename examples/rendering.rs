@@ -4,25 +4,15 @@
 #![cfg_attr(feature = "strict", deny(warnings))]
 #![warn(clippy::all)]
 
-use rlbot::ffi;
 use std::{error::Error, f32::consts::PI};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
 
-    let mut match_settings = ffi::MatchSettings::default();
-    let players = ["Leonardo", "Michelangelo", "Donatello", "Raphael"];
-    match_settings.NumPlayers = players.len() as i32;
-    for (i, a) in players.iter().enumerate() {
-        match_settings.PlayerConfiguration[i].Bot = true;
-        match_settings.PlayerConfiguration[i].RLBotControlled = true;
-        match_settings.PlayerConfiguration[i].set_name(a);
-        match_settings.PlayerConfiguration[i].Team = (i % 2) as u8;
-    }
-    #[allow(deprecated)]
-    {
-        rlbot.interface.start_match(match_settings)?;
-    }
+    rlbot.start_match(rlbot::MatchSettings::allstar_vs_allstar(
+        "Leonardo",
+        "Michelangelo",
+    ))?;
     rlbot.wait_for_match_start()?;
 
     let mut packets = rlbot.packeteer();
