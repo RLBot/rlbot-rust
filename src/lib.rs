@@ -120,6 +120,7 @@
 
 pub use crate::{
     framework::{parse_framework_args, run_bot, Bot, FrameworkArgs},
+    game::ControllerState,
     init::{init, init_with_options, InitOptions},
     match_settings::*,
     packeteer::Packeteer,
@@ -135,6 +136,7 @@ mod error;
 pub mod ffi;
 mod ffi_impls;
 mod framework;
+mod game;
 mod init;
 mod inject;
 mod interface;

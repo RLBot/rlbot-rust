@@ -1,6 +1,12 @@
 use crate::{
-    error::RLBotError, interface::RLBotInterface, match_settings::MatchSettings,
-    packeteer::Packeteer, physicist::Physicist, render::RenderGroup, state,
+    error::RLBotError,
+    game::{build_update_player_input, ControllerState},
+    interface::RLBotInterface,
+    match_settings::MatchSettings,
+    packeteer::Packeteer,
+    physicist::Physicist,
+    render::RenderGroup,
+    state,
 };
 use std::{cell::Cell, error::Error, marker::PhantomData};
 
@@ -34,6 +40,17 @@ impl RLBot {
     /// ticks as they occur.
     pub fn physicist(&self) -> Physicist<'_> {
         Physicist::new(self)
+    }
+
+    /// Sends player input to RLBot.
+    pub fn update_player_input(
+        &self,
+        player_index: i32,
+        controller_state: ControllerState,
+    ) -> Result<(), RLBotError> {
+        let built = build_update_player_input(player_index, controller_state);
+        self.interface
+            .update_player_input_flatbuffer(built.finished_data())
     }
 
     /// Sets the game state.
