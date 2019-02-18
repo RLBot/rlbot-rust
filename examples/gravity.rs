@@ -5,7 +5,6 @@
 #![warn(clippy::all)]
 
 use na::{Point3, Vector3};
-use rlbot::state;
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -28,12 +27,12 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn get_desired_state(packet: rlbot::flat::GameTickPacket<'_>) -> state::DesiredGameState {
+fn get_desired_state(packet: rlbot::flat::GameTickPacket<'_>) -> rlbot::DesiredGameState {
     let ball_phys = packet.ball().unwrap().physics().unwrap();
     let ball_loc = ball_phys.location().unwrap();
     let ball_loc = Point3::new(ball_loc.x(), ball_loc.y(), ball_loc.z());
 
-    let mut desired_game_state = state::DesiredGameState::new();
+    let mut desired_game_state = rlbot::DesiredGameState::new();
 
     for i in 0..packet.players().unwrap().len() {
         let car = packet.players().unwrap().get(i);
@@ -45,13 +44,13 @@ fn get_desired_state(packet: rlbot::flat::GameTickPacket<'_>) -> state::DesiredG
         // Note: You can ordinarily just use `na::Vector3::new(x, y, z)` here. There's a
         // cargo build oddity which prevents that from working in code inside the
         // `examples/` directory.
-        let new_velocity = rlbot::state::Vector3Partial::new()
+        let new_velocity = rlbot::Vector3Partial::new()
             .x(v.x() + a.x)
             .y(v.y() + a.y)
             .z(v.z() + a.z);
 
-        let physics = state::DesiredPhysics::new().velocity(new_velocity);
-        let car_state = state::DesiredCarState::new().physics(physics);
+        let physics = rlbot::DesiredPhysics::new().velocity(new_velocity);
+        let car_state = rlbot::DesiredCarState::new().physics(physics);
         desired_game_state = desired_game_state.car_state(i, car_state);
     }
 
