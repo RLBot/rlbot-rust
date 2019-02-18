@@ -182,6 +182,7 @@ fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
 
     let ptr = byte_buffer.ptr as *const u8;
     let size = byte_buffer.size as usize;
+    // TODO: don't leak the buffer
     let slice = unsafe { slice::from_raw_parts(ptr, size) };
     Some(flatbuffers::get_root::<T>(slice))
 }

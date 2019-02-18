@@ -18,6 +18,7 @@ libloading = "0.5.0"
 ratelimit = "0.4.3"
 flatbuffers = "0.5.0"
 na = { version = "0.16.8", package = "nalgebra", optional = true }
+smallvec = "0.6.9"
 
 [dev-dependencies]
 na = { version = "0.16.0", package = "nalgebra" }
