@@ -13,7 +13,9 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     #[allow(deprecated)]
     {
-        rlbot.start_match(MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;
+        rlbot
+            .interface
+            .start_match(MatchSettings::allstar_vs_allstar("Earth", "Mars"))?;
     }
     rlbot.wait_for_match_start()?;
 
@@ -25,8 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Check that the game is not showing a replay.
         // Also don't set state on every frame, that can make it laggy.
         if packet.gameInfo().unwrap().isRoundActive() && i % 8 == 0 {
-            let desired_state = get_desired_state(packet);
-            rlbot.set_game_state_struct(desired_state)?;
+            rlbot.set_game_state(get_desired_state(packet))?;
         }
         i += 1;
     }

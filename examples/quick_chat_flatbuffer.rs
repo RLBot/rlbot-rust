@@ -10,15 +10,19 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     #[allow(deprecated)]
     {
-        rlbot.start_match(rlbot::ffi::MatchSettings::allstar_vs_allstar(
-            "Noisy", "Silent",
-        ))?;
+        rlbot
+            .interface
+            .start_match(rlbot::ffi::MatchSettings::allstar_vs_allstar(
+                "Noisy", "Silent",
+            ))?;
     }
     rlbot.wait_for_match_start()?;
 
     loop {
         sleep(Duration::from_secs(1));
-        let result = rlbot.send_quick_chat(build_chat().finished_data());
+        let result = rlbot
+            .interface
+            .send_quick_chat(build_chat().finished_data());
         if let Err(error) = result {
             println!("{:?}", error);
         }

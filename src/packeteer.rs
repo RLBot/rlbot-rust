@@ -57,7 +57,7 @@ impl<'a> Packeteer<'a> {
     #[allow(deprecated)]
     pub fn try_next(&mut self) -> Result<Option<LiveDataPacket>, Box<dyn Error>> {
         let mut packet = unsafe { mem::uninitialized() };
-        self.rlbot.update_live_data_packet(&mut packet)?;
+        self.rlbot.interface.update_live_data_packet(&mut packet)?;
 
         let game_time = packet.GameInfo.TimeSeconds;
         if game_time != self.prev_game_time {
@@ -85,7 +85,7 @@ impl<'a> Packeteer<'a> {
     /// If there is a packet that is newer than the previous packet, it is
     /// returned. Otherwise, `None` is returned.
     pub fn try_next_flat<'fb>(&mut self) -> Option<GameTickPacket<'fb>> {
-        if let Some(packet) = self.rlbot.update_live_data_packet_flatbuffer() {
+        if let Some(packet) = self.rlbot.interface.update_live_data_packet_flatbuffer() {
             let game_time = packet.gameInfo().map(|gi| gi.secondsElapsed());
             if let Some(game_time) = game_time {
                 if game_time != self.prev_game_time {

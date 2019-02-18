@@ -1,6 +1,6 @@
 //! This module contains code for interoperating with RLBot's BotManager.
 
-use crate::{ffi, rlbot};
+use crate::{ffi, init_with_options, InitOptions};
 use std::{env, error::Error, path::PathBuf};
 
 /// A bot that can run within the RLBot framework. Instances of `Bot` are used
@@ -62,7 +62,7 @@ pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<dyn Error>> {
 
     let player_index = args.player_index;
 
-    let rlbot = rlbot::init_with_options(args.into())?;
+    let rlbot = init_with_options(args.into())?;
 
     bot.set_player_index(player_index as usize);
 
@@ -70,7 +70,7 @@ pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<dyn Error>> {
     loop {
         let packet = packets.next()?;
         let input = bot.tick(&packet);
-        rlbot.update_player_input(input, player_index)?;
+        rlbot.interface.update_player_input(input, player_index)?;
     }
 }
 
@@ -138,7 +138,7 @@ pub struct FrameworkArgs {
     _non_exhaustive: (),
 }
 
-impl From<FrameworkArgs> for rlbot::InitOptions {
+impl From<FrameworkArgs> for InitOptions {
     fn from(args: FrameworkArgs) -> Self {
         Self::new().rlbot_dll_directory(args.rlbot_dll_directory)
     }

@@ -21,7 +21,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     #[allow(deprecated)]
     {
-        rlbot.start_match(match_settings)?;
+        rlbot.interface.start_match(match_settings)?;
     }
     rlbot.wait_for_match_start()?;
 
