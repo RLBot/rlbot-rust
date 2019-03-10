@@ -14,6 +14,8 @@ pub struct Physicist<'a> {
 }
 
 impl<'a> Physicist<'a> {
+    const DEFAULT_TIMEOUT: Duration = Duration::from_secs(10);
+
     pub(crate) fn new(rlbot: &'a RLBot) -> Self {
         // Physics ticks happen at 120Hz. The goal is never to miss any. But if we poll
         // too often, the game crashes, so space out the checks.
@@ -41,7 +43,7 @@ impl<'a> Physicist<'a> {
     )]
     #[allow(deprecated)]
     pub fn next(&mut self) -> Result<ffi::RigidBodyTick, Box<dyn Error>> {
-        self.spin(|this| Ok(this.try_next()?))
+        self.spin(|this| Ok(this.try_next()?), Self::DEFAULT_TIMEOUT)
     }
 
     /// Polls for a new physics tick.
@@ -71,7 +73,18 @@ impl<'a> Physicist<'a> {
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
     pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<dyn Error>> {
-        self.spin(|this| Ok(this.try_next_flat()))
+        self.spin(|this| Ok(this.try_next_flat()), Self::DEFAULT_TIMEOUT)
+    }
+
+    /// Block until the next physics tick occurs, and then return it.
+    ///
+    /// This works the same as `next_flat`, but lets the caller choose the
+    /// timeout.
+    pub fn next_flat_with_timeout<'fb>(
+        &mut self,
+        timeout: Duration,
+    ) -> Result<flat::RigidBodyTick<'fb>, Box<dyn Error>> {
+        self.spin(|this| Ok(this.try_next_flat()), timeout)
     }
 
     /// Polls for a new physics tick.
@@ -96,6 +109,7 @@ impl<'a> Physicist<'a> {
     fn spin<R>(
         &mut self,
         f: impl Fn(&mut Self) -> Result<Option<R>, Box<dyn Error>>,
+        timeout: Duration,
     ) -> Result<R, Box<dyn Error>> {
         let start = Instant::now();
 
@@ -107,8 +121,8 @@ impl<'a> Physicist<'a> {
             }
 
             let elapsed = Instant::now() - start;
-            if elapsed > Duration::from_secs(10) {
-                return Err(From::from("no physics tick received after ten seconds"));
+            if elapsed > timeout {
+                return Err(From::from("no physics tick received within the timeout"));
             }
         }
     }
