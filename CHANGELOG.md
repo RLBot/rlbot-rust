@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.0
+
+TODO: write changelog
+
 ## v0.3.0
 
 ### Added
