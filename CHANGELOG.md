@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.4.1 – 2019-04-14
+
+### Changed
+
+* Updated dependencies to address [this
+  issue](https://github.com/rustsim/ncollide/issues/266).
+
 ## v0.4.0
 
 TODO: write changelog
