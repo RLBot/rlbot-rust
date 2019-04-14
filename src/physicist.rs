@@ -91,6 +91,7 @@ impl<'a> Physicist<'a> {
     ///
     /// If there is a tick that is newer than the previous tick, it is
     /// returned. Otherwise, `None` is returned.
+    #[allow(clippy::redundant_closure)]
     pub fn try_next_flat<'fb>(&mut self) -> Option<flat::RigidBodyTick<'fb>> {
         if let Some(tick) = self.rlbot.interface().update_rigid_body_tick_flatbuffer() {
             let ball = tick.ball();

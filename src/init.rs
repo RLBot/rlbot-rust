@@ -45,7 +45,7 @@ pub fn init() -> Result<RLBot, Box<dyn Error>> {
 /// [`examples/simple`]: https://github.com/whatisaphone/rlbot-rust/blob/master/examples/simple.rs
 #[allow(clippy::needless_pass_by_value)]
 pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<dyn Error>> {
-    let rlbot_dll_directory = options.rlbot_dll_directory.as_ref().map(|p| p.as_path());
+    let rlbot_dll_directory = options.rlbot_dll_directory.as_ref().map(PathBuf::as_path);
 
     inject::inject_dll(rlbot_dll_directory)?;
 

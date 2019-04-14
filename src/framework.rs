@@ -149,7 +149,7 @@ mod tests {
     use super::*;
 
     fn pfcl(ss: Vec<&str>) -> Result<Option<FrameworkArgs>, ()> {
-        parse_framework_command_line(ss.into_iter().map(|s| s.to_string()))
+        parse_framework_command_line(ss.into_iter().map(str::to_string))
     }
 
     #[test]

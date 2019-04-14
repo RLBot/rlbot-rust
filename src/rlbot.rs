@@ -118,7 +118,7 @@ mod tests {
     use std::{error::Error, mem};
 
     #[test]
-    #[ignore(note = "compile-only test")]
+    #[ignore = "compile-only test"]
     fn game_data_is_send() -> Result<(), Box<dyn Error>> {
         fn assert_send<T: Send + 'static>(_: T) {}
 
