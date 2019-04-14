@@ -7,9 +7,27 @@
 * Updated dependencies to address [this
   issue](https://github.com/rustsim/ncollide/issues/266).
 
-## v0.4.0
+## v0.4.0 – 2019-03-10
 
-TODO: write changelog
+### Added
+
+* High-level `start_match`, `update_player_input`, and `GameTickPacket`.
+* Convenience method for `rlbot_vs_rlbot` matches.
+* `Physicist::next_flat_with_timeout`, which lets the caller specify the
+  timeout.
+
+### Changed
+
+* Updated to Rust 2018.
+* Updated to the latest RLBot version.
+* The low-level interface is now behind a method (`RLBot::interface()`) instead
+  of a field.
+
+### Deprecated
+
+* FFI methods/structs have been mass-deprecated, since RLBot considers them to
+  be an implementation detail and does not provide any stability guarantees. Use
+  flatbuffers instead.
 
 ## v0.3.0
 
