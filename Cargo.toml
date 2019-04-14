@@ -17,19 +17,14 @@ travis-ci = { repository = "whatisaphone/rlbot-rust" }
 libloading = "0.5.0"
 ratelimit = "0.4.3"
 flatbuffers = "0.5.0"
-na = { version = "0.16.8", package = "nalgebra", optional = true }
+na = { version = "0.18.0", package = "nalgebra", optional = true }
 smallvec = "0.6.9"
 
 [dev-dependencies]
-na = { version = "0.16.0", package = "nalgebra" }
+na = { version = "0.18.0", package = "nalgebra" }
 rand = "0.6.1"
 winapi = { version = "0.3.5", features = ["synchapi"] }
-winproc = "0.5.1"
-
-# winproc > failure > backtrace
-# There seems to be an incorrect dependency pin somewhere that causes build
-# errors. This fixes it.
-backtrace = "= 0.3.9"
+winproc = "0.6.2"
 
 [features]
 default = ["use-nalgebra"]
