@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.2 – 2019-04-21
+
+### Changed
+
+* Updated to work with the latest RLBot.
+
 ## v0.4.1 – 2019-04-14
 
 ### Changed
