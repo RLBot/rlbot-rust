@@ -139,7 +139,6 @@ mod framework;
 mod game;
 mod game_deserialize;
 mod init;
-mod inject;
 mod interface;
 mod match_settings;
 mod packeteer;

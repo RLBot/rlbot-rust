@@ -1,4 +1,4 @@
-use crate::{dll::RLBotCoreInterface, inject, interface::RLBotInterface, rlbot::RLBot};
+use crate::{dll::RLBotCoreInterface, interface::RLBotInterface, rlbot::RLBot};
 use std::{error::Error, path::PathBuf, thread::sleep, time::Duration};
 
 /// Initializes RLBot and returns a ready-to-use [`RLBot`] object.
@@ -46,8 +46,6 @@ pub fn init() -> Result<RLBot, Box<dyn Error>> {
 #[allow(clippy::needless_pass_by_value)]
 pub fn init_with_options(options: InitOptions) -> Result<RLBot, Box<dyn Error>> {
     let rlbot_dll_directory = options.rlbot_dll_directory.as_ref().map(PathBuf::as_path);
-
-    inject::inject_dll(rlbot_dll_directory)?;
 
     let dll = RLBotCoreInterface::load(rlbot_dll_directory)?;
     wait_for_initialized(&dll)?;
