@@ -20,9 +20,9 @@
 //!    a single match from start to finish. It expects the app to have been
 //!    launched by the RLBot framework, and runs its own game loop under
 //!    framework control.
-//! 2. [`init`](init()) and [`RLBot`] – This is the **low-level** interface. You can use
-//!    this to directly access the innards of RLBot for scripting, integration
-//!    tests, or any other custom use-case.
+//! 2. [`init`](init()) and [`RLBot`] – This is the **low-level** interface. You
+//!    can use this to directly access the innards of RLBot for scripting,
+//!    integration tests, or any other custom use-case.
 //!
 //! ## Examples
 //!
