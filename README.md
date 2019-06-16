@@ -56,17 +56,19 @@ error:
 Os { code: 2, kind: NotFound, message: "The system cannot find the file specified." }
 ```
 
-You'll need to download [these files] from RLBot:
+RLBot is written in Python, so the easiest way to get the needed files is to use
+`pip`:
 
-[these files]: https://github.com/RLBot/RLBot/tree/master/src/main/python/rlbot/dll
+```sh
+pip install rlbot
+```
 
-* `RLBot_Injector.exe`
-* `RLBot_Core.dll`
-* `RLBot_Core_Interface.dll`
+Then add them to your `PATH` (adapt this command to the location of `rlbot` on
+your particular system:
 
-Place them in a directory in your `$PATH`. Alternatively, if you don't want to
-pollute your system, place them in your crate's target directory, e.g.
-`target/debug` or `target/release`).
+```sh
+export PATH="$PATH":/c/Python36/Lib/site-packages/rlbot/dll
+```
 
 ## Development
 

@@ -27,12 +27,20 @@
 //! ## Examples
 //!
 //! This crate comes with plenty examples to get you started. All the examples
-//! can be run directly from the repo. For example, to run the `simple` example,
-//! follow these steps:
+//! can be run directly from the repo. Follow these steps to run an example:
 //!
-//! 1. Run Rocket League.
+//! 1. Run Rocket League with the `-rlbot` flag. The flag causes Rocket League
+//!    to start a local UDP server that lets RLBot control the game. It also
+//!    disables the online features of the game.
 //!
-//! 1. Run the example:
+//!    ```sh
+//!    Steam.exe -applaunch 252950 -rlbot
+//!    ```
+//!
+//! 1. Run `RLBot.exe`, which is included as part of the Python `rlbot` package.
+//!    This is a service process that helps bots communicate with the game.
+//!
+//! 1. Run the example (here we run the example called `simple`):
 //!
 //!    ```sh
 //!    cargo run --example simple
@@ -40,8 +48,7 @@
 //!
 //! ### examples/simple ([Source][`examples/simple`])
 //!
-//! This is a simple ATBA, or **A**lways **T**owards **B**all **A**gent. It can
-//! run with no dependencies other than RLBot itself.
+//! This is a simple ATBA, or **A**lways **T**owards **B**all **A**gent.
 //!
 //! Key APIs:
 //!
@@ -52,8 +59,8 @@
 //!
 //! ### examples/simple_flatbuffer ([Source][`examples/simple_flatbuffer`])
 //!
-//! Another ATBA, but using a secondary interface which uses flatbuffers. Many
-//! of the low-level functions in RLBot's interface make use of flatbuffers.
+//! Another ATBA, but using the lower-level flatbuffer functions. All of the
+//! low-level functions in RLBot's interface make use of flatbuffers.
 //!
 //! Key APIs:
 //!
@@ -94,8 +101,10 @@
 //! within the RLBot framework. It's different than the other examples, in that
 //! it requires a working RLBot Python setup. Follow the instructions in
 //! [RLBotPythonExample] to make sure you have all the necessary dependencies
-//! installed. Once you have that working, you should be able to run a Rust bot
-//! within the framework with this command:
+//! installed. Once you have that working, you are ready to roll.
+//!
+//! Do not run Rocket League or RLBot.exe—the framework will take care of that
+//! automatically. Just run this command:
 //!
 //! ```sh
 //! cargo build --example bot && python -c "from rlbot import runner; runner.main()"
