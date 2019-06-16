@@ -3,7 +3,6 @@
 #![warn(clippy::all)]
 
 use na::Vector2;
-use rlbot::ffi;
 use std::{error::Error, f32::consts::PI};
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -19,26 +18,29 @@ impl rlbot::Bot for MyBot {
         self.player_index = index;
     }
 
-    fn tick(&mut self, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput {
-        get_input(self.player_index, packet)
+    fn tick(&mut self, packet: &rlbot::GameTickPacket) -> rlbot::ControllerState {
+        get_input(self.player_index, packet).unwrap_or_default()
     }
 }
 
-fn get_input(player_index: usize, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput {
-    let ball = packet.GameBall;
-    let ball_loc = Vector2::new(ball.Physics.Location.X, ball.Physics.Location.Y);
-    let car = packet.GameCars[player_index];
-    let car_loc = Vector2::new(car.Physics.Location.X, car.Physics.Location.Y);
+fn get_input(
+    player_index: usize,
+    packet: &rlbot::GameTickPacket,
+) -> Option<rlbot::ControllerState> {
+    let ball = packet.ball.as_ref()?;
+    let ball_loc = Vector2::new(ball.physics.location.x, ball.physics.location.y);
+    let car = &packet.players[player_index];
+    let car_loc = Vector2::new(car.physics.location.x, car.physics.location.y);
 
     let offset = ball_loc - car_loc;
     let desired_yaw = f32::atan2(offset.y, offset.x);
-    let steer = desired_yaw - car.Physics.Rotation.Yaw;
+    let steer = desired_yaw - car.physics.rotation.yaw;
 
-    ffi::PlayerInput {
-        Throttle: 1.0,
-        Steer: normalize_angle(steer).max(-1.0).min(1.0),
+    Some(rlbot::ControllerState {
+        throttle: 1.0,
+        steer: normalize_angle(steer).max(-1.0).min(1.0),
         ..Default::default()
-    }
+    })
 }
 
 /// Normalize an angle to between -PI and PI.

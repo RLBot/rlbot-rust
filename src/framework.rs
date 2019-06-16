@@ -1,6 +1,9 @@
 //! This module contains code for interoperating with RLBot's BotManager.
 
-use crate::{ffi, init_with_options, InitOptions};
+use crate::{
+    game::{ControllerState, GameTickPacket},
+    init_with_options, InitOptions,
+};
 use std::{env, error::Error, path::PathBuf};
 
 /// A bot that can run within the RLBot framework. Instances of `Bot` are used
@@ -22,7 +25,7 @@ pub trait Bot {
     /// This is called whenever there is a new game state. Your car will be
     /// controlled according to the [`PlayerInput`](ffi::PlayerInput) you
     /// return.
-    fn tick(&mut self, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput;
+    fn tick(&mut self, packet: &GameTickPacket) -> ControllerState;
 }
 
 /// Runs a bot under control of the RLBot framework.
@@ -38,14 +41,12 @@ pub trait Bot {
 /// # Example
 ///
 /// ```no_run
-/// # use rlbot::ffi;
-/// #
 /// struct MyBot;
 ///
 /// impl rlbot::Bot for MyBot {
 ///     // ...
 ///     # fn set_player_index(&mut self, index: usize) { unimplemented!() }
-///     # fn tick(&mut self, packet: &ffi::LiveDataPacket) -> ffi::PlayerInput { unimplemented!() }
+///     # fn tick(&mut self, packet: &rlbot::GameTickPacket) -> rlbot::ControllerState { unimplemented!() }
 /// }
 ///
 /// rlbot::run_bot(MyBot);
@@ -68,9 +69,9 @@ pub fn run_bot<B: Bot>(mut bot: B) -> Result<(), Box<dyn Error>> {
 
     let mut packets = rlbot.packeteer();
     loop {
-        let packet = packets.next_ffi()?;
+        let packet = packets.next()?;
         let input = bot.tick(&packet);
-        rlbot.interface().update_player_input(input, player_index)?;
+        rlbot.update_player_input(player_index, &input)?;
     }
 }
 
