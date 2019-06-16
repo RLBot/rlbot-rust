@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.5.0 – 2019-06-16
+
+### Changed
+
+* **BREAKING:** The `Bot` trait now uses the high-level ``GameTickPacket`` and `update_player_input` introduced in v0.4.0, instead of the deprecated `ffi` equivalents.
+* **BREAKING:** Renamed the `use-nalgebra` cargo feature to just `nalgebra`.
+* Updated the docs to note new requirements for the latest version of RLBot.
+
 ## v0.4.2 – 2019-04-21
 
 ### Changed
