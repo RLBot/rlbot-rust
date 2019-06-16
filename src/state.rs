@@ -425,7 +425,7 @@ impl DesiredGameState {
     }
 }
 
-#[cfg(feature = "use-nalgebra")]
+#[cfg(feature = "nalgebra")]
 #[cfg(test)]
 mod tests {
     use crate::state;

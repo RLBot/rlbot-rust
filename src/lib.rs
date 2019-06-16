@@ -158,6 +158,6 @@ mod rlbot;
 mod rlbot_generated;
 mod state;
 mod state_convert;
-#[cfg(feature = "use-nalgebra")]
+#[cfg(feature = "nalgebra")]
 mod state_nalgebra;
 mod utils;
