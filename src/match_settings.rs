@@ -5,7 +5,10 @@ pub use crate::flat::{
     BoostOption, DemolishOption, GameMap, GameMode, GameSpeedOption, GravityOption, MatchLength,
     MaxScore, OvertimeOption, RespawnTimeOption, RumbleOption, SeriesLengthOption,
 };
-use crate::{flat, rlbot_generated::rlbot::flat::BoostStrengthOption};
+use crate::{
+    flat,
+    rlbot_generated::rlbot::flat::{BoostStrengthOption, ExistingMatchBehavior},
+};
 use flatbuffers::{FlatBufferBuilder, UnionWIPOffset, WIPOffset};
 
 /// A psyonix bot, e.g. All Star bot
@@ -369,7 +372,7 @@ impl Default for MutatorSettings {
             ball_size_option: BallSizeOption::Default,
             ball_bounciness_option: BallBouncinessOption::Default,
             boost_option: BoostOption::Normal_Boost,
-            rumble_option: RumbleOption::None,
+            rumble_option: RumbleOption::No_Rumble,
             boost_strength_option: BoostStrengthOption::One,
             gravity_option: GravityOption::Default,
             demolish_option: DemolishOption::Default,
@@ -597,6 +600,8 @@ impl<'a> MatchSettings<'a> {
             skipReplays: false,
             instantStart: false,
             mutatorSettings: Some(self.mutator_settings.build(&mut builder)),
+            existingMatchBehavior: ExistingMatchBehavior::Restart_If_Different,
+            enableLockstep: false,
         };
         let root = flat::MatchSettings::create(&mut builder, &args);
 

@@ -3,7 +3,7 @@
 #![warn(clippy::all)]
 
 use rand::prelude::*;
-use std::{error::Error, thread::sleep, time::Duration};
+use std::{default::Default, error::Error, thread::sleep, time::Duration};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let rlbot = rlbot::init()?;
@@ -31,6 +31,7 @@ fn build_chat() -> flatbuffers::FlatBufferBuilder<'static> {
         quickChatSelection: select_chat(),
         playerIndex: 0,
         teamOnly: false,
+        ..Default::default()
     });
     builder.finish(root, None);
     builder

@@ -417,6 +417,7 @@ impl DesiredGameState {
                 .game_info_state
                 .as_ref()
                 .map(|x| x.serialize(&mut builder)),
+            consoleCommands: None,
         };
         let root = flat::DesiredGameState::create(&mut builder, &args);
 

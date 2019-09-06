@@ -21,6 +21,68 @@ pub mod rlbot {
         use flatbuffers;
 
         #[allow(non_camel_case_types)]
+        #[repr(u8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum CollisionShape {
+            NONE = 0,
+            BoxShape = 1,
+            SphereShape = 2,
+            CylinderShape = 3,
+        }
+
+        const ENUM_MIN_COLLISION_SHAPE: u8 = 0;
+        const ENUM_MAX_COLLISION_SHAPE: u8 = 3;
+
+        impl<'a> flatbuffers::Follow<'a> for CollisionShape {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for CollisionShape {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = u8::to_le(self as u8);
+                let p = &n as *const u8 as *const CollisionShape;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = u8::from_le(self as u8);
+                let p = &n as *const u8 as *const CollisionShape;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for CollisionShape {
+            type Output = CollisionShape;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<CollisionShape>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_COLLISION_SHAPE: [CollisionShape; 4] = [
+            CollisionShape::NONE,
+            CollisionShape::BoxShape,
+            CollisionShape::SphereShape,
+            CollisionShape::CylinderShape,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_COLLISION_SHAPE: [&'static str; 4] =
+            ["NONE", "BoxShape", "SphereShape", "CylinderShape"];
+
+        pub fn enum_name_collision_shape(e: CollisionShape) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_COLLISION_SHAPE[index]
+        }
+
+        pub struct CollisionShapeUnionTableOffset {}
+        #[allow(non_camel_case_types)]
         #[repr(i8)]
         #[derive(Clone, Copy, PartialEq, Debug)]
         pub enum TileState {
@@ -1378,17 +1440,18 @@ pub mod rlbot {
         #[repr(i8)]
         #[derive(Clone, Copy, PartialEq, Debug)]
         pub enum RumbleOption {
-            None = 0,
+            No_Rumble = 0,
             Default = 1,
             Slow = 2,
             Civilized = 3,
             Destruction_Derby = 4,
             Spring_Loaded = 5,
             Spikes_Only = 6,
+            Spike_Rush = 7,
         }
 
         const ENUM_MIN_RUMBLE_OPTION: i8 = 0;
-        const ENUM_MAX_RUMBLE_OPTION: i8 = 6;
+        const ENUM_MAX_RUMBLE_OPTION: i8 = 7;
 
         impl<'a> flatbuffers::Follow<'a> for RumbleOption {
             type Inner = Self;
@@ -1422,25 +1485,27 @@ pub mod rlbot {
         }
 
         #[allow(non_camel_case_types)]
-        const ENUM_VALUES_RUMBLE_OPTION: [RumbleOption; 7] = [
-            RumbleOption::None,
+        const ENUM_VALUES_RUMBLE_OPTION: [RumbleOption; 8] = [
+            RumbleOption::No_Rumble,
             RumbleOption::Default,
             RumbleOption::Slow,
             RumbleOption::Civilized,
             RumbleOption::Destruction_Derby,
             RumbleOption::Spring_Loaded,
             RumbleOption::Spikes_Only,
+            RumbleOption::Spike_Rush,
         ];
 
         #[allow(non_camel_case_types)]
-        const ENUM_NAMES_RUMBLE_OPTION: [&'static str; 7] = [
-            "None",
+        const ENUM_NAMES_RUMBLE_OPTION: [&'static str; 8] = [
+            "No_Rumble",
             "Default",
             "Slow",
             "Civilized",
             "Destruction_Derby",
             "Spring_Loaded",
             "Spikes_Only",
+            "Spike_Rush",
         ];
 
         pub fn enum_name_rumble_option(e: RumbleOption) -> &'static str {
@@ -1701,6 +1766,72 @@ pub mod rlbot {
         pub fn enum_name_respawn_time_option(e: RespawnTimeOption) -> &'static str {
             let index: usize = e as usize;
             ENUM_NAMES_RESPAWN_TIME_OPTION[index]
+        }
+
+        #[allow(non_camel_case_types)]
+        #[repr(i8)]
+        #[derive(Clone, Copy, PartialEq, Debug)]
+        pub enum ExistingMatchBehavior {
+            /// Restart the match if any match settings differ. This is the
+            /// default because old RLBot always worked this way.
+            Restart_If_Different = 0,
+            /// Always restart the match, even if config is identical
+            Restart = 1,
+            /// Never restart an existing match, just try to remove or spawn
+            /// cars to match the configuration. If we are not in
+            /// the middle of a match, a match will be started. Handy for LAN
+            /// matches.
+            Continue_And_Spawn = 2,
+        }
+
+        const ENUM_MIN_EXISTING_MATCH_BEHAVIOR: i8 = 0;
+        const ENUM_MAX_EXISTING_MATCH_BEHAVIOR: i8 = 2;
+
+        impl<'a> flatbuffers::Follow<'a> for ExistingMatchBehavior {
+            type Inner = Self;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                flatbuffers::read_scalar_at::<Self>(buf, loc)
+            }
+        }
+
+        impl flatbuffers::EndianScalar for ExistingMatchBehavior {
+            #[inline]
+            fn to_little_endian(self) -> Self {
+                let n = i8::to_le(self as i8);
+                let p = &n as *const i8 as *const ExistingMatchBehavior;
+                unsafe { *p }
+            }
+            #[inline]
+            fn from_little_endian(self) -> Self {
+                let n = i8::from_le(self as i8);
+                let p = &n as *const i8 as *const ExistingMatchBehavior;
+                unsafe { *p }
+            }
+        }
+
+        impl flatbuffers::Push for ExistingMatchBehavior {
+            type Output = ExistingMatchBehavior;
+            #[inline]
+            fn push(&self, dst: &mut [u8], _rest: &[u8]) {
+                flatbuffers::emplace_scalar::<ExistingMatchBehavior>(dst, *self);
+            }
+        }
+
+        #[allow(non_camel_case_types)]
+        const ENUM_VALUES_EXISTING_MATCH_BEHAVIOR: [ExistingMatchBehavior; 3] = [
+            ExistingMatchBehavior::Restart_If_Different,
+            ExistingMatchBehavior::Restart,
+            ExistingMatchBehavior::Continue_And_Spawn,
+        ];
+
+        #[allow(non_camel_case_types)]
+        const ENUM_NAMES_EXISTING_MATCH_BEHAVIOR: [&'static str; 3] =
+            ["Restart_If_Different", "Restart", "Continue_And_Spawn"];
+
+        pub fn enum_name_existing_match_behavior(e: ExistingMatchBehavior) -> &'static str {
+            let index: usize = e as usize;
+            ENUM_NAMES_EXISTING_MATCH_BEHAVIOR[index]
         }
 
         // struct Vector3, aligned to 4
@@ -2052,6 +2183,7 @@ pub mod rlbot {
                 builder.add_pitch(args.pitch);
                 builder.add_steer(args.steer);
                 builder.add_throttle(args.throttle);
+                builder.add_useItem(args.useItem);
                 builder.add_handbrake(args.handbrake);
                 builder.add_boost(args.boost);
                 builder.add_jump(args.jump);
@@ -2066,6 +2198,7 @@ pub mod rlbot {
             pub const VT_JUMP: flatbuffers::VOffsetT = 14;
             pub const VT_BOOST: flatbuffers::VOffsetT = 16;
             pub const VT_HANDBRAKE: flatbuffers::VOffsetT = 18;
+            pub const VT_USEITEM: flatbuffers::VOffsetT = 20;
 
             /// -1 for full reverse, 1 for full forward
             #[inline]
@@ -2123,6 +2256,14 @@ pub mod rlbot {
                     .get::<bool>(ControllerState::VT_HANDBRAKE, Some(false))
                     .unwrap()
             }
+            /// true if you want to press the 'use item' button, used in rumble
+            /// etc.
+            #[inline]
+            pub fn useItem(&self) -> bool {
+                self._tab
+                    .get::<bool>(ControllerState::VT_USEITEM, Some(false))
+                    .unwrap()
+            }
         }
 
         pub struct ControllerStateArgs {
@@ -2134,6 +2275,7 @@ pub mod rlbot {
             pub jump: bool,
             pub boost: bool,
             pub handbrake: bool,
+            pub useItem: bool,
         }
         impl<'a> Default for ControllerStateArgs {
             #[inline]
@@ -2147,10 +2289,11 @@ pub mod rlbot {
                     jump: false,
                     boost: false,
                     handbrake: false,
+                    useItem: false,
                 }
             }
         }
-        pub struct ControllerStateBuilder<'a: 'b, 'b> {
+        pub struct ControllerStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -2194,6 +2337,11 @@ pub mod rlbot {
             pub fn add_handbrake(&mut self, handbrake: bool) {
                 self.fbb_
                     .push_slot::<bool>(ControllerState::VT_HANDBRAKE, handbrake, false);
+            }
+            #[inline]
+            pub fn add_useItem(&mut self, useItem: bool) {
+                self.fbb_
+                    .push_slot::<bool>(ControllerState::VT_USEITEM, useItem, false);
             }
             #[inline]
             pub fn new(
@@ -2279,7 +2427,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct PlayerInputBuilder<'a: 'b, 'b> {
+        pub struct PlayerInputBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -2317,6 +2465,284 @@ pub mod rlbot {
             }
         }
 
+        pub enum BoxShapeOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct BoxShape<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for BoxShape<'a> {
+            type Inner = BoxShape<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> BoxShape<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                BoxShape { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args BoxShapeArgs,
+            ) -> flatbuffers::WIPOffset<BoxShape<'bldr>> {
+                let mut builder = BoxShapeBuilder::new(_fbb);
+                builder.add_height(args.height);
+                builder.add_width(args.width);
+                builder.add_length(args.length);
+                builder.finish()
+            }
+
+            pub const VT_LENGTH: flatbuffers::VOffsetT = 4;
+            pub const VT_WIDTH: flatbuffers::VOffsetT = 6;
+            pub const VT_HEIGHT: flatbuffers::VOffsetT = 8;
+
+            #[inline]
+            pub fn length(&self) -> f32 {
+                self._tab
+                    .get::<f32>(BoxShape::VT_LENGTH, Some(0.0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn width(&self) -> f32 {
+                self._tab.get::<f32>(BoxShape::VT_WIDTH, Some(0.0)).unwrap()
+            }
+            #[inline]
+            pub fn height(&self) -> f32 {
+                self._tab
+                    .get::<f32>(BoxShape::VT_HEIGHT, Some(0.0))
+                    .unwrap()
+            }
+        }
+
+        pub struct BoxShapeArgs {
+            pub length: f32,
+            pub width: f32,
+            pub height: f32,
+        }
+        impl<'a> Default for BoxShapeArgs {
+            #[inline]
+            fn default() -> Self {
+                BoxShapeArgs {
+                    length: 0.0,
+                    width: 0.0,
+                    height: 0.0,
+                }
+            }
+        }
+        pub struct BoxShapeBuilder<'a, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> BoxShapeBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_length(&mut self, length: f32) {
+                self.fbb_.push_slot::<f32>(BoxShape::VT_LENGTH, length, 0.0);
+            }
+            #[inline]
+            pub fn add_width(&mut self, width: f32) {
+                self.fbb_.push_slot::<f32>(BoxShape::VT_WIDTH, width, 0.0);
+            }
+            #[inline]
+            pub fn add_height(&mut self, height: f32) {
+                self.fbb_.push_slot::<f32>(BoxShape::VT_HEIGHT, height, 0.0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> BoxShapeBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                BoxShapeBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<BoxShape<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        pub enum SphereShapeOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct SphereShape<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for SphereShape<'a> {
+            type Inner = SphereShape<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> SphereShape<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                SphereShape { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args SphereShapeArgs,
+            ) -> flatbuffers::WIPOffset<SphereShape<'bldr>> {
+                let mut builder = SphereShapeBuilder::new(_fbb);
+                builder.add_diameter(args.diameter);
+                builder.finish()
+            }
+
+            pub const VT_DIAMETER: flatbuffers::VOffsetT = 4;
+
+            #[inline]
+            pub fn diameter(&self) -> f32 {
+                self._tab
+                    .get::<f32>(SphereShape::VT_DIAMETER, Some(0.0))
+                    .unwrap()
+            }
+        }
+
+        pub struct SphereShapeArgs {
+            pub diameter: f32,
+        }
+        impl<'a> Default for SphereShapeArgs {
+            #[inline]
+            fn default() -> Self {
+                SphereShapeArgs { diameter: 0.0 }
+            }
+        }
+        pub struct SphereShapeBuilder<'a, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> SphereShapeBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_diameter(&mut self, diameter: f32) {
+                self.fbb_
+                    .push_slot::<f32>(SphereShape::VT_DIAMETER, diameter, 0.0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> SphereShapeBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                SphereShapeBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<SphereShape<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        pub enum CylinderShapeOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct CylinderShape<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for CylinderShape<'a> {
+            type Inner = CylinderShape<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> CylinderShape<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                CylinderShape { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args CylinderShapeArgs,
+            ) -> flatbuffers::WIPOffset<CylinderShape<'bldr>> {
+                let mut builder = CylinderShapeBuilder::new(_fbb);
+                builder.add_height(args.height);
+                builder.add_diameter(args.diameter);
+                builder.finish()
+            }
+
+            pub const VT_DIAMETER: flatbuffers::VOffsetT = 4;
+            pub const VT_HEIGHT: flatbuffers::VOffsetT = 6;
+
+            #[inline]
+            pub fn diameter(&self) -> f32 {
+                self._tab
+                    .get::<f32>(CylinderShape::VT_DIAMETER, Some(0.0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn height(&self) -> f32 {
+                self._tab
+                    .get::<f32>(CylinderShape::VT_HEIGHT, Some(0.0))
+                    .unwrap()
+            }
+        }
+
+        pub struct CylinderShapeArgs {
+            pub diameter: f32,
+            pub height: f32,
+        }
+        impl<'a> Default for CylinderShapeArgs {
+            #[inline]
+            fn default() -> Self {
+                CylinderShapeArgs {
+                    diameter: 0.0,
+                    height: 0.0,
+                }
+            }
+        }
+        pub struct CylinderShapeBuilder<'a, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> CylinderShapeBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_diameter(&mut self, diameter: f32) {
+                self.fbb_
+                    .push_slot::<f32>(CylinderShape::VT_DIAMETER, diameter, 0.0);
+            }
+            #[inline]
+            pub fn add_height(&mut self, height: f32) {
+                self.fbb_
+                    .push_slot::<f32>(CylinderShape::VT_HEIGHT, height, 0.0);
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> CylinderShapeBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                CylinderShapeBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<CylinderShape<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
         pub enum TouchOffset {}
         #[derive(Copy, Clone, Debug, PartialEq)]
 
@@ -2345,6 +2771,7 @@ pub mod rlbot {
                 args: &'args TouchArgs<'args>,
             ) -> flatbuffers::WIPOffset<Touch<'bldr>> {
                 let mut builder = TouchBuilder::new(_fbb);
+                builder.add_playerIndex(args.playerIndex);
                 builder.add_team(args.team);
                 if let Some(x) = args.normal {
                     builder.add_normal(x);
@@ -2364,6 +2791,7 @@ pub mod rlbot {
             pub const VT_LOCATION: flatbuffers::VOffsetT = 8;
             pub const VT_NORMAL: flatbuffers::VOffsetT = 10;
             pub const VT_TEAM: flatbuffers::VOffsetT = 12;
+            pub const VT_PLAYERINDEX: flatbuffers::VOffsetT = 14;
 
             /// The name of the player involved with the touch.
             #[inline]
@@ -2393,6 +2821,13 @@ pub mod rlbot {
             pub fn team(&self) -> i32 {
                 self._tab.get::<i32>(Touch::VT_TEAM, Some(0)).unwrap()
             }
+            /// The index of the player involved with the touch.
+            #[inline]
+            pub fn playerIndex(&self) -> i32 {
+                self._tab
+                    .get::<i32>(Touch::VT_PLAYERINDEX, Some(0))
+                    .unwrap()
+            }
         }
 
         pub struct TouchArgs<'a> {
@@ -2401,6 +2836,7 @@ pub mod rlbot {
             pub location: Option<&'a Vector3>,
             pub normal: Option<&'a Vector3>,
             pub team: i32,
+            pub playerIndex: i32,
         }
         impl<'a> Default for TouchArgs<'a> {
             #[inline]
@@ -2411,10 +2847,11 @@ pub mod rlbot {
                     location: None,
                     normal: None,
                     team: 0,
+                    playerIndex: 0,
                 }
             }
         }
-        pub struct TouchBuilder<'a: 'b, 'b> {
+        pub struct TouchBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -2444,6 +2881,11 @@ pub mod rlbot {
             #[inline]
             pub fn add_team(&mut self, team: i32) {
                 self.fbb_.push_slot::<i32>(Touch::VT_TEAM, team, 0);
+            }
+            #[inline]
+            pub fn add_playerIndex(&mut self, playerIndex: i32) {
+                self.fbb_
+                    .push_slot::<i32>(Touch::VT_PLAYERINDEX, playerIndex, 0);
             }
             #[inline]
             pub fn new(_fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>) -> TouchBuilder<'a, 'b> {
@@ -2565,7 +3007,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct ScoreInfoBuilder<'a: 'b, 'b> {
+        pub struct ScoreInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -2701,7 +3143,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct PhysicsBuilder<'a: 'b, 'b> {
+        pub struct PhysicsBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -2769,6 +3211,9 @@ pub mod rlbot {
                 args: &'args PlayerInfoArgs<'args>,
             ) -> flatbuffers::WIPOffset<PlayerInfo<'bldr>> {
                 let mut builder = PlayerInfoBuilder::new(_fbb);
+                if let Some(x) = args.hitbox {
+                    builder.add_hitbox(x);
+                }
                 builder.add_boost(args.boost);
                 builder.add_team(args.team);
                 if let Some(x) = args.name {
@@ -2800,6 +3245,7 @@ pub mod rlbot {
             pub const VT_NAME: flatbuffers::VOffsetT = 20;
             pub const VT_TEAM: flatbuffers::VOffsetT = 22;
             pub const VT_BOOST: flatbuffers::VOffsetT = 24;
+            pub const VT_HITBOX: flatbuffers::VOffsetT = 26;
 
             #[inline]
             pub fn physics(&self) -> Option<Physics<'a>> {
@@ -2870,6 +3316,11 @@ pub mod rlbot {
             pub fn boost(&self) -> i32 {
                 self._tab.get::<i32>(PlayerInfo::VT_BOOST, Some(0)).unwrap()
             }
+            #[inline]
+            pub fn hitbox(&self) -> Option<BoxShape<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<BoxShape<'a>>>(PlayerInfo::VT_HITBOX, None)
+            }
         }
 
         pub struct PlayerInfoArgs<'a> {
@@ -2884,6 +3335,7 @@ pub mod rlbot {
             pub name: Option<flatbuffers::WIPOffset<&'a str>>,
             pub team: i32,
             pub boost: i32,
+            pub hitbox: Option<flatbuffers::WIPOffset<BoxShape<'a>>>,
         }
         impl<'a> Default for PlayerInfoArgs<'a> {
             #[inline]
@@ -2900,10 +3352,11 @@ pub mod rlbot {
                     name: None,
                     team: 0,
                     boost: 0,
+                    hitbox: None,
                 }
             }
         }
-        pub struct PlayerInfoBuilder<'a: 'b, 'b> {
+        pub struct PlayerInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -2966,6 +3419,14 @@ pub mod rlbot {
             #[inline]
             pub fn add_boost(&mut self, boost: i32) {
                 self.fbb_.push_slot::<i32>(PlayerInfo::VT_BOOST, boost, 0);
+            }
+            #[inline]
+            pub fn add_hitbox(&mut self, hitbox: flatbuffers::WIPOffset<BoxShape<'b>>) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<BoxShape<'_>>>(
+                        PlayerInfo::VT_HITBOX,
+                        hitbox,
+                    );
             }
             #[inline]
             pub fn new(
@@ -3057,7 +3518,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct DropShotBallInfoBuilder<'a: 'b, 'b> {
+        pub struct DropShotBallInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -3125,6 +3586,9 @@ pub mod rlbot {
                 args: &'args BallInfoArgs<'args>,
             ) -> flatbuffers::WIPOffset<BallInfo<'bldr>> {
                 let mut builder = BallInfoBuilder::new(_fbb);
+                if let Some(x) = args.shape {
+                    builder.add_shape(x);
+                }
                 if let Some(x) = args.dropShotInfo {
                     builder.add_dropShotInfo(x);
                 }
@@ -3134,12 +3598,15 @@ pub mod rlbot {
                 if let Some(x) = args.physics {
                     builder.add_physics(x);
                 }
+                builder.add_shape_type(args.shape_type);
                 builder.finish()
             }
 
             pub const VT_PHYSICS: flatbuffers::VOffsetT = 4;
             pub const VT_LATESTTOUCH: flatbuffers::VOffsetT = 6;
             pub const VT_DROPSHOTINFO: flatbuffers::VOffsetT = 8;
+            pub const VT_SHAPE_TYPE: flatbuffers::VOffsetT = 10;
+            pub const VT_SHAPE: flatbuffers::VOffsetT = 12;
 
             #[inline]
             pub fn physics(&self) -> Option<Physics<'a>> {
@@ -3159,12 +3626,57 @@ pub mod rlbot {
                         None,
                     )
             }
+            #[inline]
+            pub fn shape_type(&self) -> CollisionShape {
+                self._tab
+                    .get::<CollisionShape>(BallInfo::VT_SHAPE_TYPE, Some(CollisionShape::NONE))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn shape(&self) -> Option<flatbuffers::Table<'a>> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<flatbuffers::Table<'a>>>(
+                        BallInfo::VT_SHAPE,
+                        None,
+                    )
+            }
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn shape_as_box_shape(&'a self) -> Option<BoxShape<'_>> {
+                if self.shape_type() == CollisionShape::BoxShape {
+                    self.shape().map(|u| BoxShape::init_from_table(u))
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn shape_as_sphere_shape(&'a self) -> Option<SphereShape<'_>> {
+                if self.shape_type() == CollisionShape::SphereShape {
+                    self.shape().map(|u| SphereShape::init_from_table(u))
+                } else {
+                    None
+                }
+            }
+
+            #[inline]
+            #[allow(non_snake_case)]
+            pub fn shape_as_cylinder_shape(&'a self) -> Option<CylinderShape<'_>> {
+                if self.shape_type() == CollisionShape::CylinderShape {
+                    self.shape().map(|u| CylinderShape::init_from_table(u))
+                } else {
+                    None
+                }
+            }
         }
 
         pub struct BallInfoArgs<'a> {
             pub physics: Option<flatbuffers::WIPOffset<Physics<'a>>>,
             pub latestTouch: Option<flatbuffers::WIPOffset<Touch<'a>>>,
             pub dropShotInfo: Option<flatbuffers::WIPOffset<DropShotBallInfo<'a>>>,
+            pub shape_type: CollisionShape,
+            pub shape: Option<flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>>,
         }
         impl<'a> Default for BallInfoArgs<'a> {
             #[inline]
@@ -3173,10 +3685,12 @@ pub mod rlbot {
                     physics: None,
                     latestTouch: None,
                     dropShotInfo: None,
+                    shape_type: CollisionShape::NONE,
+                    shape: None,
                 }
             }
         }
-        pub struct BallInfoBuilder<'a: 'b, 'b> {
+        pub struct BallInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -3207,6 +3721,22 @@ pub mod rlbot {
                         BallInfo::VT_DROPSHOTINFO,
                         dropShotInfo,
                     );
+            }
+            #[inline]
+            pub fn add_shape_type(&mut self, shape_type: CollisionShape) {
+                self.fbb_.push_slot::<CollisionShape>(
+                    BallInfo::VT_SHAPE_TYPE,
+                    shape_type,
+                    CollisionShape::NONE,
+                );
+            }
+            #[inline]
+            pub fn add_shape(
+                &mut self,
+                shape: flatbuffers::WIPOffset<flatbuffers::UnionWIPOffset>,
+            ) {
+                self.fbb_
+                    .push_slot_always::<flatbuffers::WIPOffset<_>>(BallInfo::VT_SHAPE, shape);
             }
             #[inline]
             pub fn new(
@@ -3291,7 +3821,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct BoostPadStateBuilder<'a: 'b, 'b> {
+        pub struct BoostPadStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -3357,7 +3887,7 @@ pub mod rlbot {
 
             pub const VT_TILESTATE: flatbuffers::VOffsetT = 4;
 
-            /// True if the tile is damaged
+            /// The amount of damage the tile has sustained.
             #[inline]
             pub fn tileState(&self) -> TileState {
                 self._tab
@@ -3377,7 +3907,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct DropshotTileBuilder<'a: 'b, 'b> {
+        pub struct DropshotTileBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -3500,9 +4030,8 @@ pub mod rlbot {
                     .unwrap()
             }
             /// Turns true after final replay, the moment the 'winner' screen
-            /// appears. Remains true during next match
-            /// countdown. Turns false again the moment the 'choose team' screen
-            /// appears.
+            /// appears. Remains true during next match countdown.
+            /// Turns false again the moment the 'choose team' screen appears.
             #[inline]
             pub fn isMatchEnded(&self) -> bool {
                 self._tab
@@ -3551,7 +4080,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct GameInfoBuilder<'a: 'b, 'b> {
+        pub struct GameInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -3680,7 +4209,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct TeamInfoBuilder<'a: 'b, 'b> {
+        pub struct TeamInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -3856,7 +4385,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct GameTickPacketBuilder<'a: 'b, 'b> {
+        pub struct GameTickPacketBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4039,7 +4568,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct RigidBodyStateBuilder<'a: 'b, 'b> {
+        pub struct RigidBodyStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4162,7 +4691,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct PlayerRigidBodyStateBuilder<'a: 'b, 'b> {
+        pub struct PlayerRigidBodyStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4256,7 +4785,7 @@ pub mod rlbot {
                 BallRigidBodyStateArgs { state: None }
             }
         }
-        pub struct BallRigidBodyStateBuilder<'a: 'b, 'b> {
+        pub struct BallRigidBodyStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4364,7 +4893,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct RigidBodyTickBuilder<'a: 'b, 'b> {
+        pub struct RigidBodyTickBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4434,6 +4963,8 @@ pub mod rlbot {
                 args: &'args GoalInfoArgs<'args>,
             ) -> flatbuffers::WIPOffset<GoalInfo<'bldr>> {
                 let mut builder = GoalInfoBuilder::new(_fbb);
+                builder.add_height(args.height);
+                builder.add_width(args.width);
                 if let Some(x) = args.direction {
                     builder.add_direction(x);
                 }
@@ -4447,6 +4978,8 @@ pub mod rlbot {
             pub const VT_TEAMNUM: flatbuffers::VOffsetT = 4;
             pub const VT_LOCATION: flatbuffers::VOffsetT = 6;
             pub const VT_DIRECTION: flatbuffers::VOffsetT = 8;
+            pub const VT_WIDTH: flatbuffers::VOffsetT = 10;
+            pub const VT_HEIGHT: flatbuffers::VOffsetT = 12;
 
             #[inline]
             pub fn teamNum(&self) -> i32 {
@@ -4460,12 +4993,24 @@ pub mod rlbot {
             pub fn direction(&self) -> Option<&'a Vector3> {
                 self._tab.get::<Vector3>(GoalInfo::VT_DIRECTION, None)
             }
+            #[inline]
+            pub fn width(&self) -> f32 {
+                self._tab.get::<f32>(GoalInfo::VT_WIDTH, Some(0.0)).unwrap()
+            }
+            #[inline]
+            pub fn height(&self) -> f32 {
+                self._tab
+                    .get::<f32>(GoalInfo::VT_HEIGHT, Some(0.0))
+                    .unwrap()
+            }
         }
 
         pub struct GoalInfoArgs<'a> {
             pub teamNum: i32,
             pub location: Option<&'a Vector3>,
             pub direction: Option<&'a Vector3>,
+            pub width: f32,
+            pub height: f32,
         }
         impl<'a> Default for GoalInfoArgs<'a> {
             #[inline]
@@ -4474,10 +5019,12 @@ pub mod rlbot {
                     teamNum: 0,
                     location: None,
                     direction: None,
+                    width: 0.0,
+                    height: 0.0,
                 }
             }
         }
-        pub struct GoalInfoBuilder<'a: 'b, 'b> {
+        pub struct GoalInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4495,6 +5042,14 @@ pub mod rlbot {
             pub fn add_direction(&mut self, direction: &'b Vector3) {
                 self.fbb_
                     .push_slot_always::<&Vector3>(GoalInfo::VT_DIRECTION, direction);
+            }
+            #[inline]
+            pub fn add_width(&mut self, width: f32) {
+                self.fbb_.push_slot::<f32>(GoalInfo::VT_WIDTH, width, 0.0);
+            }
+            #[inline]
+            pub fn add_height(&mut self, height: f32) {
+                self.fbb_.push_slot::<f32>(GoalInfo::VT_HEIGHT, height, 0.0);
             }
             #[inline]
             pub fn new(
@@ -4576,7 +5131,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct BoostPadBuilder<'a: 'b, 'b> {
+        pub struct BoostPadBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4689,7 +5244,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct FieldInfoBuilder<'a: 'b, 'b> {
+        pub struct FieldInfoBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4806,7 +5361,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct Vector3PartialBuilder<'a: 'b, 'b> {
+        pub struct Vector3PartialBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -4916,7 +5471,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct RotatorPartialBuilder<'a: 'b, 'b> {
+        pub struct RotatorPartialBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5052,7 +5607,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct DesiredPhysicsBuilder<'a: 'b, 'b> {
+        pub struct DesiredPhysicsBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5164,7 +5719,7 @@ pub mod rlbot {
                 DesiredBallStateArgs { physics: None }
             }
         }
-        pub struct DesiredBallStateBuilder<'a: 'b, 'b> {
+        pub struct DesiredBallStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5283,7 +5838,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct DesiredCarStateBuilder<'a: 'b, 'b> {
+        pub struct DesiredCarStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5380,7 +5935,7 @@ pub mod rlbot {
                 DesiredBoostStateArgs { respawnTime: None }
             }
         }
-        pub struct DesiredBoostStateBuilder<'a: 'b, 'b> {
+        pub struct DesiredBoostStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5472,7 +6027,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct DesiredGameInfoStateBuilder<'a: 'b, 'b> {
+        pub struct DesiredGameInfoStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5506,6 +6061,89 @@ pub mod rlbot {
             }
         }
 
+        /// A console command which we will try to execute inside Rocket League.
+        /// See https://github.com/RLBot/RLBot/wiki/Console-Commands for a list of known commands.
+        pub enum ConsoleCommandOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct ConsoleCommand<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for ConsoleCommand<'a> {
+            type Inner = ConsoleCommand<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> ConsoleCommand<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                ConsoleCommand { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args ConsoleCommandArgs<'args>,
+            ) -> flatbuffers::WIPOffset<ConsoleCommand<'bldr>> {
+                let mut builder = ConsoleCommandBuilder::new(_fbb);
+                if let Some(x) = args.command {
+                    builder.add_command(x);
+                }
+                builder.finish()
+            }
+
+            pub const VT_COMMAND: flatbuffers::VOffsetT = 4;
+
+            #[inline]
+            pub fn command(&self) -> Option<&'a str> {
+                self._tab
+                    .get::<flatbuffers::ForwardsUOffset<&str>>(ConsoleCommand::VT_COMMAND, None)
+            }
+        }
+
+        pub struct ConsoleCommandArgs<'a> {
+            pub command: Option<flatbuffers::WIPOffset<&'a str>>,
+        }
+        impl<'a> Default for ConsoleCommandArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                ConsoleCommandArgs { command: None }
+            }
+        }
+        pub struct ConsoleCommandBuilder<'a, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> ConsoleCommandBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_command(&mut self, command: flatbuffers::WIPOffset<&'b str>) {
+                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
+                    ConsoleCommand::VT_COMMAND,
+                    command,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> ConsoleCommandBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                ConsoleCommandBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<ConsoleCommand<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
         pub enum DesiredGameStateOffset {}
         #[derive(Copy, Clone, Debug, PartialEq)]
 
@@ -5534,6 +6172,9 @@ pub mod rlbot {
                 args: &'args DesiredGameStateArgs<'args>,
             ) -> flatbuffers::WIPOffset<DesiredGameState<'bldr>> {
                 let mut builder = DesiredGameStateBuilder::new(_fbb);
+                if let Some(x) = args.consoleCommands {
+                    builder.add_consoleCommands(x);
+                }
                 if let Some(x) = args.gameInfoState {
                     builder.add_gameInfoState(x);
                 }
@@ -5553,6 +6194,7 @@ pub mod rlbot {
             pub const VT_CARSTATES: flatbuffers::VOffsetT = 6;
             pub const VT_BOOSTSTATES: flatbuffers::VOffsetT = 8;
             pub const VT_GAMEINFOSTATE: flatbuffers::VOffsetT = 10;
+            pub const VT_CONSOLECOMMANDS: flatbuffers::VOffsetT = 12;
 
             #[inline]
             pub fn ballState(&self) -> Option<DesiredBallState<'a>> {
@@ -5588,6 +6230,15 @@ pub mod rlbot {
                         None,
                     )
             }
+            #[inline]
+            pub fn consoleCommands(
+                &self,
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<ConsoleCommand<'a>>>>
+            {
+                self._tab.get::<flatbuffers::ForwardsUOffset<
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<ConsoleCommand<'a>>>,
+                >>(DesiredGameState::VT_CONSOLECOMMANDS, None)
+            }
         }
 
         pub struct DesiredGameStateArgs<'a> {
@@ -5603,6 +6254,11 @@ pub mod rlbot {
                 >,
             >,
             pub gameInfoState: Option<flatbuffers::WIPOffset<DesiredGameInfoState<'a>>>,
+            pub consoleCommands: Option<
+                flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'a, flatbuffers::ForwardsUOffset<ConsoleCommand<'a>>>,
+                >,
+            >,
         }
         impl<'a> Default for DesiredGameStateArgs<'a> {
             #[inline]
@@ -5612,10 +6268,11 @@ pub mod rlbot {
                     carStates: None,
                     boostStates: None,
                     gameInfoState: None,
+                    consoleCommands: None,
                 }
             }
         }
-        pub struct DesiredGameStateBuilder<'a: 'b, 'b> {
+        pub struct DesiredGameStateBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5665,6 +6322,18 @@ pub mod rlbot {
                         DesiredGameState::VT_GAMEINFOSTATE,
                         gameInfoState,
                     );
+            }
+            #[inline]
+            pub fn add_consoleCommands(
+                &mut self,
+                consoleCommands: flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'b, flatbuffers::ForwardsUOffset<ConsoleCommand<'b>>>,
+                >,
+            ) {
+                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
+                    DesiredGameState::VT_CONSOLECOMMANDS,
+                    consoleCommands,
+                );
             }
             #[inline]
             pub fn new(
@@ -5758,7 +6427,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct ColorBuilder<'a: 'b, 'b> {
+        pub struct ColorBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -5926,7 +6595,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct RenderMessageBuilder<'a: 'b, 'b> {
+        pub struct RenderMessageBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6065,7 +6734,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct RenderGroupBuilder<'a: 'b, 'b> {
+        pub struct RenderGroupBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6131,6 +6800,8 @@ pub mod rlbot {
                 args: &'args QuickChatArgs,
             ) -> flatbuffers::WIPOffset<QuickChat<'bldr>> {
                 let mut builder = QuickChatBuilder::new(_fbb);
+                builder.add_timeStamp(args.timeStamp);
+                builder.add_messageIndex(args.messageIndex);
                 builder.add_playerIndex(args.playerIndex);
                 builder.add_teamOnly(args.teamOnly);
                 builder.add_quickChatSelection(args.quickChatSelection);
@@ -6140,6 +6811,8 @@ pub mod rlbot {
             pub const VT_QUICKCHATSELECTION: flatbuffers::VOffsetT = 4;
             pub const VT_PLAYERINDEX: flatbuffers::VOffsetT = 6;
             pub const VT_TEAMONLY: flatbuffers::VOffsetT = 8;
+            pub const VT_MESSAGEINDEX: flatbuffers::VOffsetT = 10;
+            pub const VT_TIMESTAMP: flatbuffers::VOffsetT = 12;
 
             #[inline]
             pub fn quickChatSelection(&self) -> QuickChatSelection {
@@ -6164,12 +6837,26 @@ pub mod rlbot {
                     .get::<bool>(QuickChat::VT_TEAMONLY, Some(false))
                     .unwrap()
             }
+            #[inline]
+            pub fn messageIndex(&self) -> i32 {
+                self._tab
+                    .get::<i32>(QuickChat::VT_MESSAGEINDEX, Some(0))
+                    .unwrap()
+            }
+            #[inline]
+            pub fn timeStamp(&self) -> f32 {
+                self._tab
+                    .get::<f32>(QuickChat::VT_TIMESTAMP, Some(0.0))
+                    .unwrap()
+            }
         }
 
         pub struct QuickChatArgs {
             pub quickChatSelection: QuickChatSelection,
             pub playerIndex: i32,
             pub teamOnly: bool,
+            pub messageIndex: i32,
+            pub timeStamp: f32,
         }
         impl<'a> Default for QuickChatArgs {
             #[inline]
@@ -6178,10 +6865,12 @@ pub mod rlbot {
                     quickChatSelection: QuickChatSelection::Information_IGotIt,
                     playerIndex: 0,
                     teamOnly: false,
+                    messageIndex: 0,
+                    timeStamp: 0.0,
                 }
             }
         }
-        pub struct QuickChatBuilder<'a: 'b, 'b> {
+        pub struct QuickChatBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6203,6 +6892,16 @@ pub mod rlbot {
             pub fn add_teamOnly(&mut self, teamOnly: bool) {
                 self.fbb_
                     .push_slot::<bool>(QuickChat::VT_TEAMONLY, teamOnly, false);
+            }
+            #[inline]
+            pub fn add_messageIndex(&mut self, messageIndex: i32) {
+                self.fbb_
+                    .push_slot::<i32>(QuickChat::VT_MESSAGEINDEX, messageIndex, 0);
+            }
+            #[inline]
+            pub fn add_timeStamp(&mut self, timeStamp: f32) {
+                self.fbb_
+                    .push_slot::<f32>(QuickChat::VT_TIMESTAMP, timeStamp, 0.0);
             }
             #[inline]
             pub fn new(
@@ -6332,7 +7031,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct TinyPlayerBuilder<'a: 'b, 'b> {
+        pub struct TinyPlayerBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6452,7 +7151,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct TinyBallBuilder<'a: 'b, 'b> {
+        pub struct TinyBallBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6559,7 +7258,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct TinyPacketBuilder<'a: 'b, 'b> {
+        pub struct TinyPacketBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6668,7 +7367,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct PredictionSliceBuilder<'a: 'b, 'b> {
+        pub struct PredictionSliceBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6767,7 +7466,7 @@ pub mod rlbot {
                 BallPredictionArgs { slices: None }
             }
         }
-        pub struct BallPredictionBuilder<'a: 'b, 'b> {
+        pub struct BallPredictionBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6841,7 +7540,7 @@ pub mod rlbot {
                 RLBotPlayerArgs {}
             }
         }
-        pub struct RLBotPlayerBuilder<'a: 'b, 'b> {
+        pub struct RLBotPlayerBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6903,7 +7602,7 @@ pub mod rlbot {
                 HumanPlayerArgs {}
             }
         }
-        pub struct HumanPlayerBuilder<'a: 'b, 'b> {
+        pub struct HumanPlayerBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -6977,7 +7676,7 @@ pub mod rlbot {
                 PsyonixBotPlayerArgs { botSkill: 0.0 }
             }
         }
-        pub struct PsyonixBotPlayerBuilder<'a: 'b, 'b> {
+        pub struct PsyonixBotPlayerBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -7046,7 +7745,7 @@ pub mod rlbot {
                 PartyMemberBotPlayerArgs {}
             }
         }
-        pub struct PartyMemberBotPlayerBuilder<'a: 'b, 'b> {
+        pub struct PartyMemberBotPlayerBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -7257,7 +7956,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct PlayerLoadoutBuilder<'a: 'b, 'b> {
+        pub struct PlayerLoadoutBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -7479,7 +8178,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct LoadoutPaintBuilder<'a: 'b, 'b> {
+        pub struct LoadoutPaintBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -7691,7 +8390,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct PlayerConfigurationBuilder<'a: 'b, 'b> {
+        pub struct PlayerConfigurationBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -7914,7 +8613,10 @@ pub mod rlbot {
             #[inline]
             pub fn rumbleOption(&self) -> RumbleOption {
                 self._tab
-                    .get::<RumbleOption>(MutatorSettings::VT_RUMBLEOPTION, Some(RumbleOption::None))
+                    .get::<RumbleOption>(
+                        MutatorSettings::VT_RUMBLEOPTION,
+                        Some(RumbleOption::No_Rumble),
+                    )
                     .unwrap()
             }
             #[inline]
@@ -7988,7 +8690,7 @@ pub mod rlbot {
                     ballSizeOption: BallSizeOption::Default,
                     ballBouncinessOption: BallBouncinessOption::Default,
                     boostOption: BoostOption::Normal_Boost,
-                    rumbleOption: RumbleOption::None,
+                    rumbleOption: RumbleOption::No_Rumble,
                     boostStrengthOption: BoostStrengthOption::One,
                     gravityOption: GravityOption::Default,
                     demolishOption: DemolishOption::Default,
@@ -7996,7 +8698,7 @@ pub mod rlbot {
                 }
             }
         }
-        pub struct MutatorSettingsBuilder<'a: 'b, 'b> {
+        pub struct MutatorSettingsBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -8094,7 +8796,7 @@ pub mod rlbot {
                 self.fbb_.push_slot::<RumbleOption>(
                     MutatorSettings::VT_RUMBLEOPTION,
                     rumbleOption,
-                    RumbleOption::None,
+                    RumbleOption::No_Rumble,
                 );
             }
             #[inline]
@@ -8180,6 +8882,8 @@ pub mod rlbot {
                 if let Some(x) = args.playerConfigurations {
                     builder.add_playerConfigurations(x);
                 }
+                builder.add_enableLockstep(args.enableLockstep);
+                builder.add_existingMatchBehavior(args.existingMatchBehavior);
                 builder.add_instantStart(args.instantStart);
                 builder.add_skipReplays(args.skipReplays);
                 builder.add_gameMap(args.gameMap);
@@ -8193,6 +8897,8 @@ pub mod rlbot {
             pub const VT_SKIPREPLAYS: flatbuffers::VOffsetT = 10;
             pub const VT_INSTANTSTART: flatbuffers::VOffsetT = 12;
             pub const VT_MUTATORSETTINGS: flatbuffers::VOffsetT = 14;
+            pub const VT_EXISTINGMATCHBEHAVIOR: flatbuffers::VOffsetT = 16;
+            pub const VT_ENABLELOCKSTEP: flatbuffers::VOffsetT = 18;
 
             #[inline]
             pub fn playerConfigurations(
@@ -8236,6 +8942,21 @@ pub mod rlbot {
                         None,
                     )
             }
+            #[inline]
+            pub fn existingMatchBehavior(&self) -> ExistingMatchBehavior {
+                self._tab
+                    .get::<ExistingMatchBehavior>(
+                        MatchSettings::VT_EXISTINGMATCHBEHAVIOR,
+                        Some(ExistingMatchBehavior::Restart_If_Different),
+                    )
+                    .unwrap()
+            }
+            #[inline]
+            pub fn enableLockstep(&self) -> bool {
+                self._tab
+                    .get::<bool>(MatchSettings::VT_ENABLELOCKSTEP, Some(false))
+                    .unwrap()
+            }
         }
 
         pub struct MatchSettingsArgs<'a> {
@@ -8249,6 +8970,8 @@ pub mod rlbot {
             pub skipReplays: bool,
             pub instantStart: bool,
             pub mutatorSettings: Option<flatbuffers::WIPOffset<MutatorSettings<'a>>>,
+            pub existingMatchBehavior: ExistingMatchBehavior,
+            pub enableLockstep: bool,
         }
         impl<'a> Default for MatchSettingsArgs<'a> {
             #[inline]
@@ -8260,10 +8983,12 @@ pub mod rlbot {
                     skipReplays: false,
                     instantStart: false,
                     mutatorSettings: None,
+                    existingMatchBehavior: ExistingMatchBehavior::Restart_If_Different,
+                    enableLockstep: false,
                 }
             }
         }
-        pub struct MatchSettingsBuilder<'a: 'b, 'b> {
+        pub struct MatchSettingsBuilder<'a, 'b> {
             fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
         }
@@ -8318,6 +9043,25 @@ pub mod rlbot {
                     );
             }
             #[inline]
+            pub fn add_existingMatchBehavior(
+                &mut self,
+                existingMatchBehavior: ExistingMatchBehavior,
+            ) {
+                self.fbb_.push_slot::<ExistingMatchBehavior>(
+                    MatchSettings::VT_EXISTINGMATCHBEHAVIOR,
+                    existingMatchBehavior,
+                    ExistingMatchBehavior::Restart_If_Different,
+                );
+            }
+            #[inline]
+            pub fn add_enableLockstep(&mut self, enableLockstep: bool) {
+                self.fbb_.push_slot::<bool>(
+                    MatchSettings::VT_ENABLELOCKSTEP,
+                    enableLockstep,
+                    false,
+                );
+            }
+            #[inline]
             pub fn new(
                 _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
             ) -> MatchSettingsBuilder<'a, 'b> {
@@ -8329,6 +9073,100 @@ pub mod rlbot {
             }
             #[inline]
             pub fn finish(self) -> flatbuffers::WIPOffset<MatchSettings<'a>> {
+                let o = self.fbb_.end_table(self.start_);
+                flatbuffers::WIPOffset::new(o.value())
+            }
+        }
+
+        pub enum QuickChatMessagesOffset {}
+        #[derive(Copy, Clone, Debug, PartialEq)]
+
+        pub struct QuickChatMessages<'a> {
+            pub _tab: flatbuffers::Table<'a>,
+        }
+
+        impl<'a> flatbuffers::Follow<'a> for QuickChatMessages<'a> {
+            type Inner = QuickChatMessages<'a>;
+            #[inline]
+            fn follow(buf: &'a [u8], loc: usize) -> Self::Inner {
+                Self {
+                    _tab: flatbuffers::Table { buf, loc },
+                }
+            }
+        }
+
+        impl<'a> QuickChatMessages<'a> {
+            #[inline]
+            pub fn init_from_table(table: flatbuffers::Table<'a>) -> Self {
+                QuickChatMessages { _tab: table }
+            }
+            #[allow(unused_mut)]
+            pub fn create<'bldr: 'args, 'args: 'mut_bldr, 'mut_bldr>(
+                _fbb: &'mut_bldr mut flatbuffers::FlatBufferBuilder<'bldr>,
+                args: &'args QuickChatMessagesArgs<'args>,
+            ) -> flatbuffers::WIPOffset<QuickChatMessages<'bldr>> {
+                let mut builder = QuickChatMessagesBuilder::new(_fbb);
+                if let Some(x) = args.messages {
+                    builder.add_messages(x);
+                }
+                builder.finish()
+            }
+
+            pub const VT_MESSAGES: flatbuffers::VOffsetT = 4;
+
+            #[inline]
+            pub fn messages(
+                &self,
+            ) -> Option<flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<QuickChat<'a>>>>
+            {
+                self._tab.get::<flatbuffers::ForwardsUOffset<
+                    flatbuffers::Vector<'_, flatbuffers::ForwardsUOffset<QuickChat<'a>>>,
+                >>(QuickChatMessages::VT_MESSAGES, None)
+            }
+        }
+
+        pub struct QuickChatMessagesArgs<'a> {
+            pub messages: Option<
+                flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'a, flatbuffers::ForwardsUOffset<QuickChat<'a>>>,
+                >,
+            >,
+        }
+        impl<'a> Default for QuickChatMessagesArgs<'a> {
+            #[inline]
+            fn default() -> Self {
+                QuickChatMessagesArgs { messages: None }
+            }
+        }
+        pub struct QuickChatMessagesBuilder<'a, 'b> {
+            fbb_: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            start_: flatbuffers::WIPOffset<flatbuffers::TableUnfinishedWIPOffset>,
+        }
+        impl<'a: 'b, 'b> QuickChatMessagesBuilder<'a, 'b> {
+            #[inline]
+            pub fn add_messages(
+                &mut self,
+                messages: flatbuffers::WIPOffset<
+                    flatbuffers::Vector<'b, flatbuffers::ForwardsUOffset<QuickChat<'b>>>,
+                >,
+            ) {
+                self.fbb_.push_slot_always::<flatbuffers::WIPOffset<_>>(
+                    QuickChatMessages::VT_MESSAGES,
+                    messages,
+                );
+            }
+            #[inline]
+            pub fn new(
+                _fbb: &'b mut flatbuffers::FlatBufferBuilder<'a>,
+            ) -> QuickChatMessagesBuilder<'a, 'b> {
+                let start = _fbb.start_table();
+                QuickChatMessagesBuilder {
+                    fbb_: _fbb,
+                    start_: start,
+                }
+            }
+            #[inline]
+            pub fn finish(self) -> flatbuffers::WIPOffset<QuickChatMessages<'a>> {
                 let o = self.fbb_.end_table(self.start_);
                 flatbuffers::WIPOffset::new(o.value())
             }
