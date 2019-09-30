@@ -23,6 +23,8 @@ pub struct ControllerState {
     pub boost: bool,
     /// true if you want to press the handbrake button
     pub handbrake: bool,
+    /// true if you want to use the current item
+    pub use_item: bool,
 }
 
 pub struct Vector3 {
@@ -199,6 +201,7 @@ pub(crate) fn build_update_player_input(
         jump: controller_state.jump,
         boost: controller_state.boost,
         handbrake: controller_state.handbrake,
+        useItem: controller_state.use_item,
     };
     let controller_state = flat::ControllerState::create(&mut builder, &controller_state_args);
 
