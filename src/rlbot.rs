@@ -115,14 +115,15 @@ impl RLBot {
 #[cfg(test)]
 mod tests {
     use crate::rlbot::RLBot;
-    use std::{error::Error, mem};
+    use std::{error::Error, mem::MaybeUninit};
 
     #[test]
     #[ignore = "compile-only test"]
     fn game_data_is_send() -> Result<(), Box<dyn Error>> {
         fn assert_send<T: Send + 'static>(_: T) {}
 
-        let rlbot: RLBot = unsafe { mem::uninitialized() };
+        let rlbot: MaybeUninit<RLBot> = MaybeUninit::uninit();
+        let rlbot = unsafe { rlbot.assume_init() }; // undefined behavior!
         assert_send(rlbot.physicist().next_flat()?);
         assert_send(rlbot.packeteer().next()?);
         assert_send(rlbot.packeteer().next_flatbuffer()?);

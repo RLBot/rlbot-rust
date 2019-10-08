@@ -190,7 +190,7 @@ fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
 #[cfg(test)]
 mod tests {
     use crate::{ffi, interface::RLBotInterface};
-    use std::{error::Error, mem};
+    use std::{error::Error, mem::MaybeUninit};
 
     #[test]
     #[ignore = "compile-only test"]
@@ -202,7 +202,8 @@ mod tests {
         assert_send(ffi::FieldInfo::default());
         assert_send(ffi::BallPredictionPacket::default());
 
-        let interface: RLBotInterface = unsafe { mem::uninitialized() };
+        let interface: MaybeUninit<RLBotInterface> = MaybeUninit::uninit();
+        let interface = unsafe { interface.assume_init() }; // undefined behavior!
         assert_send(interface.update_live_data_packet_flatbuffer());
         assert_send(interface.update_rigid_body_tick_flatbuffer());
         assert_send(interface.update_field_info_flatbuffer());
