@@ -123,7 +123,7 @@ This will update the `src/rlbot_generated.rs` file.
 
 Bindings are generated with [rust-bindgen]. Those docs are required reading.
 
-[rust-bindgen]: https://rust-lang-nursery.github.io/rust-bindgen/
+[rust-bindgen]: https://rust-lang.github.io/rust-bindgen/
 
 After bindgen and its prerequisites are installed and working, run this
 delightfully short command:
