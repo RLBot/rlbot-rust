@@ -2,7 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/rlbot.svg)](https://crates.io/crates/rlbot)
 [![docs](https://docs.rs/rlbot/badge.svg)](https://docs.rs/rlbot/)
-[![Build Status](https://travis-ci.org/whatisaphone/rlbot-rust.svg?branch=master)](https://travis-ci.org/whatisaphone/rlbot-rust)
+[![Build Status](https://travis-ci.org/rlbot/rlbot-rust.svg?branch=master)](https://travis-ci.org/rlbot/rlbot-rust)
 
 [RLBot] is a framework for creating offline Rocket League bots. This crate lets
 you write bots using a simple, safe interface that should feel comfortable to
