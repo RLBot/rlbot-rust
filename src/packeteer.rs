@@ -5,7 +5,7 @@ use crate::{
 };
 use std::{
     error::Error,
-    mem,
+    mem::MaybeUninit,
     time::{Duration, Instant},
 };
 
@@ -78,7 +78,8 @@ impl<'a> Packeteer<'a> {
     )]
     #[allow(deprecated)]
     pub fn try_next_ffi(&mut self) -> Result<Option<ffi::LiveDataPacket>, Box<dyn Error>> {
-        let mut packet = unsafe { mem::uninitialized() };
+        let packet: MaybeUninit<ffi::LiveDataPacket> = MaybeUninit::uninit();
+        let mut packet = unsafe { packet.assume_init() }; // undefined behavior!
         self.rlbot
             .interface()
             .update_live_data_packet(&mut packet)?;
