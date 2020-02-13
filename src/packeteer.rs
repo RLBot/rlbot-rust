@@ -1,11 +1,11 @@
 #![allow(clippy::float_cmp)]
 
 use crate::{
-    ffi, flat, game::GameTickPacket, game_deserialize::deserialize_game_tick_packet, rlbot::RLBot,
+    ffi, ffi::LiveDataPacket, flat, game::GameTickPacket,
+    game_deserialize::deserialize_game_tick_packet, rlbot::RLBot,
 };
 use std::{
     error::Error,
-    mem,
     time::{Duration, Instant},
 };
 
@@ -78,7 +78,7 @@ impl<'a> Packeteer<'a> {
     )]
     #[allow(deprecated)]
     pub fn try_next_ffi(&mut self) -> Result<Option<ffi::LiveDataPacket>, Box<dyn Error>> {
-        let mut packet = unsafe { mem::uninitialized() };
+        let mut packet = LiveDataPacket::default();
         self.rlbot
             .interface()
             .update_live_data_packet(&mut packet)?;
