@@ -84,9 +84,10 @@ impl RLBotCoreInterface {
             panic!("RLBot can only be initialized once");
         }
 
-        let dllpath = maybe_join(rlbot_dll_directory, "RLBot_Core_Interface.dll");
-        let sopath = maybe_join(rlbot_dll_directory, "libRLBotInterface.so");
-        let library = Library::new(dllpath).or_else(|_| Library::new(sopath))?;
+        let path = maybe_join(rlbot_dll_directory, "RLBot_Core_Interface.dll");
+        let library = Library::new(&path)
+            .or_else(|_| Library::new(path.with_file_name("libRLBotInterface.so")))
+            .or_else(|_| Library::new(path.with_file_name("RLBot_Core_Interface_32.dll")))?;
 
         // This DLL does not seem to clean itself up all the way when unloaded, so to
         // avoid segfaults/etc we need to make sure it stays loaded until the process
