@@ -41,9 +41,8 @@ pub fn run_hive<H: Hivemind>(mut hive: H) -> Result<(), Box<dyn Error>> {
 
     // Create a Vec<usize> copy of the original Vec<i32>.
     let usize_drone_indices: Vec<usize> = drone_indices
-        .clone()
-        .into_iter()
-        .map(|element| element as usize)
+        .iter()
+        .map(|element| *element as usize)
         .collect();
     hive.set_drone_indices(usize_drone_indices);
 
