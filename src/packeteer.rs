@@ -1,6 +1,6 @@
 #![allow(clippy::float_cmp)]
 
-use crate::{ffi, ffi::LiveDataPacket, flat, game::GameTickPacket, rlbot::RLBot};
+use crate::{ffi, ffi::LiveDataPacket, game::GameTickPacket, rlbot::RLBot};
 use std::{
     error::Error,
     time::{Duration, Instant},
@@ -97,7 +97,7 @@ impl<'a> Packeteer<'a> {
     /// This function returns an error if ten seconds pass without a new
     /// packet being received. The assumption is that the game froze or
     /// crashed, and waiting longer will not help.
-    pub fn next_flatbuffer<'fb>(&mut self) -> Result<flat::GameTickPacket<'fb>, Box<dyn Error>> {
+    pub fn next_flatbuffer(&mut self) -> Result<GameTickPacket, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next_flat()))
     }
 
@@ -105,14 +105,12 @@ impl<'a> Packeteer<'a> {
     ///
     /// If there is a packet that is newer than the previous packet, it is
     /// returned. Otherwise, `None` is returned.
-    pub fn try_next_flat<'fb>(&mut self) -> Option<flat::GameTickPacket<'fb>> {
+    pub fn try_next_flat(&mut self) -> Option<GameTickPacket> {
         if let Some(packet) = self.rlbot.interface().update_live_data_packet_flatbuffer() {
-            let game_time = packet.gameInfo().map(|gi| gi.secondsElapsed());
-            if let Some(game_time) = game_time {
-                if game_time != self.prev_game_time {
-                    self.prev_game_time = game_time;
-                    return Some(packet);
-                }
+            let game_time = packet.game_info.seconds_elapsed;
+            if game_time != self.prev_game_time {
+                self.prev_game_time = game_time;
+                return Some(packet);
             }
         }
         None

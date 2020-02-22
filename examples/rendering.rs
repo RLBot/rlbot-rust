@@ -17,8 +17,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut packets = rlbot.packeteer();
     loop {
-        let packet = packets.next_flatbuffer()?;
-        let mut total_ms = (packet.gameInfo().unwrap().secondsElapsed() * 1000.0) as i32;
+        let packet = packets.next()?;
+        let mut total_ms = (packet.game_info.seconds_elapsed * 1000.0) as i32;
         let ms = total_ms % 1000;
         total_ms -= ms;
         let sec = total_ms / 1000 % 60;
