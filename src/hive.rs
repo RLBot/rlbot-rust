@@ -96,12 +96,15 @@ fn parse_framework_command_line(
     if args.next().as_ref().map(|s| &s[..]) != Some("--drone-indices") {
         return Err(());
     }
-    // Understand the rest of the arguments as drone indices.
-    let mut drone_indices: Vec<i32> = vec![];
-    for arg in args {
-        let index: i32 = arg.parse().map_err(|_| ())?;
-        drone_indices.push(index);
-    }
+    // drone indices are comma separated integers, e.g. "0,1,2,3,4,5"
+    let drone_indices_result: Result<Vec<i32>, _> = args
+        .next()
+        .ok_or(())?
+        .split(',')
+        .map(|ref s| s.parse())
+        .collect();
+    let drone_indices = drone_indices_result
+        .expect("Your --drone-indices command line argument is bad and you should feel bad.");
 
     Ok(Some(HiveFrameworkArgs {
         rlbot_version,
@@ -154,12 +157,7 @@ mod tests {
             "--rlbot-dll-directory",
             "/tmp",
             "--drone-indices",
-            "0",
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
+            "0,1,2,3,4,5",
         ])
         .unwrap()
         .unwrap();
