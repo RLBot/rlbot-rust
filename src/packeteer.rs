@@ -1,9 +1,6 @@
 #![allow(clippy::float_cmp)]
 
-use crate::{
-    ffi, ffi::LiveDataPacket, flat, game::GameTickPacket,
-    game_deserialize::deserialize_game_tick_packet, rlbot::RLBot,
-};
+use crate::{ffi, ffi::LiveDataPacket, flat, game::GameTickPacket, rlbot::RLBot};
 use std::{
     error::Error,
     time::{Duration, Instant},
@@ -42,7 +39,7 @@ impl<'a> Packeteer<'a> {
     /// crashed, and waiting longer will not help.
     #[allow(clippy::should_implement_trait)]
     pub fn next(&mut self) -> Result<GameTickPacket, Box<dyn Error>> {
-        self.next_flatbuffer().map(deserialize_game_tick_packet)
+        self.next_flatbuffer().map(From::from)
     }
 
     /// Polls for the next unique [`GameTickPacket`].
@@ -50,7 +47,7 @@ impl<'a> Packeteer<'a> {
     /// If there is a packet that is newer than the previous packet, it is
     /// returned. Otherwise, `None` is returned.
     pub fn try_next(&mut self) -> Option<GameTickPacket> {
-        self.try_next_flat().map(deserialize_game_tick_packet)
+        self.try_next_flat().map(From::from)
     }
 
     /// Blocks until we receive the next unique [`ffi::LiveDataPacket`], and

@@ -22,6 +22,8 @@ impl From<flat::GameTickPacket<'_>> for GameTickPacket {
     }
 }
 
+#[allow(unused)]
+#[deprecated(note = "Use The From trait implementation instead")]
 pub fn deserialize_game_tick_packet(packet: flat::GameTickPacket<'_>) -> GameTickPacket {
     GameTickPacket {
         players: flat_vector_iter(packet.players().unwrap())
