@@ -1,4 +1,4 @@
-use crate::{dll::RLBotCoreInterface, error::RLBotError, ffi, flat};
+use crate::{dll::RLBotCoreInterface, error::RLBotError, ffi, flat, game::*};
 use std::{
     os::raw::{c_int, c_void},
     ptr::null_mut,
@@ -32,9 +32,9 @@ impl RLBotInterface {
     /// Grabs the current [`flat::GameTickPacket`] from RLBot,
     /// if any. Consider using [`packeteer`](RLBot::packeteer) instead for
     /// a more convenient interface.
-    pub fn update_live_data_packet_flatbuffer<'fb>(&self) -> Option<flat::GameTickPacket<'fb>> {
+    pub fn update_live_data_packet_flatbuffer(&self) -> Option<GameTickPacket> {
         let byte_buffer = (self.dll.update_live_data_packet_flatbuffer)();
-        get_flatbuffer::<flat::GameTickPacket<'_>>(byte_buffer)
+        get_flatbuffer::<flat::GameTickPacket<'_>>(byte_buffer).map(From::from)
     }
 
     /// Grabs the current [`LiveDataPacket`](ffi::LiveDataPacket) from RLBot.

@@ -95,10 +95,7 @@ impl RLBot {
         // is loading. Wait for RoundActive to stabilize before trusting it.
         while count < 5 {
             let packet = packets.next_flatbuffer()?;
-            let is_round_active = packet
-                .gameInfo()
-                .map(|gi| gi.isRoundActive())
-                .unwrap_or_default();
+            let is_round_active = packet.game_info.is_round_active;
             if is_round_active {
                 count += 1;
             } else {

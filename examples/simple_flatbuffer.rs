@@ -7,7 +7,7 @@
 #![warn(clippy::all)]
 
 use na::Vector2;
-use rlbot::flat;
+use rlbot::{flat, GameTickPacket};
 use std::{error::Error, f32::consts::PI};
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -18,12 +18,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut packets = rlbot.packeteer();
     loop {
-        let packet = packets.next_flatbuffer()?;
+        let packet = packets.next()?;
 
         // check that match is started and not showing a replay.
         // `packets.next_flatbuffer()` sleeps until the next packet is
         // available, so this loop will not roast your CPU :)
-        if packet.gameInfo().unwrap().isRoundActive() {
+        if packet.game_info.is_round_active {
             let input = get_input(&packet);
             rlbot
                 .interface()
@@ -32,21 +32,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 }
 
-fn get_input<'a>(packet: &flat::GameTickPacket<'_>) -> flatbuffers::FlatBufferBuilder<'a> {
-    let ball = packet.ball().expect("Missing ball");
-    let ball_phys = ball.physics().expect("Missing ball physics");
-    let flat_ball_loc = ball_phys.location().expect("Missing ball location");
-    let ball_loc = Vector2::new(flat_ball_loc.x(), flat_ball_loc.y());
+fn get_input<'a>(packet: &GameTickPacket) -> flatbuffers::FlatBufferBuilder<'a> {
+    let ball = packet.ball.as_ref().expect("Missing ball");
+    let ball_phys = &ball.physics;
+    let ball_loc_3d = &ball_phys.location;
+    let ball_loc = Vector2::new(ball_loc_3d.x, ball_loc_3d.y);
 
-    let car = packet.players().expect("Missing players").get(0);
-    let car_phys = car.physics().expect("Missing player physics");
-    let flat_car_loc = car_phys.location().expect("Missing player location");
-    let car_loc = Vector2::new(flat_car_loc.x(), flat_car_loc.y());
+    let car = packet.players.get(0).expect("Missing player info");
+    let car_phys = &car.physics;
+    let car_loc_3d = &car_phys.location;
+    let car_loc = Vector2::new(car_loc_3d.x, car_loc_3d.y);
 
     let offset = ball_loc - car_loc;
     let desired_yaw = f32::atan2(offset.y, offset.x);
-    let flat_car_rot = car_phys.rotation().expect("Missing player rotation");
-    let steer = desired_yaw - flat_car_rot.yaw();
+    let car_rot = &car_phys.rotation;
+    let steer = desired_yaw - car_rot.yaw;
 
     let player_index = 0;
     let controller_state_args = flat::ControllerStateArgs {
