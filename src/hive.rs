@@ -32,16 +32,16 @@ pub trait Hivemind {
 /// first element corresponds to the first index in `drone_indices`, the second
 /// to the second, etc.
 pub fn run_hive<H: Hivemind>(mut hive: H) -> Result<(), Box<dyn Error>> {
-    let args = parse_framework_args()
+    let args = parse_hive_framework_args()
         .map_err(|_| Box::<dyn Error>::from("could not parse framework arguments"))?
         .ok_or_else(|| Box::<dyn Error>::from("not launched by framework"))?;
 
-    let drone_indices = args.drone_indices.to_vec();
+    let drone_indices = args.drone_indices.clone();
     let rlbot = init_with_options(args.into())?;
 
     // Create a Vec<usize> copy of the original Vec<i32>.
     let usize_drone_indices: Vec<usize> = drone_indices
-        .to_vec()
+        .clone()
         .into_iter()
         .map(|element| element as usize)
         .collect();
@@ -68,7 +68,15 @@ pub fn run_hive<H: Hivemind>(mut hive: H) -> Result<(), Box<dyn Error>> {
 }
 
 // Same as in framework.rs except it's for a hivemind.
-fn parse_framework_args() -> Result<Option<HiveFrameworkArgs>, ()> {
+/// Parse the arguments passed by the RLBot framework.
+///
+/// This function returns:
+///
+/// * `Ok(Some(args))` – if the app was launched by the framework.
+/// * `Ok(None)` – if the app was *not* launched by the framework.
+/// * `Err(_)` – if it appears the app was launched by the framework, but we
+///   could not understand the arguments.
+pub fn parse_hive_framework_args() -> Result<Option<HiveFrameworkArgs>, ()> {
     parse_framework_command_line(env::args().skip(1))
 }
 
@@ -105,7 +113,7 @@ fn parse_framework_command_line(
 }
 
 /// The arguments passed by the RLBot framework for a hivemind.
-struct HiveFrameworkArgs {
+pub struct HiveFrameworkArgs {
     /// The version of the RLBot framework used to launch the app. This is the
     /// same as the version shown when you run this Python code:
     ///
@@ -131,4 +139,54 @@ impl From<HiveFrameworkArgs> for InitOptions {
     }
 }
 
-// TODO Tests?
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn pfcl(ss: Vec<&str>) -> Result<Option<HiveFrameworkArgs>, ()> {
+        parse_framework_command_line(ss.into_iter().map(str::to_string))
+    }
+
+    #[test]
+    fn parse_hive_framework_args() {
+        let args = pfcl(vec![
+            "--rlbot-version",
+            "1.35.5",
+            "--rlbot-dll-directory",
+            "/tmp",
+            "--drone-indices",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+        ])
+        .unwrap()
+        .unwrap();
+        assert_eq!(args.rlbot_version, "1.35.5");
+        assert_eq!(args.rlbot_dll_directory.to_str().unwrap(), "/tmp");
+        assert_eq!(args.drone_indices, vec![0, 1, 2, 3, 4, 5]);
+    }
+
+    #[test]
+    fn parse_empty_command_line() {
+        let args = pfcl(vec![]).unwrap();
+        assert!(args.is_none());
+    }
+
+    #[test]
+    fn parse_non_matching_command_line() {
+        let args = pfcl(vec!["--unrelated-argument"]).unwrap();
+        assert!(args.is_none());
+    }
+
+    #[test]
+    fn parse_error() {
+        let args = pfcl(vec!["--rlbot-version"]);
+        assert!(args.is_err());
+
+        let args = pfcl(vec!["--rlbot-version", "1.35.5"]);
+        assert!(args.is_err());
+    }
+}

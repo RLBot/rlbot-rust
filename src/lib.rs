@@ -129,8 +129,8 @@
 
 pub use crate::{
     framework::{parse_framework_args, run_bot, Bot, FrameworkArgs},
-    hive::{run_hive, Hivemind},
     game::*,
+    hive::{parse_hive_framework_args, run_hive, HiveFrameworkArgs, Hivemind},
     init::{init, init_with_options, InitOptions},
     match_settings::*,
     packeteer::Packeteer,
@@ -146,9 +146,9 @@ mod error;
 pub mod ffi;
 mod ffi_impls;
 mod framework;
-mod hive;
 mod game;
 mod game_deserialize;
+mod hive;
 mod init;
 mod interface;
 mod match_settings;
