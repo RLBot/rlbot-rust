@@ -13,7 +13,7 @@ type UpdateLiveDataPacketFlatbuffer = extern "C" fn() -> ByteBuffer;
 type UpdateLiveDataPacket = extern "C" fn(pLiveData: *mut LiveDataPacket) -> RLBotCoreStatus;
 type UpdateRigidBodyTickFlatbuffer = extern "C" fn() -> ByteBuffer;
 type UpdateRigidBodyTick = extern "C" fn(rigidBodyTick: *mut RigidBodyTick) -> RLBotCoreStatus;
-type Free = extern "C" fn(ptr: *mut ::std::os::raw::c_void);
+pub(crate) type Free = extern "C" fn(ptr: *mut ::std::os::raw::c_void);
 type SetGameState = extern "C" fn(
     gameStateData: *mut ::std::os::raw::c_void,
     size: ::std::os::raw::c_int,
@@ -59,7 +59,7 @@ static INITIALIZED: AtomicBool = AtomicBool::new(false);
 pub struct RLBotCoreInterface {
     pub update_field_info_flatbuffer: UpdateFieldInfoFlatbuffer,
     pub update_field_info: UpdateFieldInfo,
-    pub update_live_data_packet_flatbuffer: UpdateLiveDataPacketFlatbuffer,
+    update_live_data_packet_flatbuffer_raw: UpdateLiveDataPacketFlatbuffer,
     pub update_live_data_packet: UpdateLiveDataPacket,
     pub update_rigid_body_tick_flatbuffer: UpdateRigidBodyTickFlatbuffer,
     pub update_rigid_body_tick: UpdateRigidBodyTick,
@@ -79,6 +79,15 @@ pub struct RLBotCoreInterface {
 }
 
 impl RLBotCoreInterface {
+    pub fn update_live_data_packet_flatbuffer(&self) -> Option<Vec<u8>> {
+        let byte_buffer = (self.update_live_data_packet_flatbuffer_raw)();
+        let ret = byte_buffer.into();
+
+        (self.free)(byte_buffer.ptr);
+
+        ret
+    }
+
     pub fn load(rlbot_dll_directory: Option<&Path>) -> io::Result<RLBotCoreInterface> {
         if INITIALIZED.swap(true, Ordering::SeqCst) {
             panic!("RLBot can only be initialized once");
@@ -98,7 +107,7 @@ impl RLBotCoreInterface {
             Ok(RLBotCoreInterface {
                 update_field_info_flatbuffer: *library.get(b"UpdateFieldInfoFlatbuffer")?,
                 update_field_info: *library.get(b"UpdateFieldInfo")?,
-                update_live_data_packet_flatbuffer: *library
+                update_live_data_packet_flatbuffer_raw: *library
                     .get(b"UpdateLiveDataPacketFlatbuffer")?,
                 update_live_data_packet: *library.get(b"UpdateLiveDataPacket")?,
                 update_rigid_body_tick_flatbuffer: *library
