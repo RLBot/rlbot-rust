@@ -33,8 +33,9 @@ impl RLBotInterface {
     /// if any. Consider using [`packeteer`](RLBot::packeteer) instead for
     /// a more convenient interface.
     pub fn update_live_data_packet_flatbuffer(&self) -> Option<GameTickPacket> {
-        let byte_buffer = (self.dll.update_live_data_packet_flatbuffer)();
-        get_flatbuffer::<flat::GameTickPacket<'_>>(byte_buffer).map(From::from)
+        self.dll
+            .update_live_data_packet_flatbuffer()
+            .map(|buf| flatbuffers::get_root::<flat::GameTickPacket<'_>>(&buf).into())
     }
 
     /// Grabs the current [`LiveDataPacket`](ffi::LiveDataPacket) from RLBot.

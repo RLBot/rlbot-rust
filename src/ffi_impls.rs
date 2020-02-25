@@ -1,4 +1,5 @@
-use crate::ffi;
+use crate::{ffi, ffi::ByteBuffer};
+use std::ptr;
 
 impl ffi::LiveDataPacket {
     /// Yields the [`PlayerInfo`](ffi::PlayerInfo) for each player in the match.
@@ -73,5 +74,22 @@ impl ffi::PlayerConfiguration {
         for (i, cp) in name.encode_utf16().enumerate() {
             self.Name[i] = cp;
         }
+    }
+}
+
+impl From<ByteBuffer> for Option<Vec<u8>> {
+    fn from(byte_buffer: ByteBuffer) -> Self {
+        let len = byte_buffer.size as usize;
+        if len == 0 || byte_buffer.ptr.is_null() {
+            return None;
+        }
+
+        let mut buf = Vec::with_capacity(len);
+        unsafe {
+            ptr::copy_nonoverlapping(byte_buffer.ptr as *const u8, buf.as_mut_ptr(), len);
+            buf.set_len(len);
+        }
+
+        Some(buf)
     }
 }
