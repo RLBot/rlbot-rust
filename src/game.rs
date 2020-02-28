@@ -186,6 +186,25 @@ pub struct GameTickPacket {
     pub(crate) _non_exhaustive: (),
 }
 
+pub struct GoalInfo {
+    pub team_num: i32,
+    pub location: Vector3,
+    pub direction: Vector3,
+    pub(crate) _non_exhaustive: (),
+}
+
+pub struct BoostPad {
+    pub location: Vector3,
+    pub full_boost: bool,
+    pub(crate) _non_exhaustive: (),
+}
+
+pub struct FieldInfo {
+    pub boost_pads: SmallVec<[BoostPad; 64]>,
+    pub goals: SmallVec<[GoalInfo; 256]>,
+    pub(crate) _non_exhaustive: (),
+}
+
 pub(crate) fn build_update_player_input(
     player_index: i32,
     controller_state: &ControllerState,

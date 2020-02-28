@@ -168,3 +168,38 @@ impl From<flat::ScoreInfo<'_>> for ScoreInfo {
         }
     }
 }
+
+impl From<flat::GoalInfo<'_>> for GoalInfo {
+    fn from(goal_info: flat::GoalInfo<'_>) -> Self {
+        Self {
+            team_num: goal_info.teamNum(),
+            location: goal_info.location().unwrap().into(),
+            direction: goal_info.direction().unwrap().into(),
+            _non_exhaustive: (),
+        }
+    }
+}
+
+impl From<flat::BoostPad<'_>> for BoostPad {
+    fn from(boost_pad: flat::BoostPad<'_>) -> Self {
+        Self {
+            location: boost_pad.location().unwrap().into(),
+            full_boost: boost_pad.isFullBoost(),
+            _non_exhaustive: (),
+        }
+    }
+}
+
+impl From<flat::FieldInfo<'_>> for FieldInfo {
+    fn from(info: flat::FieldInfo<'_>) -> Self {
+        Self {
+            boost_pads: flat_vector_iter(info.boostPads().unwrap())
+                .map(BoostPad::from)
+                .collect(),
+            goals: flat_vector_iter(info.goals().unwrap())
+                .map(GoalInfo::from)
+                .collect(),
+            _non_exhaustive: (),
+        }
+    }
+}
