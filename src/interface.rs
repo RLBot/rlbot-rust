@@ -15,9 +15,10 @@ impl RLBotInterface {
     }
 
     /// Grabs the current [`flat::FieldInfo`] from RLBot, if any
-    pub fn update_field_info_flatbuffer<'fb>(&self) -> Option<flat::FieldInfo<'fb>> {
-        let byte_buffer = (self.dll.update_field_info_flatbuffer)();
-        get_flatbuffer::<flat::FieldInfo<'_>>(byte_buffer)
+    pub fn update_field_info_flatbuffer(&self) -> Option<FieldInfo> {
+        self.dll
+            .update_field_info_flatbuffer()
+            .map(|buf| flatbuffers::get_root::<flat::FieldInfo<'_>>(&buf).into())
     }
 
     /// Grabs the current [`ffi::FieldInfo`] from RLBot

@@ -57,7 +57,7 @@ type GetBallPredictionStruct =
 static INITIALIZED: AtomicBool = AtomicBool::new(false);
 
 pub struct RLBotCoreInterface {
-    pub update_field_info_flatbuffer: UpdateFieldInfoFlatbuffer,
+    update_field_info_flatbuffer_raw: UpdateFieldInfoFlatbuffer,
     pub update_field_info: UpdateFieldInfo,
     update_live_data_packet_flatbuffer_raw: UpdateLiveDataPacketFlatbuffer,
     pub update_live_data_packet: UpdateLiveDataPacket,
@@ -79,13 +79,23 @@ pub struct RLBotCoreInterface {
 }
 
 impl RLBotCoreInterface {
-    pub fn update_live_data_packet_flatbuffer(&self) -> Option<Vec<u8>> {
-        let byte_buffer = (self.update_live_data_packet_flatbuffer_raw)();
+    fn copy_and_free_byte_buffer<T>(&self, f: T) -> Option<Vec<u8>>
+    where
+        T: Fn() -> ByteBuffer,
+    {
+        let byte_buffer = f();
         let ret = byte_buffer.into();
-
         (self.free)(byte_buffer.ptr);
 
         ret
+    }
+
+    pub fn update_field_info_flatbuffer(&self) -> Option<Vec<u8>> {
+        self.copy_and_free_byte_buffer(|| (self.update_field_info_flatbuffer_raw)())
+    }
+
+    pub fn update_live_data_packet_flatbuffer(&self) -> Option<Vec<u8>> {
+        self.copy_and_free_byte_buffer(|| (self.update_live_data_packet_flatbuffer_raw)())
     }
 
     pub fn load(rlbot_dll_directory: Option<&Path>) -> io::Result<RLBotCoreInterface> {
@@ -105,7 +115,7 @@ impl RLBotCoreInterface {
 
         unsafe {
             Ok(RLBotCoreInterface {
-                update_field_info_flatbuffer: *library.get(b"UpdateFieldInfoFlatbuffer")?,
+                update_field_info_flatbuffer_raw: *library.get(b"UpdateFieldInfoFlatbuffer")?,
                 update_field_info: *library.get(b"UpdateFieldInfo")?,
                 update_live_data_packet_flatbuffer_raw: *library
                     .get(b"UpdateLiveDataPacketFlatbuffer")?,
