@@ -74,7 +74,7 @@ pub struct RLBotCoreInterface {
     pub update_player_input_flatbuffer: UpdatePlayerInputFlatbuffer,
     pub render_group: RenderGroup,
     pub is_initialized: IsInitialized,
-    pub get_ball_prediction: GetBallPrediction,
+    get_ball_prediction_raw: GetBallPrediction,
     pub get_ball_prediction_struct: GetBallPredictionStruct,
 }
 
@@ -100,6 +100,10 @@ impl RLBotCoreInterface {
 
     pub fn update_rigid_body_tick_flatbuffer(&self) -> Option<Vec<u8>> {
         self.copy_and_free_byte_buffer(|| (self.update_rigid_body_tick_flatbuffer_raw)())
+    }
+
+    pub fn get_ball_prediction(&self) -> Option<Vec<u8>> {
+        self.copy_and_free_byte_buffer(|| (self.get_ball_prediction_raw)())
     }
 
     pub fn load(rlbot_dll_directory: Option<&Path>) -> io::Result<RLBotCoreInterface> {
@@ -137,7 +141,7 @@ impl RLBotCoreInterface {
                 update_player_input_flatbuffer: *library.get(b"UpdatePlayerInputFlatbuffer")?,
                 render_group: *library.get(b"RenderGroup")?,
                 is_initialized: *library.get(b"IsInitialized")?,
-                get_ball_prediction: *library.get(b"GetBallPrediction")?,
+                get_ball_prediction_raw: *library.get(b"GetBallPrediction")?,
                 get_ball_prediction_struct: *library.get(b"GetBallPredictionStruct")?,
             })
         }
