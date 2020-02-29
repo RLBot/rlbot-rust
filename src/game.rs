@@ -231,6 +231,17 @@ pub struct RigidBodyTick {
     pub(crate) _non_exhaustive: (),
 }
 
+pub struct PredictionSlice {
+    pub game_seconds: f32,
+    pub physics: Physics,
+    pub(crate) _non_exhaustive: (),
+}
+
+pub struct BallPrediction {
+    pub slices: SmallVec<[PredictionSlice; 512]>,
+    pub(crate) _non_exhaustive: (),
+}
+
 pub(crate) fn build_update_player_input(
     player_index: i32,
     controller_state: &ControllerState,

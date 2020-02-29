@@ -274,3 +274,24 @@ impl From<flat::RigidBodyTick<'_>> for RigidBodyTick {
         }
     }
 }
+
+impl From<flat::PredictionSlice<'_>> for PredictionSlice {
+    fn from(slice: flat::PredictionSlice<'_>) -> Self {
+        Self {
+            game_seconds: slice.gameSeconds(),
+            physics: slice.physics().unwrap().into(),
+            _non_exhaustive: (),
+        }
+    }
+}
+
+impl From<flat::BallPrediction<'_>> for BallPrediction {
+    fn from(ball_prediction: flat::BallPrediction<'_>) -> Self {
+        Self {
+            slices: flat_vector_iter(ball_prediction.slices().unwrap())
+                .map(PredictionSlice::from)
+                .collect(),
+            _non_exhaustive: (),
+        }
+    }
+}
