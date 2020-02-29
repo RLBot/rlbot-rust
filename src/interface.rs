@@ -148,9 +148,10 @@ impl RLBotInterface {
     ///
     /// Note that this method requires the framework's `BallPrediction.exe` to
     /// be running in the background.
-    pub fn get_ball_prediction<'fb>(&self) -> Option<flat::BallPrediction<'fb>> {
-        let byte_buffer = (self.dll.get_ball_prediction)();
-        get_flatbuffer::<flat::BallPrediction<'_>>(byte_buffer)
+    pub fn get_ball_prediction(&self) -> Option<BallPrediction> {
+        self.dll
+            .get_ball_prediction()
+            .map(|buf| flatbuffers::get_root::<flat::BallPrediction<'_>>(&buf).into())
     }
 
     /// Gets the framework's current prediction of ball motion as a struct.
@@ -176,6 +177,7 @@ fn core_result(status: ffi::RLBotCoreStatus) -> Result<(), RLBotError> {
     }
 }
 
+#[allow(unused)]
 fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
     byte_buffer: ffi::ByteBuffer,
 ) -> Option<T::Inner> {
