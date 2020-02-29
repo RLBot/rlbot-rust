@@ -2,7 +2,6 @@ use crate::{dll::RLBotCoreInterface, error::RLBotError, ffi, flat, game::*};
 use std::{
     os::raw::{c_int, c_void},
     ptr::null_mut,
-    slice,
 };
 
 pub struct RLBotInterface {
@@ -175,21 +174,6 @@ fn core_result(status: ffi::RLBotCoreStatus) -> Result<(), RLBotError> {
         ffi::RLBotCoreStatus::Success => Ok(()),
         _ => Err(RLBotError { status }),
     }
-}
-
-#[allow(unused)]
-fn get_flatbuffer<'a, T: flatbuffers::Follow<'a> + 'a>(
-    byte_buffer: ffi::ByteBuffer,
-) -> Option<T::Inner> {
-    if byte_buffer.size == 0 {
-        return None;
-    }
-
-    let ptr = byte_buffer.ptr as *const u8;
-    let size = byte_buffer.size as usize;
-    // TODO: don't leak the buffer
-    let slice = unsafe { slice::from_raw_parts(ptr, size) };
-    Some(flatbuffers::get_root::<T>(slice))
 }
 
 #[cfg(test)]
