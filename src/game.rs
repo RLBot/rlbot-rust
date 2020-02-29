@@ -205,6 +205,32 @@ pub struct FieldInfo {
     pub(crate) _non_exhaustive: (),
 }
 
+pub struct RigidBodyState {
+    pub frame: i32,
+    pub location: Vector3,
+    pub rotation: Quaternion,
+    pub velocity: Vector3,
+    pub angular_velocity: Vector3,
+    pub(crate) _non_exhaustive: (),
+}
+
+pub struct PlayerRigidBodyState {
+    pub state: RigidBodyState,
+    pub input: ControllerState,
+    pub(crate) _non_exhaustive: (),
+}
+
+pub struct BallRigidBodyState {
+    pub state: Option<RigidBodyState>,
+    pub(crate) _non_exhaustive: (),
+}
+
+pub struct RigidBodyTick {
+    pub ball: Option<BallRigidBodyState>,
+    pub players: SmallVec<[PlayerRigidBodyState; 10]>,
+    pub(crate) _non_exhaustive: (),
+}
+
 pub(crate) fn build_update_player_input(
     player_index: i32,
     controller_state: &ControllerState,

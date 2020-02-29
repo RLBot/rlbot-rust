@@ -1,5 +1,21 @@
 use crate::{flat, game::*, utils::flat_vector_iter};
 
+impl From<flat::ControllerState<'_>> for ControllerState {
+    fn from(state: flat::ControllerState<'_>) -> Self {
+        Self {
+            throttle: state.throttle(),
+            steer: state.steer(),
+            pitch: state.pitch(),
+            yaw: state.yaw(),
+            roll: state.roll(),
+            jump: state.jump(),
+            boost: state.boost(),
+            handbrake: state.handbrake(),
+            use_item: state.useItem(),
+        }
+    }
+}
+
 impl From<flat::GameTickPacket<'_>> for GameTickPacket {
     fn from(packet: flat::GameTickPacket<'_>) -> Self {
         Self {
@@ -90,6 +106,17 @@ impl From<&flat::Rotator> for Rotator {
             pitch: rotator.pitch(),
             yaw: rotator.yaw(),
             roll: rotator.roll(),
+        }
+    }
+}
+
+impl From<&flat::Quaternion> for Quaternion {
+    fn from(quaternion: &flat::Quaternion) -> Self {
+        Self {
+            x: quaternion.x(),
+            y: quaternion.y(),
+            z: quaternion.z(),
+            w: quaternion.w(),
         }
     }
 }
@@ -198,6 +225,50 @@ impl From<flat::FieldInfo<'_>> for FieldInfo {
                 .collect(),
             goals: flat_vector_iter(info.goals().unwrap())
                 .map(GoalInfo::from)
+                .collect(),
+            _non_exhaustive: (),
+        }
+    }
+}
+
+impl From<flat::RigidBodyState<'_>> for RigidBodyState {
+    fn from(state: flat::RigidBodyState<'_>) -> Self {
+        Self {
+            frame: state.frame(),
+            location: state.location().unwrap().into(),
+            rotation: state.rotation().unwrap().into(),
+            velocity: state.velocity().unwrap().into(),
+            angular_velocity: state.angularVelocity().unwrap().into(),
+            _non_exhaustive: (),
+        }
+    }
+}
+
+impl From<flat::PlayerRigidBodyState<'_>> for PlayerRigidBodyState {
+    fn from(state: flat::PlayerRigidBodyState<'_>) -> Self {
+        Self {
+            state: state.state().unwrap().into(),
+            input: state.input().unwrap().into(),
+            _non_exhaustive: (),
+        }
+    }
+}
+
+impl From<flat::BallRigidBodyState<'_>> for BallRigidBodyState {
+    fn from(state: flat::BallRigidBodyState<'_>) -> Self {
+        Self {
+            state: state.state().map(RigidBodyState::from),
+            _non_exhaustive: (),
+        }
+    }
+}
+
+impl From<flat::RigidBodyTick<'_>> for RigidBodyTick {
+    fn from(tick: flat::RigidBodyTick<'_>) -> Self {
+        Self {
+            ball: tick.ball().map(BallRigidBodyState::from),
+            players: flat_vector_iter(tick.players().unwrap())
+                .map(PlayerRigidBodyState::from)
                 .collect(),
             _non_exhaustive: (),
         }
