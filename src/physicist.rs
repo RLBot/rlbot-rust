@@ -1,4 +1,4 @@
-use crate::{ffi, flat, rlbot::RLBot};
+use crate::{ffi, game, rlbot::RLBot};
 use std::{
     error::Error,
     mem,
@@ -72,7 +72,7 @@ impl<'a> Physicist<'a> {
     /// This function returns an error if ten seconds pass without a new tick
     /// being received. The assumption is that the game froze or crashed, and
     /// waiting longer will not help.
-    pub fn next_flat<'fb>(&mut self) -> Result<flat::RigidBodyTick<'fb>, Box<dyn Error>> {
+    pub fn next_flat(&mut self) -> Result<game::RigidBodyTick, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next_flat()), Self::DEFAULT_TIMEOUT)
     }
 
@@ -80,10 +80,10 @@ impl<'a> Physicist<'a> {
     ///
     /// This works the same as `next_flat`, but lets the caller choose the
     /// timeout.
-    pub fn next_flat_with_timeout<'fb>(
+    pub fn next_flat_with_timeout(
         &mut self,
         timeout: Duration,
-    ) -> Result<flat::RigidBodyTick<'fb>, Box<dyn Error>> {
+    ) -> Result<game::RigidBodyTick, Box<dyn Error>> {
         self.spin(|this| Ok(this.try_next_flat()), timeout)
     }
 
@@ -92,10 +92,14 @@ impl<'a> Physicist<'a> {
     /// If there is a tick that is newer than the previous tick, it is
     /// returned. Otherwise, `None` is returned.
     #[allow(clippy::redundant_closure)]
-    pub fn try_next_flat<'fb>(&mut self) -> Option<flat::RigidBodyTick<'fb>> {
+    pub fn try_next_flat(&mut self) -> Option<game::RigidBodyTick> {
         if let Some(tick) = self.rlbot.interface().update_rigid_body_tick_flatbuffer() {
-            let ball = tick.ball();
-            match ball.as_ref().and_then(|b| b.state()).map(|s| s.frame()) {
+            let ball = &tick.ball;
+            match ball
+                .as_ref()
+                .and_then(|b| b.state.as_ref())
+                .map(|s| s.frame)
+            {
                 Some(ball_frame) if ball_frame != self.prev_ball_frame => {
                     self.prev_ball_frame = ball_frame;
                     return Some(tick);

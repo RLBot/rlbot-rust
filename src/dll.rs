@@ -61,7 +61,7 @@ pub struct RLBotCoreInterface {
     pub update_field_info: UpdateFieldInfo,
     update_live_data_packet_flatbuffer_raw: UpdateLiveDataPacketFlatbuffer,
     pub update_live_data_packet: UpdateLiveDataPacket,
-    pub update_rigid_body_tick_flatbuffer: UpdateRigidBodyTickFlatbuffer,
+    update_rigid_body_tick_flatbuffer_raw: UpdateRigidBodyTickFlatbuffer,
     pub update_rigid_body_tick: UpdateRigidBodyTick,
     pub free: Free,
     pub set_game_state: SetGameState,
@@ -98,6 +98,10 @@ impl RLBotCoreInterface {
         self.copy_and_free_byte_buffer(|| (self.update_live_data_packet_flatbuffer_raw)())
     }
 
+    pub fn update_rigid_body_tick_flatbuffer(&self) -> Option<Vec<u8>> {
+        self.copy_and_free_byte_buffer(|| (self.update_rigid_body_tick_flatbuffer_raw)())
+    }
+
     pub fn load(rlbot_dll_directory: Option<&Path>) -> io::Result<RLBotCoreInterface> {
         if INITIALIZED.swap(true, Ordering::SeqCst) {
             panic!("RLBot can only be initialized once");
@@ -120,7 +124,7 @@ impl RLBotCoreInterface {
                 update_live_data_packet_flatbuffer_raw: *library
                     .get(b"UpdateLiveDataPacketFlatbuffer")?,
                 update_live_data_packet: *library.get(b"UpdateLiveDataPacket")?,
-                update_rigid_body_tick_flatbuffer: *library
+                update_rigid_body_tick_flatbuffer_raw: *library
                     .get(b"UpdateRigidBodyTickFlatbuffer")?,
                 update_rigid_body_tick: *library.get(b"UpdateRigidBodyTick")?,
                 free: *library.get(b"Free")?,
