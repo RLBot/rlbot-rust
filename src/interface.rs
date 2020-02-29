@@ -54,9 +54,10 @@ impl RLBotInterface {
     }
 
     /// Grabs the current physics tick as a FlatBuffer table.
-    pub fn update_rigid_body_tick_flatbuffer<'fb>(&self) -> Option<flat::RigidBodyTick<'fb>> {
-        let byte_buffer = (self.dll.update_rigid_body_tick_flatbuffer)();
-        get_flatbuffer::<flat::RigidBodyTick<'_>>(byte_buffer)
+    pub fn update_rigid_body_tick_flatbuffer(&self) -> Option<RigidBodyTick> {
+        self.dll
+            .update_rigid_body_tick_flatbuffer()
+            .map(|buf| flatbuffers::get_root::<flat::RigidBodyTick<'_>>(&buf).into())
     }
 
     /// Grabs the current physics tick as a struct.
