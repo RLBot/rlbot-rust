@@ -247,7 +247,7 @@ impl<'a> RenderGroup<'a> {
         let text = self.builder.create_string(text.as_ref());
 
         let mut rm = flat::RenderMessageBuilder::new(&mut self.builder);
-        rm.add_renderType(flat::RenderType::DrawString2D);
+        rm.add_renderType(flat::RenderType::DrawString3D);
         rm.add_color(color);
         rm.add_start(&start);
         rm.add_scaleX(scale_x);
