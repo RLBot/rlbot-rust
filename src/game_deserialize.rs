@@ -82,7 +82,7 @@ impl From<flat::Physics<'_>> for Physics {
     fn from(physics: flat::Physics<'_>) -> Self {
         Self {
             location: physics.location().unwrap().into(),
-            rotation: physics.rotation().unwrap().into(),
+            rotation: physics.rotation().map_or(Rotator::default(), Rotator::from),
             velocity: physics.velocity().unwrap().into(),
             angular_velocity: physics.angularVelocity().unwrap().into(),
             _non_exhaustive: (),

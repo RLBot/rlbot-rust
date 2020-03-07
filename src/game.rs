@@ -35,6 +35,7 @@ pub struct Vector3 {
 
 /// Expresses the rotation state of an object in Euler angles, with values in
 /// radians.
+#[derive(Default)]
 pub struct Rotator {
     pub pitch: f32,
     pub yaw: f32,
