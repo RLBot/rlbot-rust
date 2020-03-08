@@ -8,7 +8,7 @@ use crate::{
     render::RenderGroup,
     state,
 };
-use std::{cell::Cell, error::Error, marker::PhantomData};
+use std::{borrow::Borrow, cell::Cell, error::Error, marker::PhantomData};
 
 /// The low-level interface to RLBot. All RLBot calls that are available can be
 /// made through this struct.
@@ -55,6 +55,16 @@ impl RLBot {
         let built = build_update_player_input(player_index, controller_state);
         self.interface
             .update_player_input_flatbuffer(built.finished_data())
+    }
+
+    /// Sends multiple player inputs to RLBot.
+    /// Used by hivemind bots to update the inputs for each
+    /// of their drones.
+    pub fn update_multiple_inputs(
+        &self,
+        mut inputs: impl Iterator<Item = (i32, impl Borrow<ControllerState>)>,
+    ) -> Result<(), RLBotError> {
+        inputs.try_for_each(|(index, input)| self.update_player_input(index, input.borrow()))
     }
 
     /// Sets the game state.

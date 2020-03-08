@@ -1,8 +1,9 @@
 use crate::{
+    framework::parse_version_and_directory,
     game::{ControllerState, GameTickPacket},
     init_with_options, InitOptions,
 };
-use std::{cmp::Ordering, env, error::Error, path::PathBuf};
+use std::{env, error::Error, path::PathBuf};
 
 // Most of this is basically a copy of what is in framework.rs,
 // just adapted for hivemind.
@@ -22,47 +23,54 @@ pub trait Hivemind {
     ///
     /// The first input will go to the first index in `drone_indices`, the
     /// second to the second, etc.
-    fn tick(&mut self, packet: &GameTickPacket) -> Vec<ControllerState>;
+    fn tick(&mut self, packet: &GameTickPacket) -> Vec<(usize, ControllerState)>;
 }
 
 /// Runs your hivemind bot. Pass in your struct which implements the Hivemind
 /// trait.
 ///
-/// Calls `tick()` on your hivemind and expects a Vec<ControllerState>. The
-/// first element corresponds to the first index in `drone_indices`, the second
-/// to the second, etc.
+/// Calls `tick()` on your hivemind and expects a Vec<(usize, ControllerState)>.
+/// The usize is the bot index you want to send the inputs to. Order does not
+/// matter. You will get warnings if you try sending the wrong number of inputs
+/// or give indices that are not in your drone_indices.
 pub fn run_hive<H: Hivemind>(mut hive: H) -> Result<(), Box<dyn Error>> {
     let args = parse_hive_framework_args()
         .map_err(|_| Box::<dyn Error>::from("could not parse framework arguments"))?
         .ok_or_else(|| Box::<dyn Error>::from("not launched by framework"))?;
 
-    let drone_indices = args.drone_indices.clone();
-    let rlbot = init_with_options(args.into())?;
+    let rlbot = init_with_options(From::from(&args))?;
 
     // Create a Vec<usize> copy of the original Vec<i32>.
-    let usize_drone_indices: Vec<usize> = drone_indices
+    let drone_indices = &args
+        .drone_indices
         .iter()
-        .map(|element| *element as usize)
-        .collect();
-    hive.set_drone_indices(usize_drone_indices);
+        .map(|&x| x as usize)
+        .collect::<Vec<usize>>();
+
+    hive.set_drone_indices(drone_indices.clone());
 
     let mut packets = rlbot.packeteer();
     loop {
         let packet = packets.next()?;
         let inputs = hive.tick(&packet);
 
-        match inputs.len().cmp(&drone_indices.len()) {
-            Ordering::Equal => {
-                for i in 0..drone_indices.len() {
-                    // first input corresponds to first index in drone_indices, etc.
-                    let drone = drone_indices[i];
-                    let input = &inputs[i];
-                    rlbot.update_player_input(drone, input)?;
-                }
-            }
-            Ordering::Less => return Err(Box::<dyn Error>::from("too few inputs for drones")),
-            Ordering::Greater => return Err(Box::<dyn Error>::from("too many inputs for drones")),
+        // Checks to make sure that everything is valid.
+        if inputs.len() != drone_indices.len() {
+            println!("number of received controller states does not match the number of drones")
         }
+        let mut valid_inputs: Vec<(i32, ControllerState)> = vec![];
+        for (index, ctrl) in inputs.into_iter() {
+            if drone_indices.contains(&index) {
+                valid_inputs.push((index as i32, ctrl));
+            } else {
+                println!(
+                    "hivemind tried sending inputs to an index that is not in it's drone indices"
+                );
+            }
+        }
+
+        // Sending valid inputs to drones.
+        rlbot.update_multiple_inputs(valid_inputs.into_iter())?;
     }
 }
 
@@ -83,28 +91,24 @@ pub fn parse_hive_framework_args() -> Result<Option<HiveFrameworkArgs>, ()> {
 fn parse_framework_command_line(
     mut args: impl Iterator<Item = String>,
 ) -> Result<Option<HiveFrameworkArgs>, ()> {
-    if args.next().as_ref().map(|s| &s[..]) != Some("--rlbot-version") {
-        return Ok(None); // not launched by the framework
-    }
-    let rlbot_version = args.next().ok_or(())?;
-
-    if args.next().as_ref().map(|s| &s[..]) != Some("--rlbot-dll-directory") {
-        return Err(());
-    }
-    let rlbot_dll_directory = PathBuf::from(args.next().ok_or(())?);
+    let (rlbot_version, rlbot_dll_directory) =
+        if let Some(val) = parse_version_and_directory(&mut args)? {
+            val
+        } else {
+            return Ok(None);
+        };
 
     if args.next().as_ref().map(|s| &s[..]) != Some("--drone-indices") {
         return Err(());
     }
     // drone indices are comma separated integers, e.g. "0,1,2,3,4,5"
-    let drone_indices_result: Result<Vec<i32>, _> = args
+    let drone_indices = args
         .next()
         .ok_or(())?
         .split(',')
-        .map(|ref s| s.parse())
-        .collect();
-    let drone_indices = drone_indices_result
-        .expect("Your --drone-indices command line argument is bad and you should feel bad.");
+        .map(|x| x.parse::<i32>())
+        .collect::<Result<Vec<i32>, _>>()
+        .map_err(|_| ())?;
 
     Ok(Some(HiveFrameworkArgs {
         rlbot_version,
@@ -135,9 +139,9 @@ pub struct HiveFrameworkArgs {
     _non_exhaustive: (),
 }
 
-impl From<HiveFrameworkArgs> for InitOptions {
-    fn from(args: HiveFrameworkArgs) -> Self {
-        Self::new().rlbot_dll_directory(args.rlbot_dll_directory)
+impl From<&HiveFrameworkArgs> for InitOptions {
+    fn from(args: &HiveFrameworkArgs) -> Self {
+        Self::new().rlbot_dll_directory(&args.rlbot_dll_directory)
     }
 }
 

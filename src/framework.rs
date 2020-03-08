@@ -93,16 +93,12 @@ fn parse_framework_command_line(
     // Currently this only needs to interoperate with one caller – RLBot Python's
     // BaseSubprocessAgent. No public interface has been committed to, so we can
     // afford to be rigid and inflexible with the parsing.
-
-    if args.next().as_ref().map(|s| &s[..]) != Some("--rlbot-version") {
-        return Ok(None); // not launched by the framework
-    }
-    let rlbot_version = args.next().ok_or(())?;
-
-    if args.next().as_ref().map(|s| &s[..]) != Some("--rlbot-dll-directory") {
-        return Err(());
-    }
-    let rlbot_dll_directory = PathBuf::from(args.next().ok_or(())?);
+    let (rlbot_version, rlbot_dll_directory) =
+        if let Some(val) = parse_version_and_directory(&mut args)? {
+            val
+        } else {
+            return Ok(None);
+        };
 
     if args.next().as_ref().map(|s| &s[..]) != Some("--player-index") {
         return Err(());
@@ -115,6 +111,23 @@ fn parse_framework_command_line(
         player_index,
         _non_exhaustive: (),
     }))
+}
+
+/// Parse the version and dll directory arguments passed by the framework.
+pub fn parse_version_and_directory(
+    mut args: impl Iterator<Item = String>,
+) -> Result<Option<(String, PathBuf)>, ()> {
+    if args.next().as_ref().map(|s| &s[..]) != Some("--rlbot-version") {
+        return Ok(None); // not launched by the framework
+    }
+    let rlbot_version = args.next().ok_or(())?;
+
+    if args.next().as_ref().map(|s| &s[..]) != Some("--rlbot-dll-directory") {
+        return Err(());
+    }
+    let rlbot_dll_directory = PathBuf::from(args.next().ok_or(())?);
+
+    Ok(Some((rlbot_version, rlbot_dll_directory)))
 }
 
 /// The arguments passed by the RLBot framework.
