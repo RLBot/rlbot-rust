@@ -21,8 +21,9 @@ pub trait Hivemind {
     /// This is called whenever there is a new game state. Your cars will be
     /// controlled according to the inputs you return.
     ///
-    /// The first input will go to the first index in `drone_indices`, the
-    /// second to the second, etc.
+    /// The output is a Vec<(usize, ControllerState)>.
+    /// The usize is the bot index you want to send the inputs to, and the
+    /// ControllerState is what you want that bot to do.
     fn tick(&mut self, packet: &GameTickPacket) -> Vec<(usize, ControllerState)>;
 }
 
