@@ -59,19 +59,19 @@ pub fn run_hive<H: Hivemind>(mut hive: H) -> Result<(), Box<dyn Error>> {
         if inputs.len() != drone_indices.len() {
             println!("number of received controller states does not match the number of drones")
         }
-        let mut valid_inputs: Vec<(i32, ControllerState)> = vec![];
-        for (index, ctrl) in inputs.into_iter() {
-            if drone_indices.contains(&index) {
-                valid_inputs.push((index as i32, ctrl));
+        let valid_inputs = inputs.into_iter().filter_map(|(index, input)| {
+            if drone_indices.contains(&index) && index <= (std::i32::MAX as usize) {
+                Some((index as i32, input))
             } else {
                 println!(
                     "hivemind tried sending inputs to an index that is not in it's drone indices"
                 );
+                None
             }
-        }
+        });
 
         // Sending valid inputs to drones.
-        rlbot.update_multiple_inputs(valid_inputs.into_iter())?;
+        rlbot.update_multiple_inputs(valid_inputs)?;
     }
 }
 
@@ -84,7 +84,7 @@ pub fn run_hive<H: Hivemind>(mut hive: H) -> Result<(), Box<dyn Error>> {
 /// * `Ok(None)` – if the app was *not* launched by the framework.
 /// * `Err(_)` – if it appears the app was launched by the framework, but we
 ///   could not understand the arguments.
-pub fn parse_hive_framework_args() -> Result<Option<HiveFrameworkArgs>, ()> {
+pub(crate) fn parse_hive_framework_args() -> Result<Option<HiveFrameworkArgs>, ()> {
     parse_framework_command_line(env::args().skip(1))
 }
 
