@@ -84,7 +84,7 @@ pub fn run_hive<H: Hivemind>(mut hive: H) -> Result<(), Box<dyn Error>> {
 /// * `Ok(None)` – if the app was *not* launched by the framework.
 /// * `Err(_)` – if it appears the app was launched by the framework, but we
 ///   could not understand the arguments.
-pub(crate) fn parse_hive_framework_args() -> Result<Option<HiveFrameworkArgs>, ()> {
+pub fn parse_hive_framework_args() -> Result<Option<HiveFrameworkArgs>, ()> {
     parse_framework_command_line(env::args().skip(1))
 }
 
