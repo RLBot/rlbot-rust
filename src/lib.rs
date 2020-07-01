@@ -130,7 +130,7 @@
 pub use crate::{
     framework::{parse_framework_args, run_bot, Bot, FrameworkArgs},
     game::*,
-    hive::{run_hive, Hivemind},
+    hive::{parse_hive_framework_args, run_hive, Hivemind, HiveFrameworkArgs},
     init::{init, init_with_options, InitOptions},
     match_settings::*,
     packeteer::Packeteer,
