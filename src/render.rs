@@ -123,6 +123,7 @@ impl<'a> RenderGroup<'a> {
     /// # let green = group.color_rgb(0, 255, 0);
     /// group.draw_line_2d((10.0, 10.0), (100.0, 100.0), green);
     /// ```
+    #[deprecated(note = "Drawing 2D lines is not currently supported")]
     pub fn draw_line_2d(
         &mut self,
         (x1, y1): (f32, f32),
@@ -178,6 +179,7 @@ impl<'a> RenderGroup<'a> {
     /// # let green = group.color_rgb(0, 255, 0);
     /// group.draw_line_2d_3d((10.0, 10.0), (100.0, 100.0, 100.0), green);
     /// ```
+    #[deprecated(note = "Drawing 2D-3D lines is not currently supported")]
     pub fn draw_line_2d_3d(
         &mut self,
         (x1, y1): (f32, f32),
@@ -247,7 +249,7 @@ impl<'a> RenderGroup<'a> {
         let text = self.builder.create_string(text.as_ref());
 
         let mut rm = flat::RenderMessageBuilder::new(&mut self.builder);
-        rm.add_renderType(flat::RenderType::DrawString2D);
+        rm.add_renderType(flat::RenderType::DrawString3D);
         rm.add_color(color);
         rm.add_start(&start);
         rm.add_scaleX(scale_x);
